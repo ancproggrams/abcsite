@@ -1,4 +1,5 @@
 
+
 import { ContactForm } from '@/components/forms/contact-form'
 import { MicrosoftBookingsEmbed } from '@/components/microsoft-bookings-embed'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -31,7 +32,7 @@ export default function AdviesGesprekPage() {
               <CardContent className="p-6">
                 <Phone className="h-8 w-8 text-primary mx-auto mb-2" />
                 <h3 className="font-semibold mb-1">Telefoon</h3>
-                <p className="text-sm text-muted-foreground">+31 (0) 622675520</p>
+                <p className="text-sm text-muted-foreground">+31622675520</p>
               </CardContent>
             </Card>
             <Card className="text-center">
@@ -149,3 +150,4 @@ export default function AdviesGesprekPage() {
     </div>
   )
 }
+

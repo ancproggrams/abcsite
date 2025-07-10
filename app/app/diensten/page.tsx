@@ -1,4 +1,5 @@
 
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
 import { Button } from '@/components/ui/button'
@@ -13,7 +14,7 @@ export default function DienstenPage() {
       title: 'Compliance Pre Audits voor: ISO22301 & ISO27001',
       description: 'Professionele voorbereiding op ISO certificering met grondige assessment en gap analyse.',
       features: ['Gap Analyse', 'Documentatie Review', 'Implementatie Advies', 'Audit Begeleiding'],
-      badge: 'Nieuw'
+      badge: 'Populair'
     },
     {
       icon: Users,
@@ -25,7 +26,7 @@ export default function DienstenPage() {
     {
       icon: Bot,
       title: 'AI Outsourcing',
-      description: 'Een business analyst maakt een analyse van bedrijfsprocessen in scope en kijkt welke diensten geoutsourced kunnen worden onder gebracht in een AI gestuurd proces.',
+      description: 'Analyseren van bedrijfsprocessen.',
       features: ['Procesanalyse', 'AI Implementatie', 'Kostenoptimalisatie', 'Workflow Automatisering'],
       badge: 'Innovatief'
     }
@@ -173,15 +174,11 @@ export default function DienstenPage() {
                     Onze AI-oplossingen automatiseren repetitieve taken, verbeteren de accuratesse en besparen kostbare tijd. 
                     Van documentverwerking tot compliance monitoring, wij maken uw processen slimmer.
                   </p>
-                  <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <div className="flex justify-center">
                     <Button asChild className="btn-primary">
-                      <Link href="/compliance-automation#quickscan">
-                        Test AI Readiness
-                      </Link>
-                    </Button>
-                    <Button asChild variant="outline">
                       <Link href="/adviesgesprek">
-                        Plan Demo
+                        Meer Informatie
+                        <ArrowRight className="ml-2 h-4 w-4" />
                       </Link>
                     </Button>
                   </div>
@@ -225,3 +222,4 @@ export default function DienstenPage() {
     </div>
   )
 }
+

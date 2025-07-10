@@ -1,4 +1,5 @@
 
+
 import Link from 'next/link'
 import Image from 'next/image'
 import { Mail, Phone, MapPin } from 'lucide-react'
@@ -31,11 +32,11 @@ export function SiteFooter() {
               </div>
               <div className="flex items-center space-x-2 text-sm text-muted-foreground">
                 <Phone className="h-4 w-4" />
-                <span>+31 (0) 20 123 4567</span>
+                <span>+31622675520</span>
               </div>
               <div className="flex items-center space-x-2 text-sm text-muted-foreground">
                 <MapPin className="h-4 w-4" />
-                <span>Amsterdam, Nederland</span>
+                <span>Voorburg, Nederland</span>
               </div>
             </div>
           </div>
@@ -44,11 +45,6 @@ export function SiteFooter() {
           <div className="space-y-4">
             <h4 className="font-semibold text-foreground">Diensten</h4>
             <ul className="space-y-2">
-              <li>
-                <Link href="/diensten" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  Managed Services
-                </Link>
-              </li>
               <li>
                 <Link href="/diensten" className="text-sm text-muted-foreground hover:text-primary transition-colors">
                   IT Consultancy
@@ -113,3 +109,4 @@ export function SiteFooter() {
     </footer>
   )
 }
+

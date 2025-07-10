@@ -1,4 +1,5 @@
 
+
 import { PrismaClient } from '@prisma/client'
 import bcrypt from 'bcryptjs'
 
@@ -7,7 +8,7 @@ const prisma = new PrismaClient()
 async function main() {
   console.log('🌱 Seeding database...')
 
-  // Create admin user
+  // Create admin user - existing one
   const hashedPassword = await bcrypt.hash('Ik,ben@dmin@02!', 12)
   
   const adminUser = await prisma.user.upsert({
@@ -22,6 +23,24 @@ async function main() {
   })
 
   console.log('✅ Admin user created:', adminUser.email)
+
+  // Create new admin user for the user
+  const newAdminPassword = await bcrypt.hash('AdminAccount2024!', 12)
+  
+  const newAdminUser = await prisma.user.upsert({
+    where: { email: 'admin@adviesnconsultancy.nl' },
+    update: {},
+    create: {
+      email: 'admin@adviesnconsultancy.nl',
+      name: 'Admin User',
+      password: newAdminPassword,
+      role: 'admin'
+    }
+  })
+
+  console.log('✅ New admin user created:', newAdminUser.email)
+  console.log('📧 Email: admin@adviesnconsultancy.nl')
+  console.log('🔐 Password: AdminAccount2024!')
 
   // Create some sample Quick Scan results for testing
   const sampleResults = [
@@ -73,3 +92,4 @@ main()
   .finally(async () => {
     await prisma.$disconnect()
   })
+
