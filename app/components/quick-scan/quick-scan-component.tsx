@@ -1,7 +1,7 @@
 
 'use client'
 
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -10,7 +10,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Progress } from '@/components/ui/progress'
 import { Checkbox } from '@/components/ui/checkbox'
 import { useToast } from '@/hooks/use-toast'
-import { ChevronLeft, ChevronRight, Download, Mail, CheckCircle } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Download, Mail, CheckCircle, RotateCcw, AlertCircle } from 'lucide-react'
 import { quickScanQuestions } from '@/lib/quick-scan-questions'
 
 interface Answer {
@@ -27,6 +27,51 @@ interface CategoryScore {
   }
 }
 
+interface QuickScanProgress {
+  currentQuestion: number
+  answers: Answer[]
+  isCompleted: boolean
+  userEmail: string
+  userName: string
+  sendCopyToAdmin: boolean
+  timestamp: number
+}
+
+// localStorage utilities
+const STORAGE_KEY = 'quickscan_progress'
+
+const saveProgress = (data: QuickScanProgress) => {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data))
+  } catch (error) {
+    console.warn('Could not save progress to localStorage:', error)
+  }
+}
+
+const loadProgress = (): QuickScanProgress | null => {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY)
+    if (saved) {
+      const data = JSON.parse(saved)
+      // Verify the data structure is valid
+      if (data && typeof data.currentQuestion === 'number' && Array.isArray(data.answers)) {
+        return data
+      }
+    }
+  } catch (error) {
+    console.warn('Could not load progress from localStorage:', error)
+  }
+  return null
+}
+
+const clearProgress = () => {
+  try {
+    localStorage.removeItem(STORAGE_KEY)
+  } catch (error) {
+    console.warn('Could not clear progress from localStorage:', error)
+  }
+}
+
 export function QuickScanComponent() {
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [answers, setAnswers] = useState<Answer[]>([])
@@ -35,11 +80,58 @@ export function QuickScanComponent() {
   const [userName, setUserName] = useState('')
   const [sendCopyToAdmin, setSendCopyToAdmin] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [hasLoadedProgress, setHasLoadedProgress] = useState(false)
+  const [showProgressNotification, setShowProgressNotification] = useState(false)
   const { toast } = useToast()
   const reportRef = useRef<HTMLDivElement>(null)
 
   const totalQuestions = quickScanQuestions.length
   const progress = ((currentQuestion + 1) / totalQuestions) * 100
+
+  // Load saved progress on component mount
+  useEffect(() => {
+    const savedProgress = loadProgress()
+    if (savedProgress) {
+      const timeDiff = Date.now() - savedProgress.timestamp
+      // Only load progress if saved within last 24 hours
+      if (timeDiff < 24 * 60 * 60 * 1000) {
+        setCurrentQuestion(savedProgress.currentQuestion)
+        setAnswers(savedProgress.answers)
+        setIsCompleted(savedProgress.isCompleted)
+        setUserEmail(savedProgress.userEmail || '')
+        setUserName(savedProgress.userName || '')
+        setSendCopyToAdmin(savedProgress.sendCopyToAdmin || false)
+        setHasLoadedProgress(true)
+        setShowProgressNotification(!savedProgress.isCompleted)
+        
+        if (!savedProgress.isCompleted) {
+          toast({
+            title: 'Voortgang geladen',
+            description: `U bent verder gegaan bij vraag ${savedProgress.currentQuestion + 1} van ${totalQuestions}.`,
+          })
+        }
+      } else {
+        // Clear old progress
+        clearProgress()
+      }
+    }
+  }, [])
+
+  // Auto-save progress whenever state changes
+  useEffect(() => {
+    if (hasLoadedProgress || currentQuestion > 0 || answers.length > 0) {
+      const progressData: QuickScanProgress = {
+        currentQuestion,
+        answers,
+        isCompleted,
+        userEmail,
+        userName,
+        sendCopyToAdmin,
+        timestamp: Date.now()
+      }
+      saveProgress(progressData)
+    }
+  }, [currentQuestion, answers, isCompleted, userEmail, userName, sendCopyToAdmin, hasLoadedProgress])
 
   const handleAnswer = (value: string | number) => {
     const question = quickScanQuestions[currentQuestion]
@@ -91,6 +183,25 @@ export function QuickScanComponent() {
 
   const completeQuiz = () => {
     setIsCompleted(true)
+    // Clear saved progress when quiz is completed
+    setTimeout(() => {
+      clearProgress()
+    }, 1000)
+  }
+
+  const restartScan = () => {
+    setCurrentQuestion(0)
+    setAnswers([])
+    setIsCompleted(false)
+    setUserEmail('')
+    setUserName('')
+    setSendCopyToAdmin(false)
+    setShowProgressNotification(false)
+    clearProgress()
+    toast({
+      title: 'Scan opnieuw gestart',
+      description: 'Alle voortgang is gewist. U kunt opnieuw beginnen.',
+    })
   }
 
   const calculateResults = () => {
@@ -427,17 +538,68 @@ export function QuickScanComponent() {
 
   return (
     <div className="max-w-2xl mx-auto space-y-6">
+      {showProgressNotification && !isCompleted && (
+        <Card className="border-primary/20 bg-primary/5">
+          <CardContent className="pt-6">
+            <div className="flex items-start space-x-3">
+              <AlertCircle className="h-5 w-5 text-primary mt-0.5" />
+              <div className="flex-1 space-y-2">
+                <p className="font-medium text-primary">
+                  Voortgang hersteld
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  We hebben uw vorige voortgang hersteld. U kunt verder gaan waar u gebleven was of opnieuw beginnen.
+                </p>
+                <Button
+                  onClick={restartScan}
+                  variant="outline"
+                  size="sm"
+                  className="text-primary border-primary hover:bg-primary hover:text-primary-foreground"
+                >
+                  <RotateCcw className="mr-2 h-3 w-3" />
+                  Opnieuw beginnen
+                </Button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
       <Card>
         <CardHeader>
           <div className="flex justify-between items-center">
             <CardTitle className="text-lg">
               Vraag {currentQuestion + 1} van {totalQuestions}
             </CardTitle>
-            <span className="text-sm text-muted-foreground">
-              {question?.category}
-            </span>
+            <div className="text-right">
+              <span className="text-sm text-muted-foreground block">
+                {question?.category}
+              </span>
+              {(hasLoadedProgress || answers.length > 0) && (
+                <span className="text-xs text-primary/70">
+                  ● Automatisch opgeslagen
+                </span>
+              )}
+            </div>
           </div>
-          <Progress value={progress} className="w-full" />
+          <div className="space-y-2">
+            <Progress value={progress} className="w-full" />
+            <div className="flex justify-between items-center">
+              <span className="text-xs text-muted-foreground">
+                Voortgang: {Math.round(progress)}%
+              </span>
+              {currentQuestion > 0 && (
+                <Button
+                  onClick={restartScan}
+                  variant="ghost"
+                  size="sm"
+                  className="text-xs h-auto p-1 text-muted-foreground hover:text-foreground"
+                >
+                  <RotateCcw className="mr-1 h-3 w-3" />
+                  Opnieuw beginnen
+                </Button>
+              )}
+            </div>
+          </div>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="space-y-4">
