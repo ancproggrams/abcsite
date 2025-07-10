@@ -27,13 +27,13 @@ export function HeroSection() {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button asChild size="lg" className="bg-white text-primary hover:bg-white/90 text-lg px-8 py-6">
+              <Button asChild size="lg" className="bg-white text-black hover:bg-white/90 hover:text-black text-lg px-8 py-6">
                 <Link href="/compliance-automation#quickscan">
                   <CheckCircle className="mr-2 h-5 w-5" />
                   Start Quick Scan
                 </Link>
               </Button>
-              <Button asChild size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-primary text-lg px-8 py-6">
+              <Button asChild size="lg" variant="outline" className="border-white text-black hover:bg-white hover:text-black text-lg px-8 py-6">
                 <Link href="/adviesgesprek">
                   Plan Adviesgesprek
                   <ArrowRight className="ml-2 h-5 w-5" />
