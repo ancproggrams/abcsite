@@ -9,18 +9,25 @@ import Link from 'next/link'
 export default function DienstenPage() {
   const services = [
     {
-      icon: Settings,
-      title: 'Managed Services',
-      description: 'Volledige IT-infrastructuur beheer met 24/7 monitoring en support.',
-      features: ['24/7 Monitoring', 'Proactief Onderhoud', 'Backup & Recovery', 'Security Management'],
-      badge: 'Populair'
+      icon: Shield,
+      title: 'Compliance Pre Audits voor: ISO22301 & ISO27001',
+      description: 'Professionele voorbereiding op ISO certificering met grondige assessment en gap analyse.',
+      features: ['Gap Analyse', 'Documentatie Review', 'Implementatie Advies', 'Audit Begeleiding'],
+      badge: 'Nieuw'
     },
     {
       icon: Users,
       title: 'IT Consultancy',
       description: 'Strategische adviezen en implementatie van moderne technologieën.',
-      features: ['Strategische Planning', 'Technology Roadmap', 'Digital Transformation', 'Change Management'],
-      badge: 'Nieuw'
+      features: ['Strategische Planning', 'Roadmap', 'Digitale Transformatie', 'Change Management'],
+      badge: 'Populair'
+    },
+    {
+      icon: Bot,
+      title: 'AI Outsourcing',
+      description: 'Een business analyst maakt een analyse van bedrijfsprocessen in scope en kijkt welke diensten geoutsourced kunnen worden onder gebracht in een AI gestuurd proces.',
+      features: ['Procesanalyse', 'AI Implementatie', 'Kostenoptimalisatie', 'Workflow Automatisering'],
+      badge: 'Innovatief'
     }
   ]
 
@@ -82,7 +89,7 @@ export default function DienstenPage() {
       {/* Service Cards */}
       <section className="py-20 bg-background rounded-lg mx-4 md:mx-6 my-6">
         <div className="container">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {services.map((service, index) => (
               <Card key={index} className="card-hover relative">
                 {service.badge && (
