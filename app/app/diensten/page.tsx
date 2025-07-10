@@ -11,7 +11,7 @@ export default function DienstenPage() {
   const services = [
     {
       icon: Shield,
-      title: 'Compliance Pre Audits voor: ISO22301 & ISO27001',
+      title: 'Compliance Pre Audits voor: ISO22301',
       description: 'Professionele voorbereiding op ISO certificering met grondige assessment en gap analyse.',
       features: ['Gap Analyse', 'Documentatie Review', 'Implementatie Advies', 'Audit Begeleiding'],
       badge: 'Populair'
