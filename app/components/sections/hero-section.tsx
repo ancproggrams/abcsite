@@ -13,10 +13,10 @@ export function HeroSection() {
             <div className="space-y-6">
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight">
                 Uw Strategische Partner in{' '}
-                <span className="text-white/90">IT & Compliance</span>
+                <span className="text-white/90">Business & IT Continuiteit & Compliance</span>
               </h1>
               <p className="text-xl md:text-2xl text-white/80 leading-relaxed">
-                Transformeer uw bedrijf met AI-gedreven IT-continuïteit, compliance automation en strategische consultancy.
+                Transformeer uw bedrijf met het automatiseren van uw Continuïteit en Compliance.
               </p>
             </div>
 
