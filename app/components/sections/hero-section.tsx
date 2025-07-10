@@ -11,11 +11,17 @@ export function HeroSection() {
           {/* Left side - Content */}
           <div className="space-y-8">
             <div className="space-y-6">
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight">
-                Uw Strategische Partner in{' '}
-                <span className="text-white/90">Business & IT Continuiteit & Compliance</span>
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight relative">
+                <span className="gradient-text-hero">
+                  Uw Strategische Partner in{' '}
+                </span>
+                <span className="gradient-text-hero-secondary block">
+                  Business & IT Continuiteit & Compliance
+                </span>
+                {/* Subtle background glow effect */}
+                <div className="absolute inset-0 gradient-text-glow blur-3xl opacity-20 -z-10"></div>
               </h1>
-              <p className="text-xl md:text-2xl text-white/80 leading-relaxed">
+              <p className="text-xl md:text-2xl text-white/80 leading-relaxed relative z-10">
                 Transformeer uw bedrijf met het automatiseren van uw Continuïteit en Compliance.
               </p>
             </div>

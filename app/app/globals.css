@@ -163,6 +163,69 @@
     background-clip: text;
   }
 
+  /* Hero gradient text effects */
+  .gradient-text-hero {
+    background: linear-gradient(135deg, 
+      #60A5FA 0%,     /* Light blue */
+      #3B82F6 25%,    /* Blue */
+      #2563EB 50%,    /* Darker blue */
+      #1D4ED8 75%,    /* Deep blue */
+      #1E40AF 100%    /* Very deep blue */
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradientShift 8s ease-in-out infinite;
+  }
+
+  .gradient-text-hero-secondary {
+    background: linear-gradient(135deg, 
+      #06B6D4 0%,     /* Cyan */
+      #0891B2 25%,    /* Cyan-blue */
+      #0E7490 50%,    /* Teal */
+      #155E75 75%,    /* Dark teal */
+      #164E63 100%    /* Very dark teal */
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradientShift 10s ease-in-out infinite reverse;
+  }
+
+  .gradient-text-glow {
+    background: linear-gradient(135deg, 
+      #60A5FA 0%,     /* Light blue */
+      #06B6D4 25%,    /* Cyan */
+      #3B82F6 50%,    /* Blue */
+      #0891B2 75%,    /* Cyan-blue */
+      #2563EB 100%    /* Darker blue */
+    );
+    border-radius: 50%;
+    animation: glowPulse 6s ease-in-out infinite;
+  }
+
+  @keyframes gradientShift {
+    0%, 100% {
+      background-size: 200% 200%;
+      background-position: 0% 50%;
+    }
+    50% {
+      background-size: 200% 200%;
+      background-position: 100% 50%;
+    }
+  }
+
+  @keyframes glowPulse {
+    0%, 100% {
+      opacity: 0.1;
+      transform: scale(0.8);
+    }
+    50% {
+      opacity: 0.3;
+      transform: scale(1.2);
+    }
+  }
+
   .card-hover {
     transition: all 0.3s ease;
   }
