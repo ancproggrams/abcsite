@@ -27,7 +27,7 @@ export function SpecializationSection() {
   ]
 
   return (
-    <section className="py-20 bg-background">
+    <section className="py-20 bg-background rounded-lg mx-4 md:mx-6 my-6">
       <div className="container">
         <div className="text-center space-y-4 mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-foreground">

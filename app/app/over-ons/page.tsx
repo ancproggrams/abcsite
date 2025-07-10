@@ -48,7 +48,7 @@ export default function OverOnsPage() {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="py-20 hero-gradient">
+      <section className="py-20 hero-gradient rounded-xl mx-4 md:mx-6 mt-4">
         <div className="container">
           <div className="max-w-4xl mx-auto text-center space-y-8">
             <div className="space-y-4">
@@ -64,7 +64,7 @@ export default function OverOnsPage() {
       </section>
 
       {/* Mission & Vision */}
-      <section className="py-20 bg-background">
+      <section className="py-20 bg-background rounded-lg mx-4 md:mx-6 my-6">
         <div className="container">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             <Card className="card-hover">
@@ -97,7 +97,7 @@ export default function OverOnsPage() {
       </section>
 
       {/* Values Section */}
-      <section className="py-20 section-background">
+      <section className="py-20 section-background rounded-lg mx-4 md:mx-6 my-6">
         <div className="container">
           <div className="text-center space-y-4 mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-foreground">
@@ -129,21 +129,23 @@ export default function OverOnsPage() {
       </section>
 
       {/* Stats Section */}
-      <section className="py-20 bg-background">
+      <section className="py-20 bg-background rounded-lg mx-4 md:mx-6 my-6">
         <div className="container">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {stats.map((stat, index) => (
-              <div key={index} className="text-center space-y-2">
-                <div className="text-4xl font-bold text-primary">{stat.number}</div>
-                <div className="text-muted-foreground">{stat.label}</div>
-              </div>
-            ))}
+          <div className="bg-card/30 rounded-xl p-8">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+              {stats.map((stat, index) => (
+                <div key={index} className="text-center space-y-2">
+                  <div className="text-4xl font-bold text-primary">{stat.number}</div>
+                  <div className="text-muted-foreground">{stat.label}</div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
       {/* Expertise Section */}
-      <section className="py-20 section-background">
+      <section className="py-20 section-background rounded-lg mx-4 md:mx-6 my-6">
         <div className="container">
           <div className="max-w-4xl mx-auto">
             <div className="text-center space-y-4 mb-16">
@@ -170,7 +172,7 @@ export default function OverOnsPage() {
       </section>
 
       {/* Team Section */}
-      <section className="py-20 bg-background">
+      <section className="py-20 bg-background rounded-lg mx-4 md:mx-6 my-6">
         <div className="container">
           <div className="max-w-4xl mx-auto text-center space-y-8">
             <div className="space-y-4">
@@ -209,7 +211,7 @@ export default function OverOnsPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 section-background">
+      <section className="py-20 section-background rounded-lg mx-4 md:mx-6 my-6">
         <div className="container">
           <div className="max-w-4xl mx-auto text-center space-y-8">
             <div className="space-y-4">

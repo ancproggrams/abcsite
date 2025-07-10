@@ -69,7 +69,7 @@ export default function ComplianceAutomationPage() {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="py-20 hero-gradient">
+      <section className="py-20 hero-gradient rounded-xl mx-4 md:mx-6 mt-4">
         <div className="container">
           <div className="max-w-4xl mx-auto text-center space-y-8">
             <div className="space-y-4">
@@ -91,7 +91,7 @@ export default function ComplianceAutomationPage() {
       </section>
 
       {/* Benefits Section */}
-      <section className="py-20 bg-background">
+      <section className="py-20 bg-background rounded-lg mx-4 md:mx-6 my-6">
         <div className="container">
           <div className="text-center space-y-4 mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-foreground">
@@ -123,7 +123,7 @@ export default function ComplianceAutomationPage() {
       </section>
 
       {/* Problem/Solution Section */}
-      <section className="py-20 section-background">
+      <section className="py-20 section-background rounded-lg mx-4 md:mx-6 my-6">
         <div className="container">
           <div className="text-center space-y-4 mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-foreground">
@@ -159,7 +159,7 @@ export default function ComplianceAutomationPage() {
       </section>
 
       {/* Quick Scan Section */}
-      <section id="quickscan" className="py-20 bg-background">
+      <section id="quickscan" className="py-20 bg-background rounded-lg mx-4 md:mx-6 my-6">
         <div className="container">
           <div className="text-center space-y-4 mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-foreground">
@@ -175,7 +175,7 @@ export default function ComplianceAutomationPage() {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-20 section-background">
+      <section className="py-20 section-background rounded-lg mx-4 md:mx-6 my-6">
         <div className="container">
           <div className="max-w-3xl mx-auto">
             <div className="text-center space-y-4 mb-12">
@@ -187,18 +187,20 @@ export default function ComplianceAutomationPage() {
               </p>
             </div>
 
-            <Accordion type="single" collapsible className="w-full">
-              {faqs.map((faq, index) => (
-                <AccordionItem key={index} value={`item-${index}`}>
-                  <AccordionTrigger className="text-left">
-                    {faq.question}
-                  </AccordionTrigger>
-                  <AccordionContent>
-                    {faq.answer}
-                  </AccordionContent>
-                </AccordionItem>
-              ))}
-            </Accordion>
+            <div className="bg-card/50 rounded-xl p-6">
+              <Accordion type="single" collapsible className="w-full">
+                {faqs.map((faq, index) => (
+                  <AccordionItem key={index} value={`item-${index}`}>
+                    <AccordionTrigger className="text-left">
+                      {faq.question}
+                    </AccordionTrigger>
+                    <AccordionContent>
+                      {faq.answer}
+                    </AccordionContent>
+                  </AccordionItem>
+                ))}
+              </Accordion>
+            </div>
           </div>
         </div>
       </section>

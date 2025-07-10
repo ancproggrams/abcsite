@@ -64,7 +64,7 @@ export default function DienstenPage() {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="py-20 section-background">
+      <section className="py-20 section-background rounded-xl mx-4 md:mx-6 mt-4">
         <div className="container">
           <div className="max-w-4xl mx-auto text-center space-y-8">
             <div className="space-y-4">
@@ -80,7 +80,7 @@ export default function DienstenPage() {
       </section>
 
       {/* Service Cards */}
-      <section className="py-20 bg-background">
+      <section className="py-20 bg-background rounded-lg mx-4 md:mx-6 my-6">
         <div className="container">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {services.map((service, index) => (
@@ -126,7 +126,7 @@ export default function DienstenPage() {
       </section>
 
       {/* AI Outsourcing Section */}
-      <section className="py-20 section-background">
+      <section className="py-20 section-background rounded-lg mx-4 md:mx-6 my-6">
         <div className="container">
           <div className="max-w-4xl mx-auto space-y-12">
             <div className="text-center space-y-4">
@@ -156,7 +156,7 @@ export default function DienstenPage() {
               ))}
             </div>
 
-            <Card className="bg-primary/5">
+            <Card className="bg-primary/5 rounded-xl">
               <CardContent className="p-8">
                 <div className="text-center space-y-4">
                   <h3 className="text-2xl font-bold text-foreground">
@@ -186,7 +186,7 @@ export default function DienstenPage() {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-20 bg-background">
+      <section className="py-20 bg-background rounded-lg mx-4 md:mx-6 my-6">
         <div className="container">
           <div className="max-w-3xl mx-auto">
             <div className="text-center space-y-4 mb-12">
@@ -198,18 +198,20 @@ export default function DienstenPage() {
               </p>
             </div>
 
-            <Accordion type="single" collapsible className="w-full">
-              {faqs.map((faq, index) => (
-                <AccordionItem key={index} value={`item-${index}`}>
-                  <AccordionTrigger className="text-left">
-                    {faq.question}
-                  </AccordionTrigger>
-                  <AccordionContent>
-                    {faq.answer}
-                  </AccordionContent>
-                </AccordionItem>
-              ))}
-            </Accordion>
+            <div className="bg-card/50 rounded-xl p-6">
+              <Accordion type="single" collapsible className="w-full">
+                {faqs.map((faq, index) => (
+                  <AccordionItem key={index} value={`item-${index}`}>
+                    <AccordionTrigger className="text-left">
+                      {faq.question}
+                    </AccordionTrigger>
+                    <AccordionContent>
+                      {faq.answer}
+                    </AccordionContent>
+                  </AccordionItem>
+                ))}
+              </Accordion>
+            </div>
           </div>
         </div>
       </section>

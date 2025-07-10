@@ -8,7 +8,7 @@ export default function AdviesGesprekPage() {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="py-20 hero-gradient">
+      <section className="py-20 hero-gradient rounded-xl mx-4 md:mx-6 mt-4">
         <div className="container">
           <div className="max-w-4xl mx-auto text-center space-y-8">
             <div className="space-y-4">
@@ -24,7 +24,7 @@ export default function AdviesGesprekPage() {
       </section>
 
       {/* Contact Info */}
-      <section className="py-12 bg-background">
+      <section className="py-12 bg-background rounded-lg mx-4 md:mx-6 my-6">
         <div className="container">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             <Card className="text-center">
@@ -60,7 +60,7 @@ export default function AdviesGesprekPage() {
       </section>
 
       {/* Main Content */}
-      <section className="py-20 section-background">
+      <section className="py-20 section-background rounded-lg mx-4 md:mx-6 my-6">
         <div className="container">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Left Column - Contact Form */}
@@ -73,7 +73,9 @@ export default function AdviesGesprekPage() {
                   Vul het formulier in en wij nemen binnen 2 uur contact met u op.
                 </p>
               </div>
-              <ContactForm />
+              <div className="bg-card/30 rounded-xl p-6">
+                <ContactForm />
+              </div>
             </div>
 
             {/* Right Column - Microsoft Bookings */}
@@ -86,14 +88,16 @@ export default function AdviesGesprekPage() {
                   Kies een tijdstip dat u uitkomt voor een persoonlijk gesprek.
                 </p>
               </div>
-              <MicrosoftBookingsEmbed />
+              <div className="bg-card/30 rounded-xl p-6">
+                <MicrosoftBookingsEmbed />
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       {/* What to Expect */}
-      <section className="py-20 bg-background">
+      <section className="py-20 bg-background rounded-lg mx-4 md:mx-6 my-6">
         <div className="container">
           <div className="max-w-4xl mx-auto">
             <div className="text-center space-y-4 mb-16">
