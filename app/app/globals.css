@@ -101,6 +101,16 @@
     background: linear-gradient(135deg, hsl(221.2 83.2% 53.3%) 0%, hsl(210 40% 96.1%) 100%);
   }
 
+  .hero-landscape-bg {
+    background-image: 
+      linear-gradient(135deg, rgba(30, 64, 175, 0.85) 0%, rgba(15, 118, 110, 0.75) 50%, rgba(5, 150, 105, 0.65) 100%),
+      url('/landscape-hero-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+  }
+
   .container {
     max-width: 1400px;
     margin: 0 auto;
@@ -163,14 +173,15 @@
     background-clip: text;
   }
 
-  /* Hero gradient text effects */
+  /* Hero gradient text effects - Natural landscape inspired */
   .gradient-text-hero {
     background: linear-gradient(135deg, 
-      #60A5FA 0%,     /* Light blue */
-      #3B82F6 25%,    /* Blue */
-      #2563EB 50%,    /* Darker blue */
-      #1D4ED8 75%,    /* Deep blue */
-      #1E40AF 100%    /* Very deep blue */
+      #87CEEB 0%,     /* Sky blue */
+      #4682B4 20%,    /* Steel blue */
+      #20B2AA 40%,    /* Light sea green */
+      #3CB371 60%,    /* Medium sea green */
+      #228B22 80%,    /* Forest green */
+      #006400 100%    /* Dark green */
     );
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -180,11 +191,12 @@
 
   .gradient-text-hero-secondary {
     background: linear-gradient(135deg, 
-      #06B6D4 0%,     /* Cyan */
-      #0891B2 25%,    /* Cyan-blue */
-      #0E7490 50%,    /* Teal */
-      #155E75 75%,    /* Dark teal */
-      #164E63 100%    /* Very dark teal */
+      #40E0D0 0%,     /* Turquoise */
+      #48D1CC 20%,    /* Medium turquoise */
+      #00CED1 40%,    /* Dark turquoise */
+      #5F9EA0 60%,    /* Cadet blue */
+      #2E8B57 80%,    /* Sea green */
+      #228B22 100%    /* Forest green */
     );
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -194,11 +206,11 @@
 
   .gradient-text-glow {
     background: linear-gradient(135deg, 
-      #60A5FA 0%,     /* Light blue */
-      #06B6D4 25%,    /* Cyan */
-      #3B82F6 50%,    /* Blue */
-      #0891B2 75%,    /* Cyan-blue */
-      #2563EB 100%    /* Darker blue */
+      #87CEEB 0%,     /* Sky blue */
+      #40E0D0 25%,    /* Turquoise */
+      #20B2AA 50%,    /* Light sea green */
+      #3CB371 75%,    /* Medium sea green */
+      #228B22 100%    /* Forest green */
     );
     border-radius: 50%;
     animation: glowPulse 6s ease-in-out infinite;

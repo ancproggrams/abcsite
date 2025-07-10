@@ -5,7 +5,7 @@ import { ArrowRight, CheckCircle } from 'lucide-react'
 
 export function HeroSection() {
   return (
-    <section className="hero-gradient py-20 lg:py-32 overflow-hidden rounded-xl mx-4 md:mx-6 mt-4">
+    <section className="hero-landscape-bg py-20 lg:py-32 overflow-hidden rounded-xl mx-4 md:mx-6 mt-4">
       <div className="container">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left side - Content */}
