@@ -84,15 +84,15 @@ export const quickScanQuestions: QuickScanQuestion[] = [
   },
   {
     id: 6,
-    text: 'Hoeveel werkdagen per jaar besteedt u aan business continuity activiteiten?',
-    type: 'number',
+    text: 'Zijn er BCM functionarissen in uw organisatie.',
+    type: 'multiple-choice',
     category: 'Organisatie',
-    scoring: [
-      { threshold: 20, score: 4 },
-      { threshold: 10, score: 3 },
-      { threshold: 5, score: 2 },
-      { threshold: 1, score: 1 },
-      { threshold: 0, score: 0 }
+    options: [
+      { text: 'Ja, volledig aangesteld en getraind', value: 'fully_appointed', score: 4 },
+      { text: 'Ja, aangesteld maar beperkte training', value: 'appointed_limited', score: 3 },
+      { text: 'Ja, maar informeel aangewezen', value: 'informal', score: 2 },
+      { text: 'Gedeeltelijk', value: 'partially', score: 1 },
+      { text: 'Nee', value: 'no', score: 0 }
     ]
   },
   {
@@ -151,15 +151,15 @@ export const quickScanQuestions: QuickScanQuestion[] = [
   },
   {
     id: 11,
-    text: 'Hoeveel kritieke bedrijfsprocessen heeft uw organisatie geïdentificeerd?',
-    type: 'number',
+    text: 'Heeft uw de kritieke bedrijfsprocessen geïdentificeerd.',
+    type: 'multiple-choice',
     category: 'Risk Management',
-    scoring: [
-      { threshold: 20, score: 4 },
-      { threshold: 10, score: 3 },
-      { threshold: 5, score: 2 },
-      { threshold: 1, score: 1 },
-      { threshold: 0, score: 0 }
+    options: [
+      { text: 'Ja, volledig geïdentificeerd en gedocumenteerd', value: 'fully_identified', score: 4 },
+      { text: 'Ja, geïdentificeerd maar documentatie beperkt', value: 'identified_limited', score: 3 },
+      { text: 'Gedeeltelijk geïdentificeerd', value: 'partially', score: 2 },
+      { text: 'Informeel geïdentificeerd', value: 'informal', score: 1 },
+      { text: 'Nee', value: 'no', score: 0 }
     ]
   },
   {
@@ -231,15 +231,15 @@ export const quickScanQuestions: QuickScanQuestion[] = [
   },
   {
     id: 17,
-    text: 'Hoeveel procent van uw IT-systemen wordt gemonitord?',
-    type: 'number',
+    text: 'Heeft u monitoring ingericht.',
+    type: 'multiple-choice',
     category: 'Techniek',
-    scoring: [
-      { threshold: 90, score: 4 },
-      { threshold: 75, score: 3 },
-      { threshold: 50, score: 2 },
-      { threshold: 25, score: 1 },
-      { threshold: 0, score: 0 }
+    options: [
+      { text: 'Ja, volledig gemonitord met alerts', value: 'fully_monitored', score: 4 },
+      { text: 'Ja, maar beperkte alerting', value: 'limited_alerts', score: 3 },
+      { text: 'Ja, basis monitoring', value: 'basic_monitoring', score: 2 },
+      { text: 'Gedeeltelijk', value: 'partially', score: 1 },
+      { text: 'Nee', value: 'no', score: 0 }
     ]
   },
   {
@@ -324,15 +324,15 @@ export const quickScanQuestions: QuickScanQuestion[] = [
   },
   {
     id: 24,
-    text: 'Hoeveel procent van uw medewerkers is bewust van business continuity procedures?',
-    type: 'number',
+    text: 'Voert u actief campagne voor business continuiteit',
+    type: 'multiple-choice',
     category: 'Training & Awareness',
-    scoring: [
-      { threshold: 90, score: 4 },
-      { threshold: 75, score: 3 },
-      { threshold: 50, score: 2 },
-      { threshold: 25, score: 1 },
-      { threshold: 0, score: 0 }
+    options: [
+      { text: 'Ja, regelmatige campagnes en communicatie', value: 'regular_campaigns', score: 4 },
+      { text: 'Ja, jaarlijkse campagnes', value: 'annual_campaigns', score: 3 },
+      { text: 'Ja, maar beperkt', value: 'limited', score: 2 },
+      { text: 'Soms', value: 'sometimes', score: 1 },
+      { text: 'Nee', value: 'no', score: 0 }
     ]
   },
 
