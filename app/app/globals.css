@@ -173,7 +173,7 @@
     background-clip: text;
   }
 
-  /* Hero gradient text effects - Natural landscape inspired */
+  /* Hero gradient text effects - Natural landscape inspired with text-stroke */
   .gradient-text-hero {
     background: linear-gradient(135deg, 
       #87CEEB 0%,     /* Sky blue */
@@ -185,6 +185,7 @@
     );
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    -webkit-text-stroke: 3px black;
     background-clip: text;
     animation: gradientShift 8s ease-in-out infinite;
   }
@@ -200,6 +201,7 @@
     );
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    -webkit-text-stroke: 3px black;
     background-clip: text;
     animation: gradientShift 10s ease-in-out infinite reverse;
   }
