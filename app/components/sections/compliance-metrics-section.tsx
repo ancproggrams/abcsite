@@ -16,11 +16,13 @@ export function ComplianceMetricsSection() {
   ]
 
   const frameworkData = [
-    { name: 'ISO 22301', score: 85 },
-    { name: 'GDPR', score: 92 },
-    { name: 'ISO 27001', score: 78 },
-    { name: 'SOC 2', score: 71 },
-    { name: 'NIST', score: 84 },
+    { name: 'Context', score: 85 },
+    { name: 'Leadership', score: 92 },
+    { name: 'Planning', score: 78 },
+    { name: 'Support', score: 81 },
+    { name: 'Operation', score: 74 },
+    { name: 'Evaluation', score: 88 },
+    { name: 'Improvement', score: 79 },
   ]
 
   const trendData = [
@@ -37,22 +39,22 @@ export function ComplianceMetricsSection() {
       <div className="container">
         <div className="text-center space-y-4 mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-foreground">
-            Compliance Metrics Dashboard
+            ISO 22301 Compliance Dashboard
           </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Krijg realtime inzicht in uw compliance status en verbeterpunten.
+            Krijg realtime inzicht in uw ISO 22301 compliance status en voortgang.
           </p>
         </div>
 
         <Card className="max-w-4xl mx-auto">
           <CardHeader>
-            <CardTitle className="text-center">Live Compliance Status</CardTitle>
+            <CardTitle className="text-center">Live ISO 22301 Status</CardTitle>
           </CardHeader>
           <CardContent>
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
               <TabsList className="grid w-full grid-cols-3">
                 <TabsTrigger value="overview">Overzicht</TabsTrigger>
-                <TabsTrigger value="frameworks">Per Framework</TabsTrigger>
+                <TabsTrigger value="frameworks">Per Clausule</TabsTrigger>
                 <TabsTrigger value="trends">Trends</TabsTrigger>
               </TabsList>
               
@@ -80,7 +82,7 @@ export function ComplianceMetricsSection() {
                 </div>
                 <div className="text-center">
                   <p className="text-2xl font-bold text-primary">78%</p>
-                  <p className="text-muted-foreground">Totale Compliance Score</p>
+                  <p className="text-muted-foreground">ISO 22301 Compliance Score</p>
                 </div>
               </TabsContent>
 

@@ -1,6 +1,6 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Shield, Clock, Server, FileText } from 'lucide-react'
+import { Shield, Clock, Server } from 'lucide-react'
 
 export function SpecializationSection() {
   const specializations = [
@@ -12,17 +12,12 @@ export function SpecializationSection() {
     {
       icon: Clock,
       title: 'Minimaliseer Downtime',
-      description: 'Proactieve monitoring en snelle respons om bedrijfskritische systemen optimaal te houden.',
+      description: 'Wij begeleiden bij het implementeren van proactieve monitoring om bedrijfskritische systemen optimaal te houden.',
     },
     {
       icon: Server,
       title: 'IT Continuïteit',
       description: 'Robuuste infrastructuur en back-up strategieën voor ononderbroken bedrijfsvoering.',
-    },
-    {
-      icon: FileText,
-      title: 'Geautomatiseerde Documentatie',
-      description: 'AI-gedreven documentatie en rapportage voor compliance en auditdoeleinden.',
     },
   ]
 
@@ -38,7 +33,7 @@ export function SpecializationSection() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {specializations.map((spec, index) => (
             <Card key={index} className="card-hover">
               <CardHeader className="text-center">

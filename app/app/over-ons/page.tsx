@@ -31,7 +31,6 @@ export default function OverOnsPage() {
 
   const stats = [
     { number: '50+', label: 'Tevreden Klanten' },
-    { number: '98%', label: 'Uptime Garantie' },
     { number: '24/7', label: 'Support' },
     { number: '5+', label: 'Jaar Ervaring' }
   ]
@@ -132,7 +131,7 @@ export default function OverOnsPage() {
       <section className="py-20 bg-background rounded-lg mx-4 md:mx-6 my-6">
         <div className="container">
           <div className="bg-card/30 rounded-xl p-8">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {stats.map((stat, index) => (
                 <div key={index} className="text-center space-y-2">
                   <div className="text-4xl font-bold text-primary">{stat.number}</div>
