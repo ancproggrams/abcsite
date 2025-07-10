@@ -181,44 +181,51 @@ export function QuickScanComponent() {
   }
 
   const handleDownloadPDF = async () => {
-    if (!reportRef.current) return
+    if (!userEmail || !userName) {
+      toast({
+        title: 'Ontbrekende gegevens',
+        description: 'Vul uw naam en e-mailadres in om de PDF te downloaden.',
+        variant: 'destructive',
+      })
+      return
+    }
 
     setIsLoading(true)
     try {
-      const { jsPDF } = await import('jspdf')
-      const html2canvas = await import('html2canvas')
-      
-      const canvas = await html2canvas.default(reportRef.current, {
-        scale: 2,
-        useCORS: true,
-        allowTaint: true
+      const results = calculateResults()
+      const recommendations = getRecommendations(results)
+
+      const response = await fetch('/api/generate-pdf', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          results,
+          recommendations,
+          userName,
+          userEmail
+        }),
       })
-      
-      const imgData = canvas.toDataURL('image/png')
-      const pdf = new jsPDF('p', 'mm', 'a4')
-      
-      const imgWidth = 210
-      const pageHeight = 295
-      const imgHeight = (canvas.height * imgWidth) / canvas.width
-      let heightLeft = imgHeight
-      
-      let position = 0
-      
-      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight)
-      heightLeft -= pageHeight
-      
-      while (heightLeft >= 0) {
-        position = heightLeft - imgHeight
-        pdf.addPage()
-        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight)
-        heightLeft -= pageHeight
+
+      if (!response.ok) {
+        throw new Error('Failed to generate PDF')
       }
-      
-      pdf.save('QuickScan-Rapport.pdf')
+
+      const blob = await response.blob()
+      const url = window.URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.style.display = 'none'
+      a.href = url
+      a.download = 'QuickScan-Rapport.pdf'
+      document.body.appendChild(a)
+      a.click()
+      window.URL.revokeObjectURL(url)
+      document.body.removeChild(a)
       
       toast({
         title: 'PDF Downloaded!',
-        description: 'Uw rapport is succesvol gedownload.',
+        description: 'Uw professionele rapport is succesvol gedownload.',
       })
     } catch (error) {
       toast({
