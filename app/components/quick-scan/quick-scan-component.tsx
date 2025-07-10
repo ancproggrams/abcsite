@@ -235,27 +235,7 @@ export function QuickScanComponent() {
       const results = calculateResults()
       const recommendations = getRecommendations(results)
 
-      // Save to database first
-      const dbResponse = await fetch('/api/quick-scan/save', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: userName,
-          email: userEmail,
-          answers: answers,
-          totalScore: results.totalPercentage,
-          maturityLevel: results.maturityLevel,
-          categoryScores: results.categoryScores
-        }),
-      })
-
-      if (!dbResponse.ok) {
-        throw new Error('Failed to save results')
-      }
-
-      // Send email
+      // Send email directly
       const emailResponse = await fetch('/api/send-report', {
         method: 'POST',
         headers: {

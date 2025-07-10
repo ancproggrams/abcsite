@@ -1,23 +1,21 @@
+// Type definitions for the application
 
-import { User } from '@prisma/client'
-
-declare module 'next-auth' {
-  interface Session {
-    user: {
-      id: string
-      email: string
-      name?: string | null
-      role?: string | null
-    }
-  }
-
-  interface User {
-    role?: string | null
-  }
+export interface QuickScanAnswer {
+  questionId: number
+  value: string | number
+  score: number
 }
 
-declare module 'next-auth/jwt' {
-  interface JWT {
-    role?: string | null
-  }
+export interface CategoryScore {
+  score: number
+  maxScore: number
+  percentage: number
+}
+
+export interface QuickScanResults {
+  totalScore: number
+  maxTotalScore: number
+  totalPercentage: number
+  maturityLevel: string
+  categoryScores: { [key: string]: CategoryScore }
 }
