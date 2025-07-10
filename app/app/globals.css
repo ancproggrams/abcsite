@@ -173,37 +173,17 @@
     background-clip: text;
   }
 
-  /* Hero gradient text effects - Natural landscape inspired with text-stroke */
+  /* Hero transparent text effects - Background shows through with black stroke */
   .gradient-text-hero {
-    background: linear-gradient(135deg, 
-      #87CEEB 0%,     /* Sky blue */
-      #4682B4 20%,    /* Steel blue */
-      #20B2AA 40%,    /* Light sea green */
-      #3CB371 60%,    /* Medium sea green */
-      #228B22 80%,    /* Forest green */
-      #006400 100%    /* Dark green */
-    );
-    -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    -webkit-text-stroke: 3px black;
-    background-clip: text;
-    animation: gradientShift 8s ease-in-out infinite;
+    -webkit-text-stroke: 5px black;
+    color: transparent;
   }
 
   .gradient-text-hero-secondary {
-    background: linear-gradient(135deg, 
-      #40E0D0 0%,     /* Turquoise */
-      #48D1CC 20%,    /* Medium turquoise */
-      #00CED1 40%,    /* Dark turquoise */
-      #5F9EA0 60%,    /* Cadet blue */
-      #2E8B57 80%,    /* Sea green */
-      #228B22 100%    /* Forest green */
-    );
-    -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    -webkit-text-stroke: 3px black;
-    background-clip: text;
-    animation: gradientShift 10s ease-in-out infinite reverse;
+    -webkit-text-stroke: 5px black;
+    color: transparent;
   }
 
   .gradient-text-glow {
@@ -218,16 +198,7 @@
     animation: glowPulse 6s ease-in-out infinite;
   }
 
-  @keyframes gradientShift {
-    0%, 100% {
-      background-size: 200% 200%;
-      background-position: 0% 50%;
-    }
-    50% {
-      background-size: 200% 200%;
-      background-position: 100% 50%;
-    }
-  }
+
 
   @keyframes glowPulse {
     0%, 100% {
