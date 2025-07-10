@@ -128,17 +128,30 @@ export function QuickScanComponent() {
 
     const totalPercentage = Math.round((totalScore / maxTotalScore) * 100)
     
-    let maturityLevel = 'Ad Hoc'
-    if (totalPercentage >= 80) maturityLevel = 'Optimized'
-    else if (totalPercentage >= 60) maturityLevel = 'Managed'
-    else if (totalPercentage >= 40) maturityLevel = 'Defined'
-    else if (totalPercentage >= 20) maturityLevel = 'Repeatable'
+    // Calculate maturity level from 1 to 5
+    let maturityLevelNumber = 1
+    let maturityLevelDescription = 'Zeer laag volwassenheidsniveau'
+    
+    if (totalPercentage >= 81) {
+      maturityLevelNumber = 5
+      maturityLevelDescription = 'Zeer hoog volwassenheidsniveau'
+    } else if (totalPercentage >= 61) {
+      maturityLevelNumber = 4
+      maturityLevelDescription = 'Hoog volwassenheidsniveau'
+    } else if (totalPercentage >= 41) {
+      maturityLevelNumber = 3
+      maturityLevelDescription = 'Gemiddeld volwassenheidsniveau'
+    } else if (totalPercentage >= 21) {
+      maturityLevelNumber = 2
+      maturityLevelDescription = 'Laag volwassenheidsniveau'
+    }
 
     return {
       totalScore,
       maxTotalScore,
       totalPercentage,
-      maturityLevel,
+      maturityLevelNumber,
+      maturityLevelDescription,
       categoryScores
     }
   }
@@ -295,8 +308,13 @@ export function QuickScanComponent() {
             <CardContent className="space-y-6">
               <div className="text-center space-y-4">
                 <div className="text-6xl font-bold text-primary">{results.totalPercentage}%</div>
-                <div className="text-2xl font-semibold text-foreground">
-                  Volwassenheidsniveau: {results.maturityLevel}
+                <div className="space-y-2">
+                  <div className="text-4xl font-bold text-foreground">
+                    Niveau {results.maturityLevelNumber}/5
+                  </div>
+                  <div className="text-lg text-muted-foreground">
+                    {results.maturityLevelDescription}
+                  </div>
                 </div>
                 <Progress value={results.totalPercentage} className="w-full max-w-md mx-auto" />
               </div>

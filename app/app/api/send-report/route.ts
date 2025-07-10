@@ -26,8 +26,13 @@ export async function POST(request: NextRequest) {
             <div style="font-size: 48px; font-weight: bold; color: #3b82f6; margin-bottom: 10px;">
               ${results.totalPercentage}%
             </div>
-            <div style="font-size: 18px; color: #374151;">
-              Volwassenheidsniveau: <strong>${results.maturityLevel}</strong>
+            <div style="margin-bottom: 10px;">
+              <div style="font-size: 28px; font-weight: bold; color: #374151;">
+                Niveau ${results.maturityLevelNumber}/5
+              </div>
+              <div style="font-size: 16px; color: #6b7280;">
+                ${results.maturityLevelDescription}
+              </div>
             </div>
           </div>
           
@@ -90,7 +95,7 @@ export async function POST(request: NextRequest) {
             <p><strong>Naam:</strong> ${name}</p>
             <p><strong>Email:</strong> ${email}</p>
             <p><strong>Score:</strong> ${results.totalPercentage}%</p>
-            <p><strong>Volwassenheidsniveau:</strong> ${results.maturityLevel}</p>
+            <p><strong>Volwassenheidsniveau:</strong> Niveau ${results.maturityLevelNumber}/5 - ${results.maturityLevelDescription}</p>
             <hr>
             ${htmlContent}
           </div>
