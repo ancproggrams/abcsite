@@ -18,7 +18,7 @@ export default function DienstenPage() {
     {
       icon: Users,
       title: 'IT Consultancy',
-      description: 'Strategische IT-adviezen en implementatie van moderne technologieën.',
+      description: 'Strategische adviezen en implementatie van moderne technologieën.',
       features: ['Strategische Planning', 'Technology Roadmap', 'Digital Transformation', 'Change Management'],
       badge: 'Nieuw'
     }
@@ -28,7 +28,7 @@ export default function DienstenPage() {
     {
       icon: Bot,
       title: 'Automatisering',
-      description: 'Repetitieve taken automatiseren met AI-oplossingen'
+      description: 'Repetitieve taken automatiseren'
     },
     {
       icon: Shield,
@@ -72,7 +72,7 @@ export default function DienstenPage() {
                 Onze Diensten
               </h1>
               <p className="text-xl text-muted-foreground">
-                Van managed services tot strategische consultancy - wij bieden de complete IT-oplossing voor uw bedrijf.
+                Van managed services tot strategische consultancy, wij bieden de complete IT-oplossing voor uw bedrijf.
               </p>
             </div>
           </div>
@@ -134,7 +134,7 @@ export default function DienstenPage() {
                 AI Outsourcing - De Toekomst van Efficiency
               </h2>
               <p className="text-xl text-muted-foreground">
-                Transformeer uw bedrijfsprocessen met onze AI-gedreven outsourcing oplossingen.
+                Transformeer uw bedrijfsprocessen met onze automatiserings oplossingen.
               </p>
             </div>
 
@@ -164,7 +164,7 @@ export default function DienstenPage() {
                   </h3>
                   <p className="text-muted-foreground">
                     Onze AI-oplossingen automatiseren repetitieve taken, verbeteren de accuratesse en besparen kostbare tijd. 
-                    Van documentverwerking tot compliance monitoring - wij maken uw processen slimmer.
+                    Van documentverwerking tot compliance monitoring, wij maken uw processen slimmer.
                   </p>
                   <div className="flex flex-col sm:flex-row gap-4 justify-center">
                     <Button asChild className="btn-primary">

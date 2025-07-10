@@ -30,18 +30,13 @@ export default function OverOnsPage() {
   ]
 
   const stats = [
-    { number: '50+', label: 'Tevreden Klanten' },
     { number: '24/7', label: 'Support' },
-    { number: '5+', label: 'Jaar Ervaring' }
+    { number: '20+', label: 'Jaar Ervaring' }
   ]
 
   const certifications = [
     'ISO 22301 Certified',
-    'ISO 27001 Expert',
-    'GDPR Specialist',
-    'SOC 2 Implementation',
-    'NIST Framework',
-    'Microsoft Partner'
+   
   ]
 
   return (
@@ -55,7 +50,7 @@ export default function OverOnsPage() {
                 Over Advies N Consultancy BV
               </h1>
               <p className="text-xl text-white/80">
-                Uw betrouwbare partner voor IT-consultancy, compliance en business continuïteit sinds 2019.
+                Uw betrouwbare partner voor compliance en business continuïteit sinds 2019.
               </p>
             </div>
           </div>
@@ -152,7 +147,7 @@ export default function OverOnsPage() {
                 Onze Expertise
               </h2>
               <p className="text-xl text-muted-foreground">
-                Gecertificeerd en gespecialiseerd in verschillende compliance frameworks.
+                Gespecialiseerd in Business & IT Continteits management.
               </p>
             </div>
 
@@ -187,20 +182,15 @@ export default function OverOnsPage() {
               <CardContent className="p-8">
                 <div className="space-y-6">
                   <div className="text-center space-y-2">
-                    <h3 className="text-2xl font-bold text-foreground">Marc van der Berg</h3>
+                    <h3 className="text-2xl font-bold text-foreground">Marc René</h3>
                     <p className="text-lg text-primary">Founder & Lead Consultant</p>
                   </div>
                   <div className="space-y-4">
                     <p className="text-muted-foreground">
-                      Marc heeft meer dan 15 jaar ervaring in IT-consultancy en compliance. Als gecertificeerd 
-                      ISO 22301 en ISO 27001 expert helpt hij organisaties hun business continuïteit te verbeteren.
+                      Marc heeft meer dan 15 jaar ervaring in IT-consultancy en compliance. Als expert helpt hij organisaties hun business continuïteit te verbeteren.
                     </p>
                     <div className="flex flex-wrap gap-2 justify-center">
-                      <Badge variant="secondary">ISO 22301 Lead Auditor</Badge>
-                      <Badge variant="secondary">ISO 27001 Expert</Badge>
-                      <Badge variant="secondary">GDPR Specialist</Badge>
-                      <Badge variant="secondary">Microsoft MVP</Badge>
-                    </div>
+                                          </div>
                   </div>
                 </div>
               </CardContent>

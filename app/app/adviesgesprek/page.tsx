@@ -13,10 +13,10 @@ export default function AdviesGesprekPage() {
           <div className="max-w-4xl mx-auto text-center space-y-8">
             <div className="space-y-4">
               <h1 className="text-4xl md:text-5xl font-bold text-white">
-                Plan Uw Adviesgesprek
+                Plan Uw Gesprek
               </h1>
               <p className="text-xl text-white/80">
-                Bespreek uw IT-uitdagingen met onze experts. Gratis, zonder verplichtingen.
+                Bespreek uw uitdagingen met onze experts. Gratis, zonder verplichtingen.
               </p>
             </div>
           </div>
@@ -31,7 +31,7 @@ export default function AdviesGesprekPage() {
               <CardContent className="p-6">
                 <Phone className="h-8 w-8 text-primary mx-auto mb-2" />
                 <h3 className="font-semibold mb-1">Telefoon</h3>
-                <p className="text-sm text-muted-foreground">+31 (0) 20 123 4567</p>
+                <p className="text-sm text-muted-foreground">+31 (0) 622675520</p>
               </CardContent>
             </Card>
             <Card className="text-center">
@@ -45,7 +45,7 @@ export default function AdviesGesprekPage() {
               <CardContent className="p-6">
                 <MapPin className="h-8 w-8 text-primary mx-auto mb-2" />
                 <h3 className="font-semibold mb-1">Locatie</h3>
-                <p className="text-sm text-muted-foreground">Amsterdam, Nederland</p>
+                <p className="text-sm text-muted-foreground">Voorburg, Nederland</p>
               </CardContent>
             </Card>
             <Card className="text-center">
@@ -116,7 +116,7 @@ export default function AdviesGesprekPage() {
                 </CardHeader>
                 <CardContent>
                   <CardDescription>
-                    Wij leren uw bedrijf kennen en begrijpen uw specifieke IT-uitdagingen.
+                    Wij leren uw bedrijf kennen en begrijpen uw specifieke uitdagingen.
                   </CardDescription>
                 </CardContent>
               </Card>
