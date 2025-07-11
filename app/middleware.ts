@@ -13,65 +13,51 @@ export function middleware(request: NextRequest) {
                    hostname.includes('127.0.0.1') ||
                    process.env.NODE_ENV === 'development'
 
-  // Security Headers
+  // For preview environments, use minimal security headers to avoid blocking
+  if (isPreview) {
+    console.log('🔄 Preview environment detected:', hostname)
+    
+    // Completely disable frame restrictions for preview
+    response.headers.delete('X-Frame-Options')
+    
+    // Allow all permissions
+    response.headers.set('Permissions-Policy', 'camera=*, microphone=*, geolocation=*')
+    
+    // Minimal CSP that allows everything
+    response.headers.set('Content-Security-Policy', "default-src * 'unsafe-inline' 'unsafe-eval' data: blob:; frame-ancestors *;")
+    
+    // Skip other security headers for preview
+    return response
+  }
+
+  // Production security headers
   response.headers.set('X-DNS-Prefetch-Control', 'on')
   response.headers.set('X-XSS-Protection', '1; mode=block')
   response.headers.set('X-Content-Type-Options', 'nosniff')
   response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
-  
-  // Environment-specific headers
-  if (isPreview) {
-    // Relaxed headers for preview environment
-    response.headers.set('X-Frame-Options', 'SAMEORIGIN')
-    response.headers.set('Permissions-Policy', 'camera=*, microphone=*, geolocation=*')
-  } else {
-    // Strict headers for production
-    response.headers.set('X-Frame-Options', 'DENY')
-    response.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()')
-  }
+  response.headers.set('X-Frame-Options', 'DENY')
+  response.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()')
   
   // HSTS - Only for HTTPS and production
-  if (request.url.startsWith('https://') && !isPreview) {
+  if (request.url.startsWith('https://')) {
     response.headers.set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload')
   }
   
-  // Content Security Policy - Environment specific
-  const nonce = Buffer.from(crypto.randomUUID()).toString('base64')
-  
-  let cspPolicy: string[]
-  
-  if (isPreview) {
-    // Relaxed CSP for preview environment
-    cspPolicy = [
-      "default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: *",
-      `script-src 'self' 'unsafe-inline' 'unsafe-eval' https: data: blob:`,
-      `style-src 'self' 'unsafe-inline' https: data:`,
-      `font-src 'self' https: data:`,
-      `img-src 'self' data: https: blob: *`,
-      `connect-src 'self' https: wss: ws:`,
-      `frame-src 'self' https: data:`,
-      `object-src 'self' data:`,
-      `base-uri 'self'`,
-      `form-action 'self'`,
-      `frame-ancestors 'self' *.abacusai.app`,
-    ]
-  } else {
-    // Strict CSP for production
-    cspPolicy = [
-      "default-src 'self'",
-      `script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://unpkg.com https://www.googletagmanager.com https://www.google-analytics.com`,
-      `style-src 'self' 'unsafe-inline' https://fonts.googleapis.com`,
-      `font-src 'self' https://fonts.gstatic.com`,
-      `img-src 'self' data: https: blob:`,
-      `connect-src 'self' https://www.google-analytics.com https://api.adviesnconsultancy.nl`,
-      `frame-src 'self' https://outlook.office365.com https://outlook.office.com`,
-      `object-src 'none'`,
-      `base-uri 'self'`,
-      `form-action 'self'`,
-      `frame-ancestors 'none'`,
-      `upgrade-insecure-requests`,
-    ]
-  }
+  // Strict CSP for production
+  const cspPolicy = [
+    "default-src 'self'",
+    `script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://unpkg.com https://www.googletagmanager.com https://www.google-analytics.com`,
+    `style-src 'self' 'unsafe-inline' https://fonts.googleapis.com`,
+    `font-src 'self' https: data:`,
+    `img-src 'self' data: https: blob:`,
+    `connect-src 'self' https://www.google-analytics.com https://api.adviesnconsultancy.nl`,
+    `frame-src 'self' https://outlook.office365.com https://outlook.office.com`,
+    `object-src 'none'`,
+    `base-uri 'self'`,
+    `form-action 'self'`,
+    `frame-ancestors 'none'`,
+    `upgrade-insecure-requests`,
+  ]
   
   response.headers.set('Content-Security-Policy', cspPolicy.join('; '))
   
