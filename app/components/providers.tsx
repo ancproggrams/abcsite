@@ -3,6 +3,8 @@
 
 import { ThemeProvider } from '@/components/theme-provider'
 import { LanguageProvider } from '@/components/language-provider'
+import { AnalyticsProvider } from '@/components/analytics-provider'
+import { CookieConsentBanner } from '@/components/cookie-consent-banner'
 
 interface ProvidersProps {
   children: React.ReactNode
@@ -18,7 +20,10 @@ export function Providers({ children }: ProvidersProps) {
         disableTransitionOnChange={false}
         storageKey="theme-preference"
       >
-        {children}
+        <AnalyticsProvider>
+          {children}
+          <CookieConsentBanner />
+        </AnalyticsProvider>
       </ThemeProvider>
     </LanguageProvider>
   )

@@ -10,8 +10,11 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Progress } from '@/components/ui/progress'
 import { Checkbox } from '@/components/ui/checkbox'
 import { useToast } from '@/hooks/use-toast'
-import { ChevronLeft, ChevronRight, Download, Mail, CheckCircle, RotateCcw, AlertCircle } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Download, Mail, CheckCircle, RotateCcw, AlertCircle, Zap, TrendingUp } from 'lucide-react'
 import { quickScanQuestions } from '@/lib/quick-scan-questions'
+import analytics from '@/lib/analytics'
+import abTesting from '@/lib/ab-testing'
+import leadScoring from '@/lib/lead-scoring'
 
 interface Answer {
   questionId: number
@@ -82,14 +85,31 @@ export function QuickScanComponent() {
   const [isLoading, setIsLoading] = useState(false)
   const [hasLoadedProgress, setHasLoadedProgress] = useState(false)
   const [showProgressNotification, setShowProgressNotification] = useState(false)
+  const [abTestVariant, setAbTestVariant] = useState<string>('control')
+  const [abTestConfig, setAbTestConfig] = useState<any>({})
+  const [scanStartTime, setScanStartTime] = useState<number>(0)
   const { toast } = useToast()
   const reportRef = useRef<HTMLDivElement>(null)
 
   const totalQuestions = quickScanQuestions.length
   const progress = ((currentQuestion + 1) / totalQuestions) * 100
 
-  // Load saved progress on component mount
+  // Load saved progress and initialize A/B testing on component mount
   useEffect(() => {
+    // Initialize A/B testing
+    const variant = abTesting.getQuickScanVariant()
+    const config = abTesting.getQuickScanConfig()
+    setAbTestVariant(variant)
+    setAbTestConfig(config)
+    
+    // Track scan start
+    setScanStartTime(Date.now())
+    analytics.trackQuickScanStart(variant)
+    leadScoring.processActivity('quick_scan_start', undefined, {
+      variant,
+      timestamp: new Date().toISOString()
+    })
+    
     const savedProgress = loadProgress()
     if (savedProgress) {
       const timeDiff = Date.now() - savedProgress.timestamp
@@ -169,7 +189,17 @@ export function QuickScanComponent() {
 
   const nextQuestion = () => {
     if (currentQuestion < totalQuestions - 1) {
-      setCurrentQuestion(currentQuestion + 1)
+      const newQuestion = currentQuestion + 1
+      setCurrentQuestion(newQuestion)
+      
+      // Track progress
+      analytics.trackQuickScanProgress(newQuestion + 1, totalQuestions)
+      leadScoring.processActivity('quick_scan_progress', undefined, {
+        questionNumber: newQuestion + 1,
+        totalQuestions,
+        progress: Math.round(((newQuestion + 1) / totalQuestions) * 100),
+        variant: abTestVariant
+      })
     } else {
       completeQuiz()
     }
@@ -183,6 +213,26 @@ export function QuickScanComponent() {
 
   const completeQuiz = () => {
     setIsCompleted(true)
+    
+    // Calculate completion time
+    const completionTime = scanStartTime > 0 ? Date.now() - scanStartTime : 0
+    
+    // Calculate results for tracking
+    const results = calculateResults()
+    
+    // Track completion
+    analytics.trackQuickScanComplete(results)
+    leadScoring.processActivity('quick_scan_complete', undefined, {
+      totalScore: results.totalPercentage,
+      maturityLevel: results.maturityLevelNumber,
+      completionTime,
+      variant: abTestVariant,
+      categoryScores: results.categoryScores
+    })
+    
+    // Record A/B test conversion
+    abTesting.recordQuickScanConversion(undefined, results)
+    
     // Clear saved progress when quiz is completed
     setTimeout(() => {
       clearProgress()
@@ -306,6 +356,14 @@ export function QuickScanComponent() {
       const results = calculateResults()
       const recommendations = getRecommendations(results)
 
+      // Track lead capture
+      analytics.trackLeadCapture(userEmail, userName, 'quickscan_pdf')
+      leadScoring.processActivity('email_capture', undefined, {
+        email: userEmail,
+        name: userName,
+        source: 'quickscan_pdf'
+      })
+
       const response = await fetch('/api/generate-pdf', {
         method: 'POST',
         headers: {
@@ -333,6 +391,14 @@ export function QuickScanComponent() {
       a.click()
       window.URL.revokeObjectURL(url)
       document.body.removeChild(a)
+      
+      // Track download
+      analytics.trackDownload('QuickScan-Rapport.pdf', 'pdf')
+      leadScoring.processActivity('file_download', undefined, {
+        fileName: 'QuickScan-Rapport.pdf',
+        fileType: 'pdf',
+        source: 'quickscan'
+      })
       
       toast({
         title: 'PDF Downloaded!',
@@ -366,6 +432,14 @@ export function QuickScanComponent() {
       const results = calculateResults()
       const recommendations = getRecommendations(results)
 
+      // Track lead capture
+      analytics.trackLeadCapture(userEmail, userName, 'quickscan_email')
+      leadScoring.processActivity('email_capture', undefined, {
+        email: userEmail,
+        name: userName,
+        source: 'quickscan_email'
+      })
+
       // Send email directly
       const emailResponse = await fetch('/api/send-report', {
         method: 'POST',
@@ -382,6 +456,18 @@ export function QuickScanComponent() {
       })
 
       if (emailResponse.ok) {
+        // Track form submission
+        analytics.trackFormSubmission('quickscan_email', {
+          email: userEmail,
+          name: userName,
+          sendCopyToAdmin
+        })
+        leadScoring.processActivity('form_submit', undefined, {
+          formType: 'quickscan_email',
+          email: userEmail,
+          name: userName
+        })
+        
         toast({
           title: 'E-mail verzonden!',
           description: 'Uw rapport is succesvol verstuurd naar uw e-mailadres.',
@@ -571,9 +657,11 @@ export function QuickScanComponent() {
               Vraag {currentQuestion + 1} van {totalQuestions}
             </CardTitle>
             <div className="text-right">
-              <span className="text-sm text-muted-foreground block">
-                {question?.category}
-              </span>
+              {abTestConfig.showCategoryLabels !== false && (
+                <span className="text-sm text-muted-foreground block">
+                  {question?.category}
+                </span>
+              )}
               {(hasLoadedProgress || answers.length > 0) && (
                 <span className="text-xs text-primary/70">
                   ● Automatisch opgeslagen
@@ -582,7 +670,20 @@ export function QuickScanComponent() {
             </div>
           </div>
           <div className="space-y-2">
-            <Progress value={progress} className="w-full" />
+            {abTestConfig.progressIndicator === 'step_indicator' ? (
+              <div className="flex justify-between items-center mb-2">
+                {Array.from({ length: totalQuestions }, (_, i) => (
+                  <div
+                    key={i}
+                    className={`w-2 h-2 rounded-full ${
+                      i <= currentQuestion ? 'bg-primary' : 'bg-muted'
+                    }`}
+                  />
+                ))}
+              </div>
+            ) : (
+              <Progress value={progress} className="w-full" />
+            )}
             <div className="flex justify-between items-center">
               <span className="text-xs text-muted-foreground">
                 Voortgang: {Math.round(progress)}%
@@ -647,9 +748,9 @@ export function QuickScanComponent() {
             <Button
               onClick={nextQuestion}
               disabled={!currentAnswer}
-              className="btn-primary"
+              className={`btn-primary ${abTestConfig.style === 'enhanced' ? 'shadow-lg transform hover:scale-105 transition-all duration-200' : ''}`}
             >
-              {currentQuestion === totalQuestions - 1 ? 'Voltooi Scan' : 'Volgende'}
+              {currentQuestion === totalQuestions - 1 ? 'Voltooi Scan' : (abTestConfig.ctaText || 'Volgende')}
               <ChevronRight className="ml-2 h-4 w-4" />
             </Button>
           </div>
