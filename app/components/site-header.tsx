@@ -99,7 +99,7 @@ export function SiteHeader() {
             <ThemeToggle />
             <LanguageToggle />
             <button
-              className="focus-visible interactive-element"
+              className="mobile-menu-btn focus-visible interactive-element"
               onClick={toggleMenu}
               aria-label={isMenuOpen ? t('a11y.closeMenu', 'Close menu') : t('a11y.openMenu', 'Open menu')}
               aria-expanded={isMenuOpen}
