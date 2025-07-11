@@ -63,6 +63,12 @@ export function SiteHeader() {
               {t('nav.services')}
             </Link>
             <Link 
+              href="/kenniscentrum" 
+              className="text-sm font-medium text-foreground hover:text-primary transition-colors focus-visible interactive-element"
+            >
+              {t('nav.knowledge', 'Kenniscentrum')}
+            </Link>
+            <Link 
               href="/compliance-automation" 
               className="text-sm font-medium text-foreground hover:text-primary transition-colors focus-visible interactive-element"
             >
@@ -136,6 +142,13 @@ export function SiteHeader() {
                 onClick={toggleMenu}
               >
                 {t('nav.services')}
+              </Link>
+              <Link 
+                href="/kenniscentrum" 
+                className="block text-sm font-medium text-foreground hover:text-primary transition-colors focus-visible interactive-element"
+                onClick={toggleMenu}
+              >
+                {t('nav.knowledge', 'Kenniscentrum')}
               </Link>
               <Link 
                 href="/compliance-automation" 

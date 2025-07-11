@@ -17,3 +17,100 @@ model Contact {
   message   String
   createdAt DateTime @default(now())
 }
+
+model BlogPost {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  excerpt     String
+  content     String
+  featuredImage String?
+  status      PostStatus @default(DRAFT)
+  authorName  String   @default("Marc van der Meer")
+  authorEmail String   @default("marc@adviesnconsultancy.nl")
+  publishedAt DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // SEO fields
+  metaTitle       String?
+  metaDescription String?
+  keywords        String?
+  
+  // Relationships
+  categories      BlogCategory[]
+  tags            BlogTag[]
+  
+  // Analytics
+  viewCount       Int @default(0)
+  shareCount      Int @default(0)
+  
+  @@map("blog_posts")
+}
+
+model BlogCategory {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  slug        String   @unique
+  description String?
+  color       String   @default("#60B5FF")
+  createdAt   DateTime @default(now())
+  
+  posts       BlogPost[]
+  
+  @@map("blog_categories")
+}
+
+model BlogTag {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  slug      String   @unique
+  createdAt DateTime @default(now())
+  
+  posts     BlogPost[]
+  
+  @@map("blog_tags")
+}
+
+model NewsletterSubscriber {
+  id              String   @id @default(cuid())
+  email           String   @unique
+  name            String?
+  company         String?
+  isActive        Boolean  @default(true)
+  preferences     String[] // JSON array of preferences
+  source          String?  // Where they signed up from
+  leadScore       Int      @default(0)
+  lastEngagement  DateTime?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@map("newsletter_subscribers")
+}
+
+model SocialMediaPost {
+  id           String   @id @default(cuid())
+  platform     SocialPlatform
+  postId       String   // External post ID
+  content      String
+  url          String
+  imageUrl     String?
+  publishedAt  DateTime
+  engagements  Int      @default(0)
+  createdAt    DateTime @default(now())
+  
+  @@unique([platform, postId])
+  @@map("social_media_posts")
+}
+
+enum PostStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum SocialPlatform {
+  LINKEDIN
+  TWITTER
+  FACEBOOK
+}
