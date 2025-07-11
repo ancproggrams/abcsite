@@ -88,7 +88,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="nl" suppressHydrationWarning>
+    <html lang="nl" suppressHydrationWarning={true}>
       <head>
         <link rel="canonical" href="https://adviesnconsultancy.nl" />
         <link rel="sitemap" type="application/xml" href="/sitemap.xml" />

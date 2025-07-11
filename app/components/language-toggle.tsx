@@ -10,9 +10,15 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { useEffect, useState } from 'react'
 
 export function LanguageToggle() {
   const { language, setLanguage, t } = useLanguage()
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   return (
     <DropdownMenu>
@@ -30,14 +36,14 @@ export function LanguageToggle() {
       <DropdownMenuContent align="end" className="min-w-[120px]">
         <DropdownMenuItem
           onClick={() => setLanguage('nl')}
-          className={`cursor-pointer ${language === 'nl' ? 'bg-accent' : ''}`}
+          className={`cursor-pointer ${mounted && language === 'nl' ? 'bg-accent' : ''}`}
         >
           <span className="mr-2">🇳🇱</span>
           <span>Nederlands</span>
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={() => setLanguage('en')}
-          className={`cursor-pointer ${language === 'en' ? 'bg-accent' : ''}`}
+          className={`cursor-pointer ${mounted && language === 'en' ? 'bg-accent' : ''}`}
         >
           <span className="mr-2">🇬🇧</span>
           <span>English</span>

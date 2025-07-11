@@ -10,11 +10,60 @@ import { LanguageToggle } from '@/components/language-toggle'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { useTranslation } from '@/lib/i18n'
 
+// Static navigation configuration to ensure consistent SSR/CSR rendering
+const navigationItems = [
+  {
+    key: 'home',
+    href: '/',
+    translationKey: 'nav.home',
+    fallback: 'Home'
+  },
+  {
+    key: 'services',
+    href: '/diensten',
+    translationKey: 'nav.services',
+    fallback: 'Diensten'
+  },
+  {
+    key: 'knowledge',
+    href: '/kenniscentrum',
+    translationKey: 'nav.knowledge',
+    fallback: 'Kenniscentrum'
+  },
+  {
+    key: 'compliance',
+    href: '/compliance-automation',
+    translationKey: 'nav.compliance',
+    fallback: 'Compliance Automation'
+  },
+  {
+    key: 'about',
+    href: '/over-ons',
+    translationKey: 'nav.about',
+    fallback: 'Over Ons'
+  },
+  {
+    key: 'consultation',
+    href: '/adviesgesprek',
+    translationKey: 'nav.consultation',
+    fallback: 'Adviesgesprek'
+  }
+] as const
+
 export function SiteHeader() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const { t } = useTranslation()
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen)
+
+  // Safe translation function with guaranteed fallback
+  const safeT = (key: string, fallback: string) => {
+    try {
+      return t(key, fallback) || fallback
+    } catch {
+      return fallback
+    }
+  }
 
   return (
     <>
@@ -24,7 +73,7 @@ export function SiteHeader() {
         className="skip-link focus-visible"
         tabIndex={1}
       >
-        {t('a11y.skipToContent', 'Skip to main content')}
+        {safeT('a11y.skipToContent', 'Skip to main content')}
       </a>
       
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 theme-transition">
@@ -50,42 +99,15 @@ export function SiteHeader() {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-6" role="navigation" aria-label="Main navigation">
-            <Link 
-              href="/" 
-              className="text-sm font-medium text-foreground hover:text-primary transition-colors focus-visible interactive-element"
-            >
-              {t('nav.home')}
-            </Link>
-            <Link 
-              href="/diensten" 
-              className="text-sm font-medium text-foreground hover:text-primary transition-colors focus-visible interactive-element"
-            >
-              {t('nav.services')}
-            </Link>
-            <Link 
-              href="/kenniscentrum" 
-              className="text-sm font-medium text-foreground hover:text-primary transition-colors focus-visible interactive-element"
-            >
-              {t('nav.knowledge', 'Kenniscentrum')}
-            </Link>
-            <Link 
-              href="/compliance-automation" 
-              className="text-sm font-medium text-foreground hover:text-primary transition-colors focus-visible interactive-element"
-            >
-              {t('nav.compliance')}
-            </Link>
-            <Link 
-              href="/over-ons" 
-              className="text-sm font-medium text-foreground hover:text-primary transition-colors focus-visible interactive-element"
-            >
-              {t('nav.about')}
-            </Link>
-            <Link 
-              href="/adviesgesprek" 
-              className="text-sm font-medium text-foreground hover:text-primary transition-colors focus-visible interactive-element"
-            >
-              {t('nav.consultation')}
-            </Link>
+            {navigationItems.map((item) => (
+              <Link 
+                key={item.key}
+                href={item.href}
+                className="text-sm font-medium text-foreground hover:text-primary transition-colors focus-visible interactive-element"
+              >
+                {safeT(item.translationKey, item.fallback)}
+              </Link>
+            ))}
             
             {/* Theme and Language toggles */}
             <div className="flex items-center space-x-2 ml-4">
@@ -95,7 +117,7 @@ export function SiteHeader() {
             
             <Button asChild className="btn-primary focus-visible interactive-element ml-2">
               <Link href="/compliance-automation#quickscan">
-                {t('nav.quickscan')}
+                {safeT('nav.quickscan', 'Quick Scan')}
               </Link>
             </Button>
           </nav>
@@ -107,7 +129,7 @@ export function SiteHeader() {
             <button
               className="mobile-menu-btn focus-visible interactive-element"
               onClick={toggleMenu}
-              aria-label={isMenuOpen ? t('a11y.closeMenu', 'Close menu') : t('a11y.openMenu', 'Open menu')}
+              aria-label={isMenuOpen ? safeT('a11y.closeMenu', 'Close menu') : safeT('a11y.openMenu', 'Open menu')}
               aria-expanded={isMenuOpen}
               aria-controls="mobile-menu"
             >
@@ -129,55 +151,23 @@ export function SiteHeader() {
             aria-label="Mobile navigation"
           >
             <nav className="container py-4 space-y-4">
-              <Link 
-                href="/" 
-                className="block text-sm font-medium text-foreground hover:text-primary transition-colors focus-visible interactive-element"
-                onClick={toggleMenu}
-              >
-                {t('nav.home')}
-              </Link>
-              <Link 
-                href="/diensten" 
-                className="block text-sm font-medium text-foreground hover:text-primary transition-colors focus-visible interactive-element"
-                onClick={toggleMenu}
-              >
-                {t('nav.services')}
-              </Link>
-              <Link 
-                href="/kenniscentrum" 
-                className="block text-sm font-medium text-foreground hover:text-primary transition-colors focus-visible interactive-element"
-                onClick={toggleMenu}
-              >
-                {t('nav.knowledge', 'Kenniscentrum')}
-              </Link>
-              <Link 
-                href="/compliance-automation" 
-                className="block text-sm font-medium text-foreground hover:text-primary transition-colors focus-visible interactive-element"
-                onClick={toggleMenu}
-              >
-                {t('nav.compliance')}
-              </Link>
-              <Link 
-                href="/over-ons" 
-                className="block text-sm font-medium text-foreground hover:text-primary transition-colors focus-visible interactive-element"
-                onClick={toggleMenu}
-              >
-                {t('nav.about')}
-              </Link>
-              <Link 
-                href="/adviesgesprek" 
-                className="block text-sm font-medium text-foreground hover:text-primary transition-colors focus-visible interactive-element"
-                onClick={toggleMenu}
-              >
-                {t('nav.consultation')}
-              </Link>
+              {navigationItems.map((item) => (
+                <Link 
+                  key={item.key}
+                  href={item.href}
+                  className="block text-sm font-medium text-foreground hover:text-primary transition-colors focus-visible interactive-element"
+                  onClick={toggleMenu}
+                >
+                  {safeT(item.translationKey, item.fallback)}
+                </Link>
+              ))}
               <Button 
                 asChild 
                 className="btn-primary w-full focus-visible interactive-element" 
                 onClick={toggleMenu}
               >
                 <Link href="/compliance-automation#quickscan">
-                  {t('nav.quickscan')}
+                  {safeT('nav.quickscan', 'Quick Scan')}
                 </Link>
               </Button>
             </nav>

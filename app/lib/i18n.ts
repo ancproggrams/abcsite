@@ -17,6 +17,7 @@ export const translations: Record<Language, Record<string, string>> = {
   nl: {
     'nav.home': 'Home',
     'nav.services': 'Diensten',
+    'nav.knowledge': 'Kenniscentrum',
     'nav.compliance': 'Compliance Automation',
     'nav.about': 'Over Ons',
     'nav.consultation': 'Adviesgesprek',
@@ -45,6 +46,7 @@ export const translations: Record<Language, Record<string, string>> = {
   en: {
     'nav.home': 'Home',
     'nav.services': 'Services',
+    'nav.knowledge': 'Knowledge Center',
     'nav.compliance': 'Compliance Automation',
     'nav.about': 'About Us',
     'nav.consultation': 'Consultation',

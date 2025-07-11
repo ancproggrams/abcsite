@@ -12,16 +12,18 @@ interface ProvidersProps {
 
 export function Providers({ children }: ProvidersProps) {
   return (
-    <LanguageProvider>
-      <ThemeProvider
-        attribute="class"
-        defaultTheme="system"
-        enableSystem
-        disableTransitionOnChange={false}
-        storageKey="theme-preference"
-      >
-        {children}
-      </ThemeProvider>
-    </LanguageProvider>
+    <div suppressHydrationWarning={true}>
+      <LanguageProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="light"
+          enableSystem
+          disableTransitionOnChange={false}
+          storageKey="theme-preference"
+        >
+          {children}
+        </ThemeProvider>
+      </LanguageProvider>
+    </div>
   )
 }
