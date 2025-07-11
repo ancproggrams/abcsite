@@ -1,15 +1,18 @@
-
+'use client'
 
 import Link from 'next/link'
 import Image from 'next/image'
 import { Mail, Phone, MapPin } from 'lucide-react'
+import { useTranslation } from '@/lib/i18n'
 
 export function SiteFooter() {
+  const { t } = useTranslation()
+
   return (
-    <footer className="bg-muted/50 border-t">
+    <footer className="bg-muted/50 border-t theme-transition">
       <div className="container py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          {/* Bedrijf */}
+          {/* Company */}
           <div className="space-y-4">
             <div className="flex items-center space-x-3">
               <div className="relative h-8 w-8">
@@ -20,61 +23,76 @@ export function SiteFooter() {
                   className="object-contain"
                 />
               </div>
-              <span className="font-semibold text-foreground">ANC</span>
+              <span className="font-semibold text-foreground">{t('footer.company')}</span>
             </div>
             <p className="text-sm text-muted-foreground">
-              Uw strategische partner in IT-consultancy, compliance en AI-automatisering.
+              {t('footer.description')}
             </p>
             <div className="space-y-2">
               <div className="flex items-center space-x-2 text-sm text-muted-foreground">
                 <Mail className="h-4 w-4" />
-                <span>info@adviesnconsultancy.nl</span>
+                <span>{t('contact.info.email')}</span>
               </div>
               <div className="flex items-center space-x-2 text-sm text-muted-foreground">
                 <Phone className="h-4 w-4" />
-                <span>+31622675520</span>
+                <span>{t('contact.info.phone')}</span>
               </div>
               <div className="flex items-center space-x-2 text-sm text-muted-foreground">
                 <MapPin className="h-4 w-4" />
-                <span>Voorburg, Nederland</span>
+                <span>{t('contact.info.address')}</span>
               </div>
             </div>
           </div>
 
-          {/* Diensten */}
+          {/* Services */}
           <div className="space-y-4">
-            <h4 className="font-semibold text-foreground">Diensten</h4>
+            <h4 className="font-semibold text-foreground">{t('footer.links.services')}</h4>
             <ul className="space-y-2">
               <li>
-                <Link href="/diensten" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  IT Consultancy
+                <Link 
+                  href="/diensten" 
+                  className="text-sm text-muted-foreground hover:text-primary transition-colors focus-visible"
+                >
+                  {t('services.it.title')}
                 </Link>
               </li>
               <li>
-                <Link href="/compliance-automation" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  Compliance Automation
+                <Link 
+                  href="/compliance-automation" 
+                  className="text-sm text-muted-foreground hover:text-primary transition-colors focus-visible"
+                >
+                  {t('services.compliance.title')}
                 </Link>
               </li>
               <li>
-                <Link href="/diensten" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  AI Outsourcing
+                <Link 
+                  href="/diensten" 
+                  className="text-sm text-muted-foreground hover:text-primary transition-colors focus-visible"
+                >
+                  {t('services.ai.title')}
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Bedrijf */}
+          {/* Company */}
           <div className="space-y-4">
-            <h4 className="font-semibold text-foreground">Bedrijf</h4>
+            <h4 className="font-semibold text-foreground">{t('footer.links.about')}</h4>
             <ul className="space-y-2">
               <li>
-                <Link href="/over-ons" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  Over Ons
+                <Link 
+                  href="/over-ons" 
+                  className="text-sm text-muted-foreground hover:text-primary transition-colors focus-visible"
+                >
+                  {t('nav.about')}
                 </Link>
               </li>
               <li>
-                <Link href="/adviesgesprek" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  Contact
+                <Link 
+                  href="/adviesgesprek" 
+                  className="text-sm text-muted-foreground hover:text-primary transition-colors focus-visible"
+                >
+                  {t('footer.links.contact')}
                 </Link>
               </li>
             </ul>
@@ -85,8 +103,11 @@ export function SiteFooter() {
             <h4 className="font-semibold text-foreground">Tools</h4>
             <ul className="space-y-2">
               <li>
-                <Link href="/compliance-automation#quickscan" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  Quick Scan
+                <Link 
+                  href="/compliance-automation#quickscan" 
+                  className="text-sm text-muted-foreground hover:text-primary transition-colors focus-visible"
+                >
+                  {t('nav.quickscan')}
                 </Link>
               </li>
             </ul>
@@ -96,7 +117,7 @@ export function SiteFooter() {
         <div className="mt-12 pt-8 border-t border-border">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-sm text-muted-foreground">
-              © 2024 Advies N Consultancy BV. Alle rechten voorbehouden.
+              © 2024 {t('footer.company')}. {t('footer.rights')}.
             </p>
           </div>
         </div>

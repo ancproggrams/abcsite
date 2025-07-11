@@ -2,6 +2,7 @@
 'use client'
 
 import { ThemeProvider } from '@/components/theme-provider'
+import { LanguageProvider } from '@/components/language-provider'
 
 interface ProvidersProps {
   children: React.ReactNode
@@ -9,13 +10,16 @@ interface ProvidersProps {
 
 export function Providers({ children }: ProvidersProps) {
   return (
-    <ThemeProvider
-      attribute="class"
-      defaultTheme="light"
-      enableSystem={false}
-      disableTransitionOnChange
-    >
-      {children}
-    </ThemeProvider>
+    <LanguageProvider>
+      <ThemeProvider
+        attribute="class"
+        defaultTheme="system"
+        enableSystem
+        disableTransitionOnChange={false}
+        storageKey="theme-preference"
+      >
+        {children}
+      </ThemeProvider>
+    </LanguageProvider>
   )
 }

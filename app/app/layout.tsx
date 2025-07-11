@@ -8,6 +8,8 @@ import { SiteFooter } from '@/components/site-footer'
 import { Toaster } from '@/components/ui/toaster'
 import { StructuredData } from '@/components/structured-data'
 import { PerformanceMonitor } from '@/components/performance-monitor'
+import { PWAManager } from '@/components/pwa-manager'
+import { PWAInstallPrompt } from '@/components/pwa-install-prompt'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -90,6 +92,7 @@ export default function RootLayout({
       <head>
         <link rel="canonical" href="https://adviesnconsultancy.nl" />
         <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+        <link rel="manifest" href="/manifest.json" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#1e40af" />
         <meta name="msapplication-TileColor" content="#1e40af" />
@@ -99,17 +102,27 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="format-detection" content="telephone=no" />
         <meta name="mobile-web-app-capable" content="yes" />
+        
+        {/* PWA iOS Icons */}
+        <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png" />
+        
         <StructuredData />
       </head>
-      <body className={inter.className}>
+      <body className={`${inter.className} theme-transition`}>
         <Providers>
           <div className="flex min-h-screen flex-col">
             <SiteHeader />
-            <main className="flex-1">{children}</main>
+            <main id="main-content" className="flex-1" tabIndex={-1}>
+              {children}
+            </main>
             <SiteFooter />
           </div>
           <Toaster />
           <PerformanceMonitor />
+          <PWAManager />
+          <PWAInstallPrompt />
         </Providers>
       </body>
     </html>
