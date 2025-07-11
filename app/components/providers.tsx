@@ -20,10 +20,7 @@ export function Providers({ children }: ProvidersProps) {
         disableTransitionOnChange={false}
         storageKey="theme-preference"
       >
-        <AnalyticsProvider>
-          {children}
-          <CookieConsentBanner />
-        </AnalyticsProvider>
+        {children}
       </ThemeProvider>
     </LanguageProvider>
   )

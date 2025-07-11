@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Download, X, Smartphone } from 'lucide-react'
-import { useTranslation } from '@/lib/i18n'
+// import { useTranslation } from '@/lib/i18n'
 
 interface BeforeInstallPromptEvent extends Event {
   readonly platforms: string[]
@@ -20,9 +20,17 @@ export function PWAInstallPrompt() {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null)
   const [showPrompt, setShowPrompt] = useState(false)
   const [isInstalled, setIsInstalled] = useState(false)
-  const { t } = useTranslation()
+  const [isClient, setIsClient] = useState(false)
+  // const { t } = useTranslation()
+
+  // Set client-side flag to prevent SSR hydration errors
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
 
   useEffect(() => {
+    if (!isClient) return
+
     // Check if app is already installed
     const isAppInstalled = window.matchMedia('(display-mode: standalone)').matches ||
                           (window.navigator as any).standalone ||
@@ -57,7 +65,7 @@ export function PWAInstallPrompt() {
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
       window.removeEventListener('appinstalled', handleAppInstalled)
     }
-  }, [])
+  }, [isClient])
 
   const handleInstallClick = async () => {
     if (!deferredPrompt) return
@@ -85,8 +93,8 @@ export function PWAInstallPrompt() {
     localStorage.setItem('pwa-install-dismissed', 'true')
   }
 
-  // Don't show if already installed or no prompt available
-  if (isInstalled || !showPrompt || !deferredPrompt) {
+  // Don't show if not client-side, already installed, or no prompt available
+  if (!isClient || isInstalled || !showPrompt || !deferredPrompt) {
     return null
   }
 

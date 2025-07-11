@@ -15,7 +15,7 @@ export default function PrivacyPage() {
           </p>
           <div className="flex justify-center items-center space-x-2 mt-4">
             <div className="text-sm border rounded px-2 py-1">
-              Laatst bijgewerkt: 11 juli 2025
+              Laatst bijgewerkt: juli 2025
             </div>
             <div className="text-sm border rounded px-2 py-1">
               GDPR Compliant

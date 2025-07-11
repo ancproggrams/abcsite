@@ -35,28 +35,29 @@ export function middleware(request: NextRequest) {
   response.headers.set('X-XSS-Protection', '1; mode=block')
   response.headers.set('X-Content-Type-Options', 'nosniff')
   response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
-  response.headers.set('X-Frame-Options', 'DENY')
+  response.headers.set('X-Frame-Options', 'SAMEORIGIN')
   response.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()')
   
-  // HSTS - Only for HTTPS and production
+  // HSTS - Softened configuration to avoid SSL/TLS issues
   if (request.url.startsWith('https://')) {
-    response.headers.set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload')
+    // Reduced max-age and removed preload to avoid SSL conflicts
+    response.headers.set('Strict-Transport-Security', 'max-age=3600')
   }
   
-  // Strict CSP for production
+  // Relaxed CSP for production to avoid SSL/TLS conflicts
   const cspPolicy = [
-    "default-src 'self'",
-    `script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://unpkg.com https://www.googletagmanager.com https://www.google-analytics.com`,
-    `style-src 'self' 'unsafe-inline' https://fonts.googleapis.com`,
+    "default-src 'self' https:",
+    `script-src 'self' 'unsafe-inline' 'unsafe-eval' https: data:`,
+    `style-src 'self' 'unsafe-inline' https: data:`,
     `font-src 'self' https: data:`,
     `img-src 'self' data: https: blob:`,
-    `connect-src 'self' https://www.google-analytics.com https://api.adviesnconsultancy.nl`,
-    `frame-src 'self' https://outlook.office365.com https://outlook.office.com`,
+    `connect-src 'self' https: wss: ws:`,
+    `frame-src 'self' https:`,
     `object-src 'none'`,
     `base-uri 'self'`,
-    `form-action 'self'`,
-    `frame-ancestors 'none'`,
-    `upgrade-insecure-requests`,
+    `form-action 'self' https:`,
+    `frame-ancestors 'self'`,
+    // Removed upgrade-insecure-requests to avoid SSL protocol conflicts
   ]
   
   response.headers.set('Content-Security-Policy', cspPolicy.join('; '))

@@ -120,9 +120,9 @@ export default function RootLayout({
             <SiteFooter />
           </div>
           <Toaster />
-          <PerformanceMonitor />
+          {/* <PerformanceMonitor />
           <PWAManager />
-          <PWAInstallPrompt />
+          <PWAInstallPrompt /> */}
         </Providers>
       </body>
     </html>
