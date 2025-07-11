@@ -6,13 +6,78 @@ import { Providers } from '@/components/providers'
 import { SiteHeader } from '@/components/site-header'
 import { SiteFooter } from '@/components/site-footer'
 import { Toaster } from '@/components/ui/toaster'
+import { StructuredData } from '@/components/structured-data'
+import { PerformanceMonitor } from '@/components/performance-monitor'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Advies N Consultancy BV - IT Consultancy & Compliance',
-  description: 'Professionele IT-consultancy gespecialiseerd in business continuïteit, compliance en AI-automatisering.',
-  keywords: 'IT consultancy, business continuïteit, compliance, AI automatisering, ISO 22301',
+  metadataBase: new URL('https://adviesnconsultancy.nl'),
+  title: {
+    default: 'Advies N Consultancy BV - IT Consultancy & Compliance Experts',
+    template: '%s | Advies N Consultancy BV'
+  },
+  description: 'Professionele IT-consultancy gespecialiseerd in business continuïteit, compliance, AI-automatisering en digitale transformatie. ISO 22301 gecertificeerd. Voorburg, Nederland.',
+  keywords: [
+    'IT consultancy Nederland',
+    'business continuïteit',
+    'compliance automatisering',
+    'AI outsourcing',
+    'digitale transformatie',
+    'ISO 22301',
+    'cybersecurity',
+    'IT advisory',
+    'Voorburg',
+    'Den Haag'
+  ],
+  authors: [{ name: 'Marc van der Meer', url: 'https://adviesnconsultancy.nl' }],
+  creator: 'Advies N Consultancy BV',
+  publisher: 'Advies N Consultancy BV',
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  openGraph: {
+    title: 'Advies N Consultancy BV - IT Consultancy & Compliance Experts',
+    description: 'Professionele IT-consultancy gespecialiseerd in business continuïteit, compliance, AI-automatisering en digitale transformatie.',
+    url: 'https://adviesnconsultancy.nl',
+    siteName: 'Advies N Consultancy BV',
+    locale: 'nl_NL',
+    type: 'website',
+    images: [
+      {
+        url: '/ANCLOGO.jpeg',
+        width: 1200,
+        height: 630,
+        alt: 'Advies N Consultancy BV Logo',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Advies N Consultancy BV - IT Consultancy & Compliance',
+    description: 'Professionele IT-consultancy gespecialiseerd in business continuïteit, compliance en AI-automatisering.',
+    images: ['/ANCLOGO.jpeg'],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  alternates: {
+    canonical: 'https://adviesnconsultancy.nl',
+  },
+  verification: {
+    google: 'your-google-site-verification-code',
+  },
+  category: 'business',
 }
 
 export default function RootLayout({
@@ -22,6 +87,20 @@ export default function RootLayout({
 }) {
   return (
     <html lang="nl" suppressHydrationWarning>
+      <head>
+        <link rel="canonical" href="https://adviesnconsultancy.nl" />
+        <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="theme-color" content="#1e40af" />
+        <meta name="msapplication-TileColor" content="#1e40af" />
+        <meta name="application-name" content="Advies N Consultancy BV" />
+        <meta name="apple-mobile-web-app-title" content="Advies N Consultancy BV" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <StructuredData />
+      </head>
       <body className={inter.className}>
         <Providers>
           <div className="flex min-h-screen flex-col">
@@ -30,6 +109,7 @@ export default function RootLayout({
             <SiteFooter />
           </div>
           <Toaster />
+          <PerformanceMonitor />
         </Providers>
       </body>
     </html>
