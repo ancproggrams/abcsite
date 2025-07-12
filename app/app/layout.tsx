@@ -5,11 +5,12 @@ import './globals.css'
 import { Providers } from '@/components/providers'
 import { SiteHeader } from '@/components/site-header'
 import { SiteFooter } from '@/components/site-footer'
-import { Toaster } from '@/components/ui/toaster'
-import { StructuredData } from '@/components/structured-data'
-import { PerformanceMonitor } from '@/components/performance-monitor'
-import { PWAManager } from '@/components/pwa-manager'
-import { PWAInstallPrompt } from '@/components/pwa-install-prompt'
+// COMMENTED OUT FOR TESTING HYDRATION ISSUES
+// import { Toaster } from '@/components/ui/toaster'
+// import { StructuredData } from '@/components/structured-data'
+// import { PerformanceMonitor } from '@/components/performance-monitor'
+// import { PWAManager } from '@/components/pwa-manager'
+// import { PWAInstallPrompt } from '@/components/pwa-install-prompt'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -108,9 +109,9 @@ export default function RootLayout({
         <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png" />
         <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png" />
         
-        <StructuredData />
+        {/* <StructuredData /> */}
       </head>
-      <body className={`${inter.className} theme-transition`}>
+      <body>
         <Providers>
           <div className="flex min-h-screen flex-col">
             <SiteHeader />
@@ -119,10 +120,6 @@ export default function RootLayout({
             </main>
             <SiteFooter />
           </div>
-          <Toaster />
-          {/* <PerformanceMonitor />
-          <PWAManager />
-          <PWAInstallPrompt /> */}
         </Providers>
       </body>
     </html>

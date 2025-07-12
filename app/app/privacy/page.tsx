@@ -13,24 +13,16 @@ export default function PrivacyPage() {
           <p className="text-xl text-muted-foreground">
             Hoe Advies N Consultancy BV uw persoonlijke gegevens beschermt en verwerkt
           </p>
-          <div className="flex justify-center items-center space-x-2 mt-4">
-            <div className="text-sm border rounded px-2 py-1">
-              Laatst bijgewerkt: juli 2025
-            </div>
-            <div className="text-sm border rounded px-2 py-1">
-              GDPR Compliant
-            </div>
-          </div>
         </div>
 
         <div className="space-y-8">
-          <section className="bg-white p-6 rounded-lg shadow-sm">
+          <section className="bg-card p-6 rounded-lg border">
             <h2 className="text-2xl font-bold mb-4">1. Wie zijn wij?</h2>
             <p className="mb-4">
               Advies N Consultancy BV is een IT-consultancybedrijf gevestigd in Voorburg, Nederland. 
               Wij zijn verantwoordelijk voor de verwerking van uw persoonlijke gegevens zoals beschreven in dit privacybeleid.
             </p>
-            <div className="bg-gray-50 p-4 rounded">
+            <div className="bg-muted p-4 rounded">
               <h3 className="font-semibold mb-2">Contactgegevens:</h3>
               <p><strong>Bedrijfsnaam:</strong> Advies N Consultancy BV</p>
               <p><strong>E-mail:</strong> marc@adviesnconsultancy.nl</p>
@@ -38,7 +30,7 @@ export default function PrivacyPage() {
             </div>
           </section>
 
-          <section className="bg-white p-6 rounded-lg shadow-sm">
+          <section className="bg-card p-6 rounded-lg border">
             <h2 className="text-2xl font-bold mb-4">2. Welke gegevens verzamelen wij?</h2>
             <div className="space-y-4">
               <div>
@@ -56,43 +48,13 @@ export default function PrivacyPage() {
                   <li>Browsertype en -versie</li>
                   <li>Paginabezoeken en navigatiepatronen</li>
                   <li>Tijd en datum van bezoek</li>
-                  <li>Referrer-URL</li>
                 </ul>
               </div>
             </div>
           </section>
 
-          <section className="bg-white p-6 rounded-lg shadow-sm">
-            <h2 className="text-2xl font-bold mb-4">3. Cookies en tracking</h2>
-            <p className="mb-4">
-              Wij gebruiken cookies en vergelijkbare technologieën om uw ervaring op onze website te verbeteren 
-              en voor analysedoeleinden. U kunt uw voorkeuren beheren via onze cookie-instellingen.
-            </p>
-            <div className="space-y-4">
-              <h3 className="font-semibold mb-2">Cookie categorieën</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="bg-gray-50 p-3 rounded">
-                  <h4 className="font-medium mb-1">🔒 Noodzakelijke cookies</h4>
-                  <p className="text-sm">Voor basisfunctionaliteit van de website</p>
-                </div>
-                <div className="bg-gray-50 p-3 rounded">
-                  <h4 className="font-medium mb-1">📊 Analytische cookies</h4>
-                  <p className="text-sm">Google Analytics 4, Microsoft Clarity</p>
-                </div>
-                <div className="bg-gray-50 p-3 rounded">
-                  <h4 className="font-medium mb-1">🎯 Marketing cookies</h4>
-                  <p className="text-sm">Toekomstige marketing functionaliteit</p>
-                </div>
-                <div className="bg-gray-50 p-3 rounded">
-                  <h4 className="font-medium mb-1">⚙️ Voorkeur cookies</h4>
-                  <p className="text-sm">Thema, taal, A/B testing</p>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <section className="bg-white p-6 rounded-lg shadow-sm">
-            <h2 className="text-2xl font-bold mb-4">4. Uw rechten</h2>
+          <section className="bg-card p-6 rounded-lg border">
+            <h2 className="text-2xl font-bold mb-4">3. Uw rechten</h2>
             <p className="mb-4">
               Onder de AVG heeft u de volgende rechten met betrekking tot uw persoonlijke gegevens:
             </p>
@@ -116,27 +78,22 @@ export default function PrivacyPage() {
             </div>
           </section>
 
-          <section className="bg-white p-6 rounded-lg shadow-sm">
-            <h2 className="text-2xl font-bold mb-4">5. Contact</h2>
+          <section className="bg-card p-6 rounded-lg border">
+            <h2 className="text-2xl font-bold mb-4">4. Contact</h2>
             <p className="mb-4">
-              Heeft u vragen over dit privacybeleid of wilt u gebruik maken van uw rechten? 
-              Neem dan contact met ons op.
+              Heeft u vragen over dit privacybeleid? Neem dan contact met ons op.
             </p>
-            <div className="bg-gray-50 p-4 rounded">
+            <div className="bg-muted p-4 rounded">
               <h3 className="font-semibold mb-2">Contactgegevens:</h3>
               <p><strong>E-mail:</strong> marc@adviesnconsultancy.nl</p>
-              <p><strong>Onderwerp:</strong> Privacy verzoek</p>
               <p><strong>Reactietijd:</strong> Binnen 30 dagen</p>
             </div>
           </section>
         </div>
 
-        <hr className="my-12" />
-
-        <div className="text-center">
-          <p className="text-gray-600">
-            Dit privacybeleid is opgesteld in overeenstemming met de Algemene Verordening Gegevensbescherming (AVG) 
-            en de Nederlandse implementatiewet.
+        <div className="mt-12 pt-8 border-t text-center">
+          <p className="text-muted-foreground">
+            © 2024 Advies N Consultancy BV. Alle rechten voorbehouden.
           </p>
         </div>
       </div>
