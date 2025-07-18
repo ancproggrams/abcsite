@@ -1,5 +1,6 @@
 
 
+
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { ArrowRight, CheckCircle } from 'lucide-react'
@@ -40,17 +41,6 @@ export function HeroSection() {
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
               </Button>
-            </div>
-
-            <div className="grid grid-cols-2 gap-8 pt-8">
-              <div className="text-center space-y-2">
-                <div className="text-3xl font-bold text-white">24/7</div>
-                <div className="text-white/70 text-sm">Monitoring</div>
-              </div>
-              <div className="text-center space-y-2">
-                <div className="text-3xl font-bold text-white">ISO 22301</div>
-                <div className="text-white/70 text-sm">Compliance</div>
-              </div>
             </div>
           </div>
 

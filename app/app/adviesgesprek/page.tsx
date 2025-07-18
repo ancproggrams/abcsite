@@ -1,5 +1,6 @@
 
 
+
 'use client'
 
 import { useState } from 'react'
@@ -9,7 +10,7 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Calendar, Clock, CheckCircle, Phone, Mail, Building } from 'lucide-react'
+import { Calendar, Clock, CheckCircle, Phone, Mail, Building, ExternalLink } from 'lucide-react'
 
 export default function AdviesgespreksPage() {
   const [formData, setFormData] = useState({
@@ -106,6 +107,33 @@ export default function AdviesgespreksPage() {
           </p>
         </div>
 
+        {/* Direct Booking CTA */}
+        <div className="bg-primary text-primary-foreground rounded-lg p-8 mb-12 text-center">
+          <div className="space-y-4">
+            <h2 className="text-2xl font-bold">Direct online inplannen?</h2>
+            <p className="text-lg opacity-90">
+              Plan direct een afspraak in onze agenda voor een persoonlijk adviesgesprek.
+            </p>
+            <Button 
+              asChild 
+              size="lg" 
+              variant="secondary"
+              className="bg-white text-primary hover:bg-white/90"
+            >
+              <a 
+                href="https://outlook.office.com/bookwithme/user/d7de4a87e4164eed9a6ab6612a0cbc1a@adviesnconsultancy.nl?anonymous&ismsaljsauthenabled&ep=plink"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center"
+              >
+                <Calendar className="mr-2 h-5 w-5" />
+                Plan Direct Online
+                <ExternalLink className="ml-2 h-4 w-4" />
+              </a>
+            </Button>
+          </div>
+        </div>
+
         <div className="grid lg:grid-cols-2 gap-12">
           {/* Form */}
           <Card>
@@ -174,9 +202,8 @@ export default function AdviesgespreksPage() {
                     <SelectContent>
                       <SelectItem value="iso22301">ISO 22301 Compliance</SelectItem>
                       <SelectItem value="business-continuity">Business Continuity Planning</SelectItem>
-                      <SelectItem value="it-consultancy">IT Infrastructure Consultancy</SelectItem>
                       <SelectItem value="ai-outsourcing">AI Outsourcing</SelectItem>
-                      <SelectItem value="cybersecurity">Cybersecurity Services</SelectItem>
+                      <SelectItem value="compliance-automation">Compliance Automation Platform</SelectItem>
                       <SelectItem value="other">Overig</SelectItem>
                     </SelectContent>
                   </Select>
@@ -235,7 +262,7 @@ export default function AdviesgespreksPage() {
                 </div>
                 <div className="flex items-center space-x-3">
                   <Phone className="h-5 w-5 text-muted-foreground" />
-                  <span>+31 (0)70 123 4567</span>
+                  <span>+31 6 22675520</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <Building className="h-5 w-5 text-muted-foreground" />

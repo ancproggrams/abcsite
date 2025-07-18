@@ -1,8 +1,9 @@
 
 
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Shield, Server, Bot, Clock, Database, Lock } from 'lucide-react'
+import { Shield, Bot, Clock } from 'lucide-react'
 import Link from 'next/link'
 
 export const metadata = {
@@ -16,43 +17,19 @@ export default function DienstenPage() {
       icon: Shield,
       title: 'ISO 22301 Compliance',
       description: 'Volledige implementatie en onderhoud van business continuiteit managementsystemen volgens internationale standaarden.',
-      features: ['Gap-analyse', 'BCMS implementatie', 'Audit voorbereiding', 'Continue ondersteuning'],
-      price: 'Vanaf €14.000'
-    },
-    {
-      icon: Server,
-      title: 'IT Infrastructure Consultancy',
-      description: 'Ontwerp en implementatie van robuuste IT-infrastructuur voor maximale uptime en prestaties.',
-      features: ['Infrastructuur ontwerp', 'Implementatie', '24/7 monitoring', 'Proactief onderhoud'],
-      price: 'Op maat'
+      features: ['Gap-analyse', 'BCMS implementatie', 'Audit voorbereiding', 'Continue ondersteuning']
     },
     {
       icon: Bot,
       title: 'AI Outsourcing',
       description: 'Automatiseer uw bedrijfsprocessen met AI en machine learning oplossingen op maat.',
-      features: ['Proces automatisering', 'AI implementatie', 'Training & ondersteuning', 'Continue optimalisatie'],
-      price: 'Op aanvraag'
+      features: ['Proces automatisering', 'AI implementatie', 'Training & ondersteuning', 'Continue optimalisatie']
     },
     {
       icon: Clock,
       title: 'Business Continuity Planning',
       description: 'Ontwikkeling van strategieën om bedrijfskritische processen te beschermen tegen verstoringen.',
-      features: ['BIA uitvoering', 'Recovery strategieën', 'Crisis management', 'Continuiteitsplannen'],
-      price: 'Vanaf €8.000'
-    },
-    {
-      icon: Database,
-      title: 'Data Management & Backup',
-      description: 'Professionele data management oplossingen met gegarandeerde backup en recovery procedures.',
-      features: ['Backup strategieën', 'Data recovery', 'Cloud migratie', 'Data governance'],
-      price: 'Vanaf €5.000'
-    },
-    {
-      icon: Lock,
-      title: 'Cybersecurity Services',
-      description: 'Comprehensive cybersecurity assessments en implementatie van security maatregelen.',
-      features: ['Security assessments', 'Penetration testing', 'Security implementatie', 'Incident response'],
-      price: 'Vanaf €12.000'
+      features: ['BIA uitvoering', 'Recovery strategieën', 'Crisis management', 'Continuiteitsplannen']
     }
   ]
 
@@ -86,9 +63,6 @@ export default function DienstenPage() {
                       <span className="text-sm text-muted-foreground">{feature}</span>
                     </div>
                   ))}
-                </div>
-                <div className="pt-4 border-t">
-                  <p className="text-lg font-semibold text-primary">{service.price}</p>
                 </div>
               </CardContent>
             </Card>

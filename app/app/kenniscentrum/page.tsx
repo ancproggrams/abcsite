@@ -1,9 +1,9 @@
 
 
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { BookOpen, Download, Calendar, User, ArrowRight } from 'lucide-react'
+import { BookOpen, Download, FileText, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 
 export const metadata = {
@@ -12,83 +12,14 @@ export const metadata = {
 }
 
 export default function KenniscentrumPage() {
-  const featuredArticles = [
-    {
-      title: 'ISO 22301 Implementatiegids 2024',
-      excerpt: 'Een complete gids voor het implementeren van ISO 22301 business continuity management in uw organisatie.',
-      category: 'Guide',
-      readTime: '15 min',
-      date: '15 maart 2024',
-      featured: true
-    },
-    {
-      title: 'NIS2 Richtlijn: Impact op Nederlandse Bedrijven',
-      excerpt: 'Alles wat u moet weten over de nieuwe NIS2 richtlijn en de gevolgen voor uw cybersecurity strategie.',
-      category: 'Compliance',
-      readTime: '10 min',
-      date: '8 maart 2024',
-      featured: true
-    },
-    {
-      title: 'Business Continuity in de Cloud Era',
-      excerpt: 'Hoe cloud technologie uw business continuity strategie kan versterken en nieuwe uitdagingen brengt.',
-      category: 'Technology',
-      readTime: '12 min',
-      date: '1 maart 2024',
-      featured: false
-    }
-  ]
+  // TODO: Replace with real articles from CMS
+  const featuredArticles: any[] = []
 
-  const resources = [
-    {
-      title: 'ISO 22301 Checklist',
-      description: 'Complete checklist voor ISO 22301 compliance assessment',
-      type: 'PDF Download',
-      category: 'Checklist'
-    },
-    {
-      title: 'Business Impact Analysis Template',
-      description: 'Kant-en-klare template voor het uitvoeren van een BIA',
-      type: 'Excel Template',
-      category: 'Template'
-    },
-    {
-      title: 'Incident Response Playbook',
-      description: 'Stap-voor-stap gids voor effectieve incident response',
-      type: 'PDF Guide',
-      category: 'Guide'
-    },
-    {
-      title: 'Compliance Dashboard Template',
-      description: 'Dashboard template voor het monitoren van compliance status',
-      type: 'PowerBI Template',
-      category: 'Template'
-    }
-  ]
+  // TODO: Replace with real resources from CMS
+  const resources: any[] = []
 
-  const caseStudies = [
-    {
-      title: 'Healthcare Organisatie: ISO 22301 Certificering',
-      industry: 'Healthcare',
-      challenge: 'Implementatie van BCMS voor 24/7 patiëntenzorg',
-      result: '99.9% uptime, succesvolle ISO 22301 certificering',
-      duration: '8 maanden'
-    },
-    {
-      title: 'Financiële Instelling: NIS2 Compliance',
-      industry: 'Financial Services',
-      challenge: 'Voldoen aan nieuwe NIS2 eisen voor cybersecurity',
-      result: 'Volledige compliance, 40% reductie in security incidents',
-      duration: '6 maanden'
-    },
-    {
-      title: 'Manufacturing: Business Continuity Transformatie',
-      industry: 'Manufacturing',
-      challenge: 'Minimaliseren van productie downtime',
-      result: '75% reductie in downtime, kostenbesparing €2M per jaar',
-      duration: '12 maanden'
-    }
-  ]
+  // TODO: Replace with real case studies from CMS
+  const caseStudies: any[] = []
 
   return (
     <div className="min-h-screen py-12">
@@ -108,79 +39,72 @@ export default function KenniscentrumPage() {
         <div className="mb-16">
           <div className="flex items-center justify-between mb-8">
             <h2 className="text-3xl font-bold text-foreground">Uitgelichte Artikelen</h2>
-            <Button variant="outline" size="sm">
-              Bekijk Alle Artikelen
-              <ArrowRight className="ml-2 h-4 w-4" />
+            <Button variant="outline" size="sm" asChild>
+              <Link href="/kenniscentrum/artikelen">
+                Bekijk Alle Artikelen
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
             </Button>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {featuredArticles.map((article, index) => (
-              <Card key={index} className={`card-hover ${article.featured ? 'border-primary' : ''}`}>
-                <CardHeader>
-                  <div className="flex items-center justify-between mb-2">
-                    <Badge variant={article.featured ? 'default' : 'secondary'}>
-                      {article.category}
-                    </Badge>
-                    {article.featured && <Badge variant="outline">Featured</Badge>}
-                  </div>
-                  <CardTitle className="text-lg line-clamp-2">{article.title}</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <CardDescription className="line-clamp-3">
-                    {article.excerpt}
-                  </CardDescription>
-                  <div className="flex items-center justify-between text-sm text-muted-foreground">
-                    <div className="flex items-center space-x-4">
-                      <div className="flex items-center space-x-1">
-                        <Calendar className="h-4 w-4" />
-                        <span>{article.date}</span>
-                      </div>
-                      <div className="flex items-center space-x-1">
-                        <BookOpen className="h-4 w-4" />
-                        <span>{article.readTime}</span>
-                      </div>
-                    </div>
-                  </div>
-                  <Button variant="outline" className="w-full" size="sm">
-                    Lees Meer
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+          
+          {featuredArticles.length === 0 ? (
+            <Card className="text-center py-12">
+              <CardContent className="space-y-4">
+                <BookOpen className="h-12 w-12 text-muted-foreground mx-auto" />
+                <div className="space-y-2">
+                  <h3 className="text-lg font-semibold">Nog geen artikelen beschikbaar</h3>
+                  <p className="text-muted-foreground">
+                    Wij werken aan het toevoegen van waardevolle content. Kom binnenkort terug voor de nieuwste inzichten over business continuiteit en compliance.
+                  </p>
+                </div>
+                <Button asChild variant="outline">
+                  <Link href="/adviesgesprek">
+                    Stel een vraag aan onze experts
+                  </Link>
+                </Button>
+              </CardContent>
+            </Card>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {/* Articles will be rendered here when available */}
+            </div>
+          )}
         </div>
 
-        {/* Resources */}
+        {/* Downloads & Templates */}
         <div className="mb-16">
           <div className="flex items-center justify-between mb-8">
             <h2 className="text-3xl font-bold text-foreground">Downloads & Templates</h2>
-            <Button variant="outline" size="sm">
-              Alle Resources
-              <ArrowRight className="ml-2 h-4 w-4" />
+            <Button variant="outline" size="sm" asChild>
+              <Link href="/kenniscentrum/downloads">
+                Alle Resources
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
             </Button>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {resources.map((resource, index) => (
-              <Card key={index} className="card-hover">
-                <CardContent className="p-6">
-                  <div className="flex items-start justify-between">
-                    <div className="space-y-2 flex-1">
-                      <div className="flex items-center space-x-2">
-                        <Download className="h-5 w-5 text-primary" />
-                        <Badge variant="secondary">{resource.category}</Badge>
-                      </div>
-                      <h3 className="font-semibold">{resource.title}</h3>
-                      <p className="text-sm text-muted-foreground">{resource.description}</p>
-                      <p className="text-xs text-muted-foreground">{resource.type}</p>
-                    </div>
-                    <Button size="sm" className="ml-4">
-                      Download
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+          
+          {resources.length === 0 ? (
+            <Card className="text-center py-12">
+              <CardContent className="space-y-4">
+                <Download className="h-12 w-12 text-muted-foreground mx-auto" />
+                <div className="space-y-2">
+                  <h3 className="text-lg font-semibold">Downloads komen binnenkort beschikbaar</h3>
+                  <p className="text-muted-foreground">
+                    Wij werken aan het samenstellen van praktische templates en checklists voor ISO 22301 compliance en business continuiteit.
+                  </p>
+                </div>
+                <Button asChild variant="outline">
+                  <Link href="/compliance-automation#quickscan">
+                    Start Quick Scan
+                  </Link>
+                </Button>
+              </CardContent>
+            </Card>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Resources will be rendered here when available */}
+            </div>
+          )}
         </div>
 
         {/* Case Studies */}
@@ -191,34 +115,29 @@ export default function KenniscentrumPage() {
               Ontdek hoe wij organisaties hebben geholpen hun doelen te bereiken
             </p>
           </div>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {caseStudies.map((study, index) => (
-              <Card key={index} className="card-hover">
-                <CardHeader>
-                  <div className="flex items-center justify-between mb-2">
-                    <Badge variant="outline">{study.industry}</Badge>
-                    <span className="text-sm text-muted-foreground">{study.duration}</span>
-                  </div>
-                  <CardTitle className="text-lg">{study.title}</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="space-y-3">
-                    <div>
-                      <h4 className="font-medium text-sm">Uitdaging:</h4>
-                      <p className="text-sm text-muted-foreground">{study.challenge}</p>
-                    </div>
-                    <div>
-                      <h4 className="font-medium text-sm">Resultaat:</h4>
-                      <p className="text-sm text-muted-foreground">{study.result}</p>
-                    </div>
-                  </div>
-                  <Button variant="outline" className="w-full" size="sm">
-                    Lees Case Study
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+          
+          {caseStudies.length === 0 ? (
+            <Card className="text-center py-12">
+              <CardContent className="space-y-4">
+                <FileText className="h-12 w-12 text-muted-foreground mx-auto" />
+                <div className="space-y-2">
+                  <h3 className="text-lg font-semibold">Case studies worden voorbereid</h3>
+                  <p className="text-muted-foreground">
+                    Wij documenteren momenteel onze succesverhalen om deze binnenkort met u te delen. Neem contact op voor referenties.
+                  </p>
+                </div>
+                <Button asChild variant="outline">
+                  <Link href="/adviesgesprek">
+                    Vraag naar referenties
+                  </Link>
+                </Button>
+              </CardContent>
+            </Card>
+          ) : (
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              {/* Case studies will be rendered here when available */}
+            </div>
+          )}
         </div>
 
         {/* Newsletter Signup */}

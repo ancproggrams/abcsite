@@ -1,3 +1,4 @@
+
 generator client {
     provider = "prisma-client-js"
     binaryTargets = ["native", "linux-musl-arm64-openssl-3.0.x"]
@@ -14,8 +15,13 @@ model Contact {
   name      String
   email     String
   company   String?
+  phone     String?
   message   String
+  formType  String   @default("general")
+  interest  String?
   createdAt DateTime @default(now())
+  
+  @@map("contacts")
 }
 
 model BlogPost {
@@ -26,7 +32,7 @@ model BlogPost {
   content     String
   featuredImage String?
   status      PostStatus @default(DRAFT)
-  authorName  String   @default("Marc van der Meer")
+  authorName  String   @default("Marc René")
   authorEmail String   @default("marc@adviesnconsultancy.nl")
   publishedAt DateTime?
   createdAt   DateTime @default(now())
@@ -70,6 +76,84 @@ model BlogTag {
   posts     BlogPost[]
   
   @@map("blog_tags")
+}
+
+model DownloadResource {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  category    String
+  type        String   // PDF, Excel, PowerBI, etc.
+  fileUrl     String
+  fileName    String
+  fileSize    Int?     // in bytes
+  downloadCount Int    @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@map("download_resources")
+}
+
+model CaseStudy {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  industry    String
+  challenge   String
+  solution    String
+  result      String
+  duration    String
+  imageUrl    String?
+  status      PostStatus @default(DRAFT)
+  publishedAt DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@map("case_studies")
+}
+
+model QuickScanResult {
+  id              String   @id @default(cuid())
+  // User info
+  name            String
+  email           String
+  company         String
+  phone           String?
+  position        String?
+  
+  // BCM specific questions
+  hasBcmOfficer   Boolean  // Required question
+  hasCrisisTeam   Boolean  // Required question
+  
+  // ISO 22301 questionnaire responses (JSON)
+  responses       Json     // Array of {questionId, score, area}
+  
+  // Calculated scores per control area
+  contextScore           Int    // 1-5
+  leadershipScore        Int    // 1-5
+  planningScore          Int    // 1-5
+  supportScore           Int    // 1-5
+  operationScore         Int    // 1-5
+  performanceScore       Int    // 1-5
+  improvementScore       Int    // 1-5
+  
+  // Overall assessment
+  overallScore           Int    // 1-5
+  maturityLevel          String // Basic, Developing, Advanced, Expert
+  
+  // Report generation
+  reportGenerated        Boolean @default(false)
+  reportUrl              String?
+  
+  // Follow-up
+  wantsConsultation      Boolean @default(false)
+  consultationScheduled  Boolean @default(false)
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@map("quick_scan_results")
 }
 
 model NewsletterSubscriber {

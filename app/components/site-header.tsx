@@ -1,18 +1,21 @@
 
 
+
+'use client'
+
 import Link from 'next/link'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
-
-// Static navigation configuration - SSR-only version
-const navigationItems = [
-  { key: 'home', href: '/', label: 'Home' },
-  { key: 'services', href: '/diensten', label: 'Diensten' },
-  { key: 'knowledge', href: '/kenniscentrum', label: 'Kenniscentrum' },
-  { key: 'compliance', href: '/compliance-automation', label: 'Compliance Automation' },
-  { key: 'about', href: '/over-ons', label: 'Over Ons' },
-  { key: 'consultation', href: '/adviesgesprek', label: 'Adviesgesprek' }
-] as const
+import { 
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from '@/components/ui/navigation-menu'
+import { cn } from '@/lib/utils'
+import React from 'react'
 
 export function SiteHeader() {
   return (
@@ -49,15 +52,98 @@ export function SiteHeader() {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-6" role="navigation" aria-label="Main navigation">
-            {navigationItems.map((item) => (
-              <Link 
-                key={item.key}
-                href={item.href}
-                className="text-sm font-medium text-foreground hover:text-primary transition-colors focus-visible"
-              >
-                {item.label}
-              </Link>
-            ))}
+            <NavigationMenu>
+              <NavigationMenuList className="flex items-center space-x-6">
+                <NavigationMenuItem>
+                  <Link 
+                    href="/"
+                    className="text-sm font-medium text-foreground hover:text-primary transition-colors focus-visible"
+                  >
+                    Home
+                  </Link>
+                </NavigationMenuItem>
+                
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger className="text-sm font-medium text-foreground hover:text-primary transition-colors">
+                    Diensten
+                  </NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <ul className="grid gap-3 p-6 w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
+                      <li className="row-span-3">
+                        <NavigationMenuLink asChild>
+                          <Link
+                            className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
+                            href="/diensten"
+                          >
+                            <div className="mb-2 mt-4 text-lg font-medium">
+                              IT Consultancy Diensten
+                            </div>
+                            <p className="text-sm leading-tight text-muted-foreground">
+                              Professionele IT-consultancy diensten voor business continuiteit en compliance.
+                            </p>
+                          </Link>
+                        </NavigationMenuLink>
+                      </li>
+                      <ListItem href="/diensten" title="Alle Diensten">
+                        Overzicht van al onze IT consultancy diensten
+                      </ListItem>
+                      <ListItem href="/compliance-automation" title="Compliance Automation Platform">
+                        Automatiseer uw compliance processen met onze platform
+                      </ListItem>
+                    </ul>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger className="text-sm font-medium text-foreground hover:text-primary transition-colors">
+                    Kenniscentrum
+                  </NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <ul className="grid gap-3 p-6 w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
+                      <li className="row-span-3">
+                        <NavigationMenuLink asChild>
+                          <Link
+                            className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
+                            href="/kenniscentrum"
+                          >
+                            <div className="mb-2 mt-4 text-lg font-medium">
+                              Kenniscentrum
+                            </div>
+                            <p className="text-sm leading-tight text-muted-foreground">
+                              Waardevolle inzichten, resources en best practices voor business continuiteit.
+                            </p>
+                          </Link>
+                        </NavigationMenuLink>
+                      </li>
+                      <ListItem href="/kenniscentrum" title="Artikelen & Blogs">
+                        Nieuwste inzichten over business continuiteit en compliance
+                      </ListItem>
+                      <ListItem href="/kenniscentrum/downloads" title="Downloads & Templates">
+                        Praktische templates, checklists en resources
+                      </ListItem>
+                    </ul>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+                
+                <NavigationMenuItem>
+                  <Link 
+                    href="/over-ons"
+                    className="text-sm font-medium text-foreground hover:text-primary transition-colors focus-visible"
+                  >
+                    Over Ons
+                  </Link>
+                </NavigationMenuItem>
+                
+                <NavigationMenuItem>
+                  <Link 
+                    href="/adviesgesprek"
+                    className="text-sm font-medium text-foreground hover:text-primary transition-colors focus-visible"
+                  >
+                    Adviesgesprek
+                  </Link>
+                </NavigationMenuItem>
+              </NavigationMenuList>
+            </NavigationMenu>
             
             <Button asChild className="btn-primary focus-visible ml-4">
               <Link href="/compliance-automation#quickscan">
@@ -79,3 +165,30 @@ export function SiteHeader() {
     </>
   )
 }
+
+const ListItem = React.forwardRef<
+  React.ElementRef<'a'>,
+  React.ComponentPropsWithoutRef<'a'> & { title: string; href: string }
+>(({ className, title, children, href, ...props }, ref) => {
+  return (
+    <li>
+      <NavigationMenuLink asChild>
+        <Link
+          ref={ref}
+          href={href}
+          className={cn(
+            "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+            className
+          )}
+          {...props}
+        >
+          <div className="text-sm font-medium leading-none">{title}</div>
+          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+            {children}
+          </p>
+        </Link>
+      </NavigationMenuLink>
+    </li>
+  )
+})
+ListItem.displayName = "ListItem"

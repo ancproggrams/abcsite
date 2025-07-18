@@ -1,5 +1,6 @@
 
 
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Award, Users, Target, TrendingUp } from 'lucide-react'
@@ -33,13 +34,6 @@ export default function OverOnsPage() {
       title: 'Innovatie',
       description: 'Gebruik van de nieuwste technologieën en best practices in de industrie.'
     }
-  ]
-
-  const achievements = [
-    { number: '50+', label: 'Succesvolle Projecten' },
-    { number: '15+', label: 'Jaar Ervaring' },
-    { number: '98%', label: 'Klanttevredenheid' },
-    { number: '25+', label: 'ISO 22301 Certificeringen' }
   ]
 
   return (
@@ -118,24 +112,6 @@ export default function OverOnsPage() {
           </div>
         </div>
 
-        {/* Achievements */}
-        <div className="bg-primary text-primary-foreground rounded-lg p-12 mb-20">
-          <div className="text-center space-y-4 mb-12">
-            <h2 className="text-3xl font-bold">Onze Prestaties</h2>
-            <p className="text-lg opacity-90">
-              Cijfers die onze expertise en toewijding weerspiegelen
-            </p>
-          </div>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
-            {achievements.map((achievement, index) => (
-              <div key={index} className="text-center space-y-2">
-                <div className="text-4xl font-bold">{achievement.number}</div>
-                <div className="text-sm opacity-90">{achievement.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-
         {/* Team Section */}
         <div className="mb-20">
           <div className="text-center space-y-4 mb-12">
@@ -149,7 +125,7 @@ export default function OverOnsPage() {
               <div className="mx-auto mb-4 w-24 h-24 bg-primary/10 rounded-full flex items-center justify-center">
                 <Users className="h-12 w-12 text-primary" />
               </div>
-              <CardTitle>Marc van der Meer</CardTitle>
+              <CardTitle>Marc René</CardTitle>
               <CardDescription>Founder & Lead Consultant</CardDescription>
             </CardHeader>
             <CardContent className="text-center space-y-4">

@@ -1,380 +1,321 @@
 
 
+
 export interface QuickScanQuestion {
   id: number
   text: string
-  type: 'multiple-choice' | 'number'
+  type: 'multiple-choice' | 'boolean'
   category: string
+  controlArea: string
+  isRequired?: boolean
   options?: {
     text: string
     value: string
     score: number
   }[]
-  scoring?: {
-    threshold: number
-    score: number
-  }[]
 }
 
+// ISO 22301 BCM Quick Scan - Exactly 20 questions across 7 control areas
 export const quickScanQuestions: QuickScanQuestion[] = [
-  // Organisatie (8 vragen)
+  // 1. Context of the Organization (3 questions)
   {
     id: 1,
-    text: 'Heeft uw organisatie een formeel business continuity management systeem?',
+    text: 'Heeft uw organisatie de interne en externe context geïdentificeerd die relevant is voor business continuity?',
     type: 'multiple-choice',
-    category: 'Organisatie',
+    category: 'Context van de Organisatie',
+    controlArea: 'context',
     options: [
-      { text: 'Ja, volledig geïmplementeerd en gecertificeerd', value: 'fully_implemented', score: 4 },
-      { text: 'Ja, maar nog niet gecertificeerd', value: 'implemented', score: 3 },
-      { text: 'Gedeeltelijk geïmplementeerd', value: 'partially', score: 2 },
-      { text: 'In ontwikkeling', value: 'developing', score: 1 },
-      { text: 'Nee, nog niet gestart', value: 'not_started', score: 0 }
+      { text: 'Volledig geïdentificeerd en gedocumenteerd', value: 'fully_identified', score: 5 },
+      { text: 'Grotendeels geïdentificeerd', value: 'mostly_identified', score: 4 },
+      { text: 'Gedeeltelijk geïdentificeerd', value: 'partially_identified', score: 3 },
+      { text: 'Beperkt geïdentificeerd', value: 'limited_identified', score: 2 },
+      { text: 'Niet geïdentificeerd', value: 'not_identified', score: 1 }
     ]
   },
   {
     id: 2,
-    text: 'Heeft uw organisatie een business continuity beleid?',
+    text: 'Zijn de belanghebbenden en hun belangen geïdentificeerd en geanalyseerd?',
     type: 'multiple-choice',
-    category: 'Organisatie',
+    category: 'Context van de Organisatie',
+    controlArea: 'context',
     options: [
-      { text: 'Ja, goedgekeurd door management en regelmatig gereviewed', value: 'approved_reviewed', score: 4 },
-      { text: 'Ja, goedgekeurd door management', value: 'approved', score: 3 },
-      { text: 'Ja, maar nog niet goedgekeurd', value: 'draft', score: 2 },
-      { text: 'In ontwikkeling', value: 'developing', score: 1 },
-      { text: 'Nee', value: 'no', score: 0 }
+      { text: 'Volledig geïdentificeerd en regelmatig geëvalueerd', value: 'fully_evaluated', score: 5 },
+      { text: 'Volledig geïdentificeerd', value: 'fully_identified', score: 4 },
+      { text: 'Grotendeels geïdentificeerd', value: 'mostly_identified', score: 3 },
+      { text: 'Beperkt geïdentificeerd', value: 'limited_identified', score: 2 },
+      { text: 'Niet geïdentificeerd', value: 'not_identified', score: 1 }
     ]
   },
   {
     id: 3,
-    text: 'Zijn er duidelijke rollen en verantwoordelijkheden gedefinieerd voor business continuity?',
+    text: 'Is de scope van het BCMS duidelijk gedefinieerd?',
     type: 'multiple-choice',
-    category: 'Organisatie',
+    category: 'Context van de Organisatie',
+    controlArea: 'context',
     options: [
-      { text: 'Ja, volledig gedefinieerd en getraind', value: 'fully_defined', score: 4 },
-      { text: 'Ja, gedefinieerd maar training is beperkt', value: 'defined_limited', score: 3 },
-      { text: 'Gedeeltelijk gedefinieerd', value: 'partially', score: 2 },
-      { text: 'Informeel gedefinieerd', value: 'informal', score: 1 },
-      { text: 'Nee', value: 'no', score: 0 }
+      { text: 'Volledig gedefinieerd en goedgekeurd', value: 'fully_defined', score: 5 },
+      { text: 'Gedefinieerd maar nog niet goedgekeurd', value: 'defined_not_approved', score: 4 },
+      { text: 'Gedeeltelijk gedefinieerd', value: 'partially_defined', score: 3 },
+      { text: 'In ontwikkeling', value: 'in_development', score: 2 },
+      { text: 'Niet gedefinieerd', value: 'not_defined', score: 1 }
     ]
   },
+
+  // 2. Leadership (3 questions - including required BCM officer question)
   {
     id: 4,
-    text: 'Hoe vaak worden business continuity plannen gereviewed?',
-    type: 'multiple-choice',
-    category: 'Organisatie',
-    options: [
-      { text: 'Elke 6 maanden of bij wijzigingen', value: 'every_6_months', score: 4 },
-      { text: 'Jaarlijks', value: 'annually', score: 3 },
-      { text: 'Om de 2 jaar', value: 'biannually', score: 2 },
-      { text: 'Onregelmatig', value: 'irregular', score: 1 },
-      { text: 'Nooit', value: 'never', score: 0 }
-    ]
+    text: 'Heeft uw organisatie een aangestelde BCM-functionaris of -manager?',
+    type: 'boolean',
+    category: 'Leiderschap',
+    controlArea: 'leadership',
+    isRequired: true
   },
   {
     id: 5,
-    text: 'Heeft uw organisatie een crisis management team?',
+    text: 'Toont het management leiderschap en betrokkenheid bij business continuity?',
     type: 'multiple-choice',
-    category: 'Organisatie',
+    category: 'Leiderschap',
+    controlArea: 'leadership',
     options: [
-      { text: 'Ja, volledig operationeel met regelmatige training', value: 'fully_operational', score: 4 },
-      { text: 'Ja, maar beperkte training', value: 'limited_training', score: 3 },
-      { text: 'Ja, maar niet getraind', value: 'not_trained', score: 2 },
-      { text: 'Informeel team', value: 'informal', score: 1 },
-      { text: 'Nee', value: 'no', score: 0 }
+      { text: 'Volledig betrokken en actief ondersteunend', value: 'fully_engaged', score: 5 },
+      { text: 'Grotendeels betrokken', value: 'mostly_engaged', score: 4 },
+      { text: 'Redelijk betrokken', value: 'moderately_engaged', score: 3 },
+      { text: 'Beperkt betrokken', value: 'limited_engaged', score: 2 },
+      { text: 'Niet betrokken', value: 'not_engaged', score: 1 }
     ]
   },
   {
     id: 6,
-    text: 'Zijn er BCM functionarissen in uw organisatie.',
+    text: 'Zijn rollen en verantwoordelijkheden voor BCMS duidelijk gedefinieerd?',
     type: 'multiple-choice',
-    category: 'Organisatie',
+    category: 'Leiderschap',
+    controlArea: 'leadership',
     options: [
-      { text: 'Ja, volledig aangesteld en getraind', value: 'fully_appointed', score: 4 },
-      { text: 'Ja, aangesteld maar beperkte training', value: 'appointed_limited', score: 3 },
-      { text: 'Ja, maar informeel aangewezen', value: 'informal', score: 2 },
-      { text: 'Gedeeltelijk', value: 'partially', score: 1 },
-      { text: 'Nee', value: 'no', score: 0 }
+      { text: 'Volledig gedefinieerd en gecommuniceerd', value: 'fully_defined', score: 5 },
+      { text: 'Gedefinieerd maar beperkt gecommuniceerd', value: 'defined_limited_comm', score: 4 },
+      { text: 'Gedeeltelijk gedefinieerd', value: 'partially_defined', score: 3 },
+      { text: 'Informeel gedefinieerd', value: 'informally_defined', score: 2 },
+      { text: 'Niet gedefinieerd', value: 'not_defined', score: 1 }
     ]
   },
+
+  // 3. Planning (3 questions)
   {
     id: 7,
-    text: 'Heeft uw organisatie een communicatieplan voor crisis situaties?',
+    text: 'Heeft uw organisatie een Business Impact Analysis (BIA) uitgevoerd?',
     type: 'multiple-choice',
-    category: 'Organisatie',
+    category: 'Planning',
+    controlArea: 'planning',
     options: [
-      { text: 'Ja, volledig uitgewerkt en getest', value: 'fully_tested', score: 4 },
-      { text: 'Ja, volledig uitgewerkt maar niet getest', value: 'not_tested', score: 3 },
-      { text: 'Gedeeltelijk uitgewerkt', value: 'partially', score: 2 },
-      { text: 'Basis communicatieplan', value: 'basic', score: 1 },
-      { text: 'Nee', value: 'no', score: 0 }
+      { text: 'Recent uitgevoerd en regelmatig geüpdatet', value: 'recent_updated', score: 5 },
+      { text: 'Recent uitgevoerd', value: 'recent', score: 4 },
+      { text: 'Uitgevoerd maar verouderd', value: 'outdated', score: 3 },
+      { text: 'Informele analyse uitgevoerd', value: 'informal', score: 2 },
+      { text: 'Niet uitgevoerd', value: 'not_performed', score: 1 }
     ]
   },
   {
     id: 8,
-    text: 'Wordt business continuity meegenomen in nieuwe projecten?',
+    text: 'Zijn risico\'s geïdentificeerd en beoordeeld?',
     type: 'multiple-choice',
-    category: 'Organisatie',
+    category: 'Planning',
+    controlArea: 'planning',
     options: [
-      { text: 'Ja, altijd vanaf het begin', value: 'always', score: 4 },
-      { text: 'Ja, meestal', value: 'usually', score: 3 },
-      { text: 'Soms', value: 'sometimes', score: 2 },
-      { text: 'Zelden', value: 'rarely', score: 1 },
-      { text: 'Nooit', value: 'never', score: 0 }
+      { text: 'Volledig geïdentificeerd en regelmatig geëvalueerd', value: 'fully_evaluated', score: 5 },
+      { text: 'Volledig geïdentificeerd', value: 'fully_identified', score: 4 },
+      { text: 'Grotendeels geïdentificeerd', value: 'mostly_identified', score: 3 },
+      { text: 'Beperkt geïdentificeerd', value: 'limited_identified', score: 2 },
+      { text: 'Niet geïdentificeerd', value: 'not_identified', score: 1 }
+    ]
+  },
+  {
+    id: 9,
+    text: 'Zijn BCMS-doelstellingen vastgesteld en gemeten?',
+    type: 'multiple-choice',
+    category: 'Planning',
+    controlArea: 'planning',
+    options: [
+      { text: 'Vastgesteld en regelmatig gemeten', value: 'established_measured', score: 5 },
+      { text: 'Vastgesteld maar beperkt gemeten', value: 'established_limited', score: 4 },
+      { text: 'Vastgesteld maar niet gemeten', value: 'established_not_measured', score: 3 },
+      { text: 'Informeel vastgesteld', value: 'informally_established', score: 2 },
+      { text: 'Niet vastgesteld', value: 'not_established', score: 1 }
     ]
   },
 
-  // Risk Management (6 vragen)
-  {
-    id: 9,
-    text: 'Heeft uw organisatie een formele business impact analyse (BIA) uitgevoerd?',
-    type: 'multiple-choice',
-    category: 'Risk Management',
-    options: [
-      { text: 'Ja, recent uitgevoerd en regelmatig geüpdatet', value: 'recent_updated', score: 4 },
-      { text: 'Ja, recent uitgevoerd', value: 'recent', score: 3 },
-      { text: 'Ja, maar meer dan 2 jaar geleden', value: 'outdated', score: 2 },
-      { text: 'Informele analyse', value: 'informal', score: 1 },
-      { text: 'Nee', value: 'no', score: 0 }
-    ]
-  },
+  // 4. Support (3 questions)
   {
     id: 10,
-    text: 'Zijn kritieke bedrijfsprocessen geïdentificeerd en gedocumenteerd?',
+    text: 'Zijn voldoende resources toegewezen aan het BCMS?',
     type: 'multiple-choice',
-    category: 'Risk Management',
+    category: 'Ondersteuning',
+    controlArea: 'support',
     options: [
-      { text: 'Ja, volledig geïdentificeerd en up-to-date', value: 'fully_current', score: 4 },
-      { text: 'Ja, volledig geïdentificeerd maar niet recent geüpdatet', value: 'fully_outdated', score: 3 },
-      { text: 'Gedeeltelijk geïdentificeerd', value: 'partially', score: 2 },
-      { text: 'Informeel geïdentificeerd', value: 'informal', score: 1 },
-      { text: 'Nee', value: 'no', score: 0 }
+      { text: 'Volledig adequaat en toegewezen', value: 'fully_adequate', score: 5 },
+      { text: 'Grotendeels adequaat', value: 'mostly_adequate', score: 4 },
+      { text: 'Redelijk adequaat', value: 'moderately_adequate', score: 3 },
+      { text: 'Beperkt adequaat', value: 'limited_adequate', score: 2 },
+      { text: 'Niet adequaat', value: 'not_adequate', score: 1 }
     ]
   },
   {
     id: 11,
-    text: 'Heeft uw de kritieke bedrijfsprocessen geïdentificeerd.',
+    text: 'Hebben medewerkers de juiste competenties voor hun BCMS-rollen?',
     type: 'multiple-choice',
-    category: 'Risk Management',
+    category: 'Ondersteuning',
+    controlArea: 'support',
     options: [
-      { text: 'Ja, volledig geïdentificeerd en gedocumenteerd', value: 'fully_identified', score: 4 },
-      { text: 'Ja, geïdentificeerd maar documentatie beperkt', value: 'identified_limited', score: 3 },
-      { text: 'Gedeeltelijk geïdentificeerd', value: 'partially', score: 2 },
-      { text: 'Informeel geïdentificeerd', value: 'informal', score: 1 },
-      { text: 'Nee', value: 'no', score: 0 }
+      { text: 'Volledig competent en getraind', value: 'fully_competent', score: 5 },
+      { text: 'Grotendeels competent', value: 'mostly_competent', score: 4 },
+      { text: 'Redelijk competent', value: 'moderately_competent', score: 3 },
+      { text: 'Beperkt competent', value: 'limited_competent', score: 2 },
+      { text: 'Niet competent', value: 'not_competent', score: 1 }
     ]
   },
   {
     id: 12,
-    text: 'Zijn recovery time objectives (RTO) gedefinieerd voor kritieke processen?',
+    text: 'Is er een communicatieplan voor business continuity?',
     type: 'multiple-choice',
-    category: 'Risk Management',
+    category: 'Ondersteuning',
+    controlArea: 'support',
     options: [
-      { text: 'Ja, voor alle kritieke processen', value: 'all_processes', score: 4 },
-      { text: 'Ja, voor de meeste processen', value: 'most_processes', score: 3 },
-      { text: 'Ja, voor enkele processen', value: 'some_processes', score: 2 },
-      { text: 'Informeel gedefinieerd', value: 'informal', score: 1 },
-      { text: 'Nee', value: 'no', score: 0 }
-    ]
-  },
-  {
-    id: 13,
-    text: 'Wordt er regelmatig risk assessment uitgevoerd?',
-    type: 'multiple-choice',
-    category: 'Risk Management',
-    options: [
-      { text: 'Ja, elke 6 maanden', value: 'every_6_months', score: 4 },
-      { text: 'Ja, jaarlijks', value: 'annually', score: 3 },
-      { text: 'Ja, om de 2 jaar', value: 'biannually', score: 2 },
-      { text: 'Onregelmatig', value: 'irregular', score: 1 },
-      { text: 'Nooit', value: 'never', score: 0 }
-    ]
-  },
-  {
-    id: 14,
-    text: 'Heeft uw organisatie een leveranciers continuity plan?',
-    type: 'multiple-choice',
-    category: 'Risk Management',
-    options: [
-      { text: 'Ja, volledig uitgewerkt en getest', value: 'fully_tested', score: 4 },
-      { text: 'Ja, volledig uitgewerkt maar niet getest', value: 'not_tested', score: 3 },
-      { text: 'Gedeeltelijk uitgewerkt', value: 'partially', score: 2 },
-      { text: 'Basis plan', value: 'basic', score: 1 },
-      { text: 'Nee', value: 'no', score: 0 }
+      { text: 'Volledig uitgewerkt en getest', value: 'fully_tested', score: 5 },
+      { text: 'Volledig uitgewerkt maar niet getest', value: 'not_tested', score: 4 },
+      { text: 'Gedeeltelijk uitgewerkt', value: 'partially_developed', score: 3 },
+      { text: 'Basis communicatieplan', value: 'basic_plan', score: 2 },
+      { text: 'Geen communicatieplan', value: 'no_plan', score: 1 }
     ]
   },
 
-  // Techniek (7 vragen)
+  // 5. Operation (4 questions - including required crisis team question)
+  {
+    id: 13,
+    text: 'Heeft uw organisatie een operationeel crisisteam?',
+    type: 'boolean',
+    category: 'Operatie',
+    controlArea: 'operation',
+    isRequired: true
+  },
+  {
+    id: 14,
+    text: 'Zijn business continuity procedures geïmplementeerd?',
+    type: 'multiple-choice',
+    category: 'Operatie',
+    controlArea: 'operation',
+    options: [
+      { text: 'Volledig geïmplementeerd en getest', value: 'fully_tested', score: 5 },
+      { text: 'Volledig geïmplementeerd maar niet getest', value: 'not_tested', score: 4 },
+      { text: 'Gedeeltelijk geïmplementeerd', value: 'partially_implemented', score: 3 },
+      { text: 'In ontwikkeling', value: 'in_development', score: 2 },
+      { text: 'Niet geïmplementeerd', value: 'not_implemented', score: 1 }
+    ]
+  },
   {
     id: 15,
-    text: 'Heeft uw organisatie een disaster recovery plan voor IT-systemen?',
+    text: 'Worden incidenten gedocumenteerd en gemanaged?',
     type: 'multiple-choice',
-    category: 'Techniek',
+    category: 'Operatie',
+    controlArea: 'operation',
     options: [
-      { text: 'Ja, volledig getest en up-to-date', value: 'fully_tested', score: 4 },
-      { text: 'Ja, maar niet recent getest', value: 'not_recent', score: 3 },
-      { text: 'Ja, maar nooit getest', value: 'never_tested', score: 2 },
-      { text: 'Basis plan', value: 'basic', score: 1 },
-      { text: 'Nee', value: 'no', score: 0 }
+      { text: 'Volledig gedocumenteerd met formeel proces', value: 'fully_documented', score: 5 },
+      { text: 'Grotendeels gedocumenteerd', value: 'mostly_documented', score: 4 },
+      { text: 'Gedeeltelijk gedocumenteerd', value: 'partially_documented', score: 3 },
+      { text: 'Informeel gedocumenteerd', value: 'informally_documented', score: 2 },
+      { text: 'Niet gedocumenteerd', value: 'not_documented', score: 1 }
     ]
   },
   {
     id: 16,
-    text: 'Hoe vaak worden backups getest?',
+    text: 'Zijn alternatieve werklocaties beschikbaar?',
     type: 'multiple-choice',
-    category: 'Techniek',
+    category: 'Operatie',
+    controlArea: 'operation',
     options: [
-      { text: 'Wekelijks', value: 'weekly', score: 4 },
-      { text: 'Maandelijks', value: 'monthly', score: 3 },
-      { text: 'Per kwartaal', value: 'quarterly', score: 2 },
-      { text: 'Jaarlijks', value: 'annually', score: 1 },
-      { text: 'Nooit', value: 'never', score: 0 }
+      { text: 'Volledig ingericht en operationeel', value: 'fully_operational', score: 5 },
+      { text: 'Ingericht maar niet getest', value: 'not_tested', score: 4 },
+      { text: 'Gedeeltelijk ingericht', value: 'partially_equipped', score: 3 },
+      { text: 'Geïdentificeerd maar niet ingericht', value: 'identified_only', score: 2 },
+      { text: 'Niet beschikbaar', value: 'not_available', score: 1 }
     ]
   },
+
+  // 6. Performance Evaluation (3 questions)
   {
     id: 17,
-    text: 'Heeft u monitoring ingericht.',
+    text: 'Wordt de prestatie van het BCMS gemeten en geëvalueerd?',
     type: 'multiple-choice',
-    category: 'Techniek',
+    category: 'Prestatie-evaluatie',
+    controlArea: 'performance',
     options: [
-      { text: 'Ja, volledig gemonitord met alerts', value: 'fully_monitored', score: 4 },
-      { text: 'Ja, maar beperkte alerting', value: 'limited_alerts', score: 3 },
-      { text: 'Ja, basis monitoring', value: 'basic_monitoring', score: 2 },
-      { text: 'Gedeeltelijk', value: 'partially', score: 1 },
-      { text: 'Nee', value: 'no', score: 0 }
+      { text: 'Regelmatig gemeten met KPIs', value: 'regular_kpis', score: 5 },
+      { text: 'Periodiek gemeten', value: 'periodic_measurement', score: 4 },
+      { text: 'Incidenteel gemeten', value: 'occasional_measurement', score: 3 },
+      { text: 'Informeel geëvalueerd', value: 'informal_evaluation', score: 2 },
+      { text: 'Niet gemeten', value: 'not_measured', score: 1 }
     ]
   },
   {
     id: 18,
-    text: 'Heeft uw organisatie een alternatieve werklocatie?',
+    text: 'Worden er regelmatig BCMS-audits uitgevoerd?',
     type: 'multiple-choice',
-    category: 'Techniek',
+    category: 'Prestatie-evaluatie',
+    controlArea: 'performance',
     options: [
-      { text: 'Ja, volledig ingericht en getest', value: 'fully_tested', score: 4 },
-      { text: 'Ja, volledig ingericht maar niet getest', value: 'not_tested', score: 3 },
-      { text: 'Ja, maar beperkt ingericht', value: 'limited', score: 2 },
-      { text: 'Informele afspraak', value: 'informal', score: 1 },
-      { text: 'Nee', value: 'no', score: 0 }
+      { text: 'Regelmatige interne en externe audits', value: 'regular_both', score: 5 },
+      { text: 'Regelmatige interne audits', value: 'regular_internal', score: 4 },
+      { text: 'Incidentele audits', value: 'occasional_audits', score: 3 },
+      { text: 'Informele evaluaties', value: 'informal_reviews', score: 2 },
+      { text: 'Geen audits', value: 'no_audits', score: 1 }
     ]
   },
   {
     id: 19,
-    text: 'Wordt er regelmatig penetration testing uitgevoerd?',
+    text: 'Worden business continuity oefeningen uitgevoerd?',
     type: 'multiple-choice',
-    category: 'Techniek',
+    category: 'Prestatie-evaluatie',
+    controlArea: 'performance',
     options: [
-      { text: 'Ja, elke 6 maanden', value: 'every_6_months', score: 4 },
-      { text: 'Ja, jaarlijks', value: 'annually', score: 3 },
-      { text: 'Ja, om de 2 jaar', value: 'biannually', score: 2 },
-      { text: 'Onregelmatig', value: 'irregular', score: 1 },
-      { text: 'Nooit', value: 'never', score: 0 }
+      { text: 'Regelmatige oefeningen (elke 6 maanden)', value: 'regular_exercises', score: 5 },
+      { text: 'Jaarlijkse oefeningen', value: 'annual_exercises', score: 4 },
+      { text: 'Incidentele oefeningen', value: 'occasional_exercises', score: 3 },
+      { text: 'Desktop oefeningen alleen', value: 'desktop_only', score: 2 },
+      { text: 'Geen oefeningen', value: 'no_exercises', score: 1 }
     ]
   },
+
+  // 7. Improvement (2 questions)
   {
     id: 20,
-    text: 'Hoeveel minuten is uw gemiddelde system recovery time?',
-    type: 'number',
-    category: 'Techniek',
-    scoring: [
-      { threshold: 0, score: 4 },
-      { threshold: 30, score: 3 },
-      { threshold: 60, score: 2 },
-      { threshold: 240, score: 1 },
-      { threshold: 1440, score: 0 }
-    ]
-  },
-  {
-    id: 21,
-    text: 'Heeft uw organisatie een cybersecurity incident response plan?',
+    text: 'Worden verbeteracties geïdentificeerd en geïmplementeerd?',
     type: 'multiple-choice',
-    category: 'Techniek',
+    category: 'Verbetering',
+    controlArea: 'improvement',
     options: [
-      { text: 'Ja, volledig getest en up-to-date', value: 'fully_tested', score: 4 },
-      { text: 'Ja, maar niet recent getest', value: 'not_recent', score: 3 },
-      { text: 'Ja, maar nooit getest', value: 'never_tested', score: 2 },
-      { text: 'Basis plan', value: 'basic', score: 1 },
-      { text: 'Nee', value: 'no', score: 0 }
-    ]
-  },
-
-  // Training & Awareness (3 vragen)
-  {
-    id: 22,
-    text: 'Hoe vaak worden business continuity oefeningen uitgevoerd?',
-    type: 'multiple-choice',
-    category: 'Training & Awareness',
-    options: [
-      { text: 'Elke 6 maanden', value: 'every_6_months', score: 4 },
-      { text: 'Jaarlijks', value: 'annually', score: 3 },
-      { text: 'Om de 2 jaar', value: 'biannually', score: 2 },
-      { text: 'Onregelmatig', value: 'irregular', score: 1 },
-      { text: 'Nooit', value: 'never', score: 0 }
-    ]
-  },
-  {
-    id: 23,
-    text: 'Ontvangen medewerkers training over business continuity?',
-    type: 'multiple-choice',
-    category: 'Training & Awareness',
-    options: [
-      { text: 'Ja, reguliere training voor alle medewerkers', value: 'all_regular', score: 4 },
-      { text: 'Ja, voor sleutelpersoneel', value: 'key_personnel', score: 3 },
-      { text: 'Ja, eenmalige training', value: 'one_time', score: 2 },
-      { text: 'Informele training', value: 'informal', score: 1 },
-      { text: 'Nee', value: 'no', score: 0 }
-    ]
-  },
-  {
-    id: 24,
-    text: 'Voert u actief campagne voor business continuiteit',
-    type: 'multiple-choice',
-    category: 'Training & Awareness',
-    options: [
-      { text: 'Ja, regelmatige campagnes en communicatie', value: 'regular_campaigns', score: 4 },
-      { text: 'Ja, jaarlijkse campagnes', value: 'annual_campaigns', score: 3 },
-      { text: 'Ja, maar beperkt', value: 'limited', score: 2 },
-      { text: 'Soms', value: 'sometimes', score: 1 },
-      { text: 'Nee', value: 'no', score: 0 }
-    ]
-  },
-
-  // Monitoring & Verbetering (3 vragen)
-  {
-    id: 25,
-    text: 'Wordt de effectiviteit van business continuity plannen gemeten?',
-    type: 'multiple-choice',
-    category: 'Monitoring & Verbetering',
-    options: [
-      { text: 'Ja, met KPIs en regelmatige rapportage', value: 'kpis_reporting', score: 4 },
-      { text: 'Ja, maar informeel', value: 'informal', score: 3 },
-      { text: 'Soms', value: 'sometimes', score: 2 },
-      { text: 'Zelden', value: 'rarely', score: 1 },
-      { text: 'Nooit', value: 'never', score: 0 }
-    ]
-  },
-  {
-    id: 26,
-    text: 'Worden lessons learned na incidenten gedocumenteerd?',
-    type: 'multiple-choice',
-    category: 'Monitoring & Verbetering',
-    options: [
-      { text: 'Ja, altijd met follow-up acties', value: 'always_followup', score: 4 },
-      { text: 'Ja, meestal', value: 'usually', score: 3 },
-      { text: 'Soms', value: 'sometimes', score: 2 },
-      { text: 'Zelden', value: 'rarely', score: 1 },
-      { text: 'Nooit', value: 'never', score: 0 }
-    ]
-  },
-  {
-    id: 27,
-    text: 'Hoeveel verbeterinitiatieven zijn het afgelopen jaar geïmplementeerd?',
-    type: 'number',
-    category: 'Monitoring & Verbetering',
-    scoring: [
-      { threshold: 10, score: 4 },
-      { threshold: 5, score: 3 },
-      { threshold: 3, score: 2 },
-      { threshold: 1, score: 1 },
-      { threshold: 0, score: 0 }
+      { text: 'Systematisch geïdentificeerd en geïmplementeerd', value: 'systematic_implementation', score: 5 },
+      { text: 'Regelmatig geïdentificeerd en grotendeels geïmplementeerd', value: 'regular_mostly_implemented', score: 4 },
+      { text: 'Incidenteel geïdentificeerd en gedeeltelijk geïmplementeerd', value: 'occasional_partial', score: 3 },
+      { text: 'Informeel geïdentificeerd', value: 'informal_identification', score: 2 },
+      { text: 'Niet geïdentificeerd', value: 'not_identified', score: 1 }
     ]
   }
 ]
+
+// Control area mapping for scoring
+export const controlAreas = {
+  context: 'Context van de Organisatie',
+  leadership: 'Leiderschap', 
+  planning: 'Planning',
+  support: 'Ondersteuning',
+  operation: 'Operatie',
+  performance: 'Prestatie-evaluatie',
+  improvement: 'Verbetering'
+}
+
+// Maturity level definitions
+export const maturityLevels = {
+  1: { level: 'Beginner', description: 'Weinig tot geen BCMS activiteiten' },
+  2: { level: 'Ontwikkelend', description: 'Basis BCMS activiteiten gestart' },
+  3: { level: 'Gedefinieerd', description: 'BCMS grotendeels geïmplementeerd' },
+  4: { level: 'Beheerd', description: 'BCMS volledig operationeel' },
+  5: { level: 'Geoptimaliseerd', description: 'BCMS continu verbeterd en geoptimaliseerd' }
+}
