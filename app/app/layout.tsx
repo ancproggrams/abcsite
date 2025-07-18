@@ -6,6 +6,7 @@ import './globals.css'
 import { Providers } from '@/components/providers'
 import { SiteHeader } from '@/components/site-header'
 import { SiteFooter } from '@/components/site-footer'
+import { ChatbotManager } from '@/components/chatbot/chatbot-manager'
 // COMMENTED OUT FOR TESTING HYDRATION ISSUES
 // import { Toaster } from '@/components/ui/toaster'
 // import { StructuredData } from '@/components/structured-data'
@@ -121,6 +122,7 @@ export default function RootLayout({
             </main>
             <SiteFooter />
           </div>
+          <ChatbotManager />
         </Providers>
       </body>
     </html>

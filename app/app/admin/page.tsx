@@ -10,7 +10,10 @@ import {
   BarChart3,
   Plus,
   Eye,
-  Edit
+  Edit,
+  Users,
+  MessageSquare,
+  HelpCircle
 } from 'lucide-react'
 import Link from 'next/link'
 
@@ -60,6 +63,34 @@ export default function AdminDashboard() {
       href: '/admin/quickscan-results',
       icon: BarChart3,
       color: 'bg-orange-500'
+    },
+    {
+      title: 'Business Dashboard',
+      description: 'Analytics en rapporten',
+      href: '/dashboard',
+      icon: BarChart3,
+      color: 'bg-teal-500'
+    },
+    {
+      title: 'CRM & Leads',
+      description: 'Lead management',
+      href: '/dashboard?tab=leads',
+      icon: Users,
+      color: 'bg-pink-500'
+    },
+    {
+      title: 'Chatbot Config',
+      description: 'Chatbot instellingen',
+      href: '/admin/chatbot',
+      icon: MessageSquare,
+      color: 'bg-indigo-500'
+    },
+    {
+      title: 'FAQ Beheer',
+      description: 'Beheer veelgestelde vragen',
+      href: '/admin/faq',
+      icon: HelpCircle,
+      color: 'bg-yellow-500'
     }
   ]
 

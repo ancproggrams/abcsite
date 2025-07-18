@@ -121,17 +121,48 @@ export function SiteHeader() {
                       <ListItem href="/kenniscentrum/downloads" title="Downloads & Templates">
                         Praktische templates, checklists en resources
                       </ListItem>
+                      <ListItem href="/resources" title="Resources & Tools">
+                        Gratis templates, tools en gidsen voor BCM
+                      </ListItem>
+                      <ListItem href="/faq" title="Veelgestelde Vragen">
+                        Antwoorden op veelgestelde vragen over onze diensten
+                      </ListItem>
                     </ul>
                   </NavigationMenuContent>
                 </NavigationMenuItem>
                 
                 <NavigationMenuItem>
-                  <Link 
-                    href="/over-ons"
-                    className="text-sm font-medium text-foreground hover:text-primary transition-colors focus-visible"
-                  >
+                  <NavigationMenuTrigger className="text-sm font-medium text-foreground hover:text-primary transition-colors">
                     Over Ons
-                  </Link>
+                  </NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <ul className="grid gap-3 p-6 w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
+                      <li className="row-span-3">
+                        <NavigationMenuLink asChild>
+                          <Link
+                            className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
+                            href="/over-ons"
+                          >
+                            <div className="mb-2 mt-4 text-lg font-medium">
+                              Over Ons
+                            </div>
+                            <p className="text-sm leading-tight text-muted-foreground">
+                              Leer meer over onze expertise en aanpak in business continuity management.
+                            </p>
+                          </Link>
+                        </NavigationMenuLink>
+                      </li>
+                      <ListItem href="/over-ons" title="Bedrijf">
+                        Onze missie, visie en werkwijze
+                      </ListItem>
+                      <ListItem href="/team" title="Ons Team">
+                        Ontmoet onze BCM experts en consultants
+                      </ListItem>
+                      <ListItem href="/dashboard" title="Dashboard">
+                        Business intelligence en analytics
+                      </ListItem>
+                    </ul>
+                  </NavigationMenuContent>
                 </NavigationMenuItem>
                 
                 <NavigationMenuItem>
@@ -140,6 +171,15 @@ export function SiteHeader() {
                     className="text-sm font-medium text-foreground hover:text-primary transition-colors focus-visible"
                   >
                     Adviesgesprek
+                  </Link>
+                </NavigationMenuItem>
+                
+                <NavigationMenuItem>
+                  <Link 
+                    href="/customer-portal"
+                    className="text-sm font-medium text-foreground hover:text-primary transition-colors focus-visible"
+                  >
+                    Klanten Portal
                   </Link>
                 </NavigationMenuItem>
               </NavigationMenuList>

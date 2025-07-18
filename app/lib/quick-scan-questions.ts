@@ -4,13 +4,17 @@
 export interface QuickScanQuestion {
   id: number
   text: string
-  type: 'multiple-choice' | 'boolean'
+  type: 'multiple-choice' | 'boolean' | 'number'
   category: string
   controlArea: string
   isRequired?: boolean
   options?: {
     text: string
     value: string
+    score: number
+  }[]
+  scoring?: {
+    threshold: number
     score: number
   }[]
 }

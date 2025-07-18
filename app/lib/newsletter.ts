@@ -3,7 +3,7 @@
 import { Resend } from 'resend'
 import { NewsletterSubscriber, NewsletterSignupData } from './types'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null
 
 export class NewsletterService {
   private static instance: NewsletterService
@@ -17,6 +17,10 @@ export class NewsletterService {
 
   async subscribe(data: NewsletterSignupData): Promise<boolean> {
     try {
+      if (!resend) {
+        console.warn('Email service not configured, skipping email subscription')
+        return false
+      }
       // Add to Resend audience
       await resend.contacts.create({
         email: data.email,
@@ -34,6 +38,7 @@ export class NewsletterService {
 
   async unsubscribe(email: string): Promise<boolean> {
     try {
+      if (!resend) return false
       await resend.contacts.remove({
         email,
         audienceId: process.env.RESEND_AUDIENCE_ID || ''
@@ -48,6 +53,7 @@ export class NewsletterService {
 
   async sendWelcomeEmail(subscriber: NewsletterSubscriber): Promise<boolean> {
     try {
+      if (!resend) return false
       await resend.emails.send({
         from: 'Marc van der Meer <marc@adviesnconsultancy.nl>',
         to: [subscriber.email],
@@ -68,6 +74,7 @@ export class NewsletterService {
     subscribers: NewsletterSubscriber[]
   ): Promise<boolean> {
     try {
+      if (!resend) return false
       const emailPromises = subscribers.map(subscriber =>
         resend.emails.send({
           from: 'Marc van der Meer <marc@adviesnconsultancy.nl>',

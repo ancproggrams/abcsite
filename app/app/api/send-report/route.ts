@@ -2,12 +2,16 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null
 
 export const dynamic = 'force-dynamic'
 
 export async function POST(request: NextRequest) {
   try {
+    if (!resend) {
+      return NextResponse.json({ error: 'Email service not configured' }, { status: 500 })
+    }
+
     const body = await request.json()
     const { email, name, sendCopyToAdmin, results, recommendations } = body
 
