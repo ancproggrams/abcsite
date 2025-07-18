@@ -46,6 +46,13 @@ export default function AdminDashboard() {
       color: 'bg-blue-500'
     },
     {
+      title: 'Team Management',
+      description: 'Beheer teamleden',
+      href: '/admin/team',
+      icon: Users,
+      color: 'bg-emerald-500'
+    },
+    {
       title: 'Upload Resource',
       description: 'Voeg nieuwe download toe',
       href: '/admin/downloads/new',
@@ -69,14 +76,14 @@ export default function AdminDashboard() {
     {
       title: 'Business Dashboard',
       description: 'Analytics en rapporten',
-      href: '/dashboard',
+      href: '/admin/dashboard',
       icon: BarChart3,
       color: 'bg-teal-500'
     },
     {
       title: 'CRM & Leads',
       description: 'Lead management',
-      href: '/dashboard?tab=leads',
+      href: '/admin/dashboard?tab=leads',
       icon: Users,
       color: 'bg-pink-500'
     },

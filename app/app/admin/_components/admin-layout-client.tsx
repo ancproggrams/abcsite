@@ -2,7 +2,7 @@
 'use client'
 
 import { useSession, signOut } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import { useEffect } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
@@ -33,18 +33,32 @@ import {
 export function AdminLayoutClient({ children }: { children: React.ReactNode }) {
   const { data: session, status } = useSession()
   const router = useRouter()
+  const pathname = usePathname()
+
+  // Skip authentication check for login page
+  const isLoginPage = pathname === '/admin/login'
 
   useEffect(() => {
-    if (status === 'unauthenticated') {
+    if (!isLoginPage && status === 'unauthenticated') {
       router.push('/admin/login')
     }
-  }, [status, router])
+  }, [status, router, isLoginPage])
 
   const navigationItems = [
     {
       href: '/admin',
       label: 'Dashboard',
       icon: LayoutDashboard
+    },
+    {
+      href: '/admin/dashboard',
+      label: 'Business Intelligence',
+      icon: BarChart3
+    },
+    {
+      href: '/admin/team',
+      label: 'Team Management',
+      icon: User
     },
     {
       href: '/admin/blog',
@@ -73,6 +87,11 @@ export function AdminLayoutClient({ children }: { children: React.ReactNode }) {
       callbackUrl: '/admin/login',
       redirect: true 
     })
+  }
+
+  // For login page, skip authentication checks and return children directly
+  if (isLoginPage) {
+    return <>{children}</>
   }
 
   if (status === 'loading') {
