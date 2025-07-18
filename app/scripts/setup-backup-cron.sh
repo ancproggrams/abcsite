@@ -24,7 +24,8 @@ else
 fi
 
 # Create log directory
-mkdir -p /home/ubuntu/advies-n-consultancy/logs
+PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+mkdir -p "$PROJECT_ROOT/logs"
 
 # Test backup script
 echo "Testing backup script..."
@@ -37,5 +38,5 @@ fi
 
 echo "Automated backup system setup complete!"
 echo "Backups will run daily at 2:00 AM"
-echo "Logs will be stored in: /home/ubuntu/advies-n-consultancy/logs/backup.log"
-echo "Backups will be stored in: /home/ubuntu/advies-n-consultancy/backups/"
+echo "Logs will be stored in: $PROJECT_ROOT/logs/backup.log"
+echo "Backups will be stored in: $PROJECT_ROOT/backups/"

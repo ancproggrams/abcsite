@@ -5,11 +5,12 @@
 # This script creates daily backups with rotation
 
 # Configuration
-BACKUP_DIR="/home/ubuntu/advies-n-consultancy/backups"
+PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+BACKUP_DIR="$PROJECT_ROOT/backups"
 DATABASE_URL=${DATABASE_URL:-"postgresql://localhost:5432/advies_n_consultancy"}
 RETENTION_DAYS=7
 MAX_BACKUPS=30
-LOG_FILE="/home/ubuntu/advies-n-consultancy/logs/backup.log"
+LOG_FILE="$PROJECT_ROOT/logs/backup.log"
 DATE=$(date +"%Y-%m-%d_%H-%M-%S")
 BACKUP_FILE="database_backup_${DATE}.sql"
 
