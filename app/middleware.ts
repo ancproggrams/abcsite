@@ -2,10 +2,51 @@
 
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
+import { getToken } from 'next-auth/jwt'
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   // Get the response
   const response = NextResponse.next()
+
+  // Check if this is an admin route (but not login page)
+  const isAdminRoute = request.nextUrl.pathname.startsWith('/admin')
+  const isLoginPage = request.nextUrl.pathname === '/admin/login'
+  const isAuthRoute = request.nextUrl.pathname.startsWith('/api/auth')
+
+  // Protect admin routes
+  if (isAdminRoute && !isLoginPage && !isAuthRoute) {
+    const token = await getToken({ 
+      req: request,
+      secret: process.env.NEXTAUTH_SECRET
+    })
+
+    if (!token || !token.isActive) {
+      // Redirect to login page
+      const loginUrl = new URL('/admin/login', request.url)
+      loginUrl.searchParams.set('callbackUrl', request.nextUrl.pathname)
+      return NextResponse.redirect(loginUrl)
+    }
+
+    // Check if user is actually an admin
+    if (!token.role || !['SUPER_ADMIN', 'ADMIN', 'EDITOR'].includes(token.role as string)) {
+      // Redirect to login page with error
+      const loginUrl = new URL('/admin/login', request.url)
+      loginUrl.searchParams.set('error', 'insufficient_permissions')
+      return NextResponse.redirect(loginUrl)
+    }
+  }
+
+  // If already authenticated and trying to access login page, redirect to dashboard
+  if (isLoginPage) {
+    const token = await getToken({ 
+      req: request,
+      secret: process.env.NEXTAUTH_SECRET
+    })
+
+    if (token && token.isActive) {
+      return NextResponse.redirect(new URL('/admin', request.url))
+    }
+  }
 
   // Check if this is a preview environment
   const hostname = request.headers.get('host') || ''

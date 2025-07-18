@@ -1,4 +1,3 @@
-
 generator client {
     provider = "prisma-client-js"
     binaryTargets = ["native", "linux-musl-arm64-openssl-3.0.x"]
@@ -20,85 +19,77 @@ model Contact {
   formType  String   @default("general")
   interest  String?
   createdAt DateTime @default(now())
-  
+
   @@map("contacts")
 }
 
 model BlogPost {
-  id          String   @id @default(cuid())
-  title       String
-  slug        String   @unique
-  excerpt     String
-  content     String
-  featuredImage String?
-  status      PostStatus @default(DRAFT)
-  authorName  String   @default("Marc René")
-  authorEmail String   @default("marc@adviesnconsultancy.nl")
-  publishedAt DateTime?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  
-  // SEO fields
+  id              String         @id @default(cuid())
+  title           String
+  slug            String         @unique
+  excerpt         String
+  content         String
+  featuredImage   String?
+  status          PostStatus     @default(DRAFT)
+  authorName      String         @default("Marc René")
+  authorEmail     String         @default("marc@adviesnconsultancy.nl")
+  publishedAt     DateTime?
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
   metaTitle       String?
   metaDescription String?
   keywords        String?
-  
-  // Relationships
-  categories      BlogCategory[]
-  tags            BlogTag[]
-  
-  // Analytics
-  viewCount       Int @default(0)
-  shareCount      Int @default(0)
-  
+  viewCount       Int            @default(0)
+  shareCount      Int            @default(0)
+  categories      BlogCategory[] @relation("BlogCategoryToBlogPost")
+  tags            BlogTag[]      @relation("BlogPostToBlogTag")
+
   @@map("blog_posts")
 }
 
 model BlogCategory {
-  id          String   @id @default(cuid())
-  name        String   @unique
-  slug        String   @unique
+  id          String     @id @default(cuid())
+  name        String     @unique
+  slug        String     @unique
   description String?
-  color       String   @default("#60B5FF")
-  createdAt   DateTime @default(now())
-  
-  posts       BlogPost[]
-  
+  color       String     @default("#60B5FF")
+  createdAt   DateTime   @default(now())
+  posts       BlogPost[] @relation("BlogCategoryToBlogPost")
+
   @@map("blog_categories")
 }
 
 model BlogTag {
-  id        String   @id @default(cuid())
-  name      String   @unique
-  slug      String   @unique
-  createdAt DateTime @default(now())
-  
-  posts     BlogPost[]
-  
+  id        String     @id @default(cuid())
+  name      String     @unique
+  slug      String     @unique
+  createdAt DateTime   @default(now())
+  posts     BlogPost[] @relation("BlogPostToBlogTag")
+
   @@map("blog_tags")
 }
 
 model DownloadResource {
-  id          String   @id @default(cuid())
-  title       String
-  description String
-  category    String
-  type        String   // PDF, Excel, PowerBI, etc.
-  fileUrl     String
-  fileName    String
-  fileSize    Int?     // in bytes
-  downloadCount Int    @default(0)
-  isActive    Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  
+  id            String   @id @default(cuid())
+  title         String
+  description   String
+  category      String
+  type          String
+  fileUrl       String
+  fileName      String
+  fileSize      Int?
+  downloadCount Int      @default(0)
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
   @@map("download_resources")
 }
 
 model CaseStudy {
-  id          String   @id @default(cuid())
+  id          String     @id @default(cuid())
   title       String
-  slug        String   @unique
+  slug        String     @unique
   industry    String
   challenge   String
   solution    String
@@ -107,84 +98,357 @@ model CaseStudy {
   imageUrl    String?
   status      PostStatus @default(DRAFT)
   publishedAt DateTime?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
   @@map("case_studies")
 }
 
 model QuickScanResult {
-  id              String   @id @default(cuid())
-  // User info
-  name            String
-  email           String
-  company         String
-  phone           String?
-  position        String?
-  
-  // BCM specific questions
-  hasBcmOfficer   Boolean  // Required question
-  hasCrisisTeam   Boolean  // Required question
-  
-  // ISO 22301 questionnaire responses (JSON)
-  responses       Json     // Array of {questionId, score, area}
-  
-  // Calculated scores per control area
-  contextScore           Int    // 1-5
-  leadershipScore        Int    // 1-5
-  planningScore          Int    // 1-5
-  supportScore           Int    // 1-5
-  operationScore         Int    // 1-5
-  performanceScore       Int    // 1-5
-  improvementScore       Int    // 1-5
-  
-  // Overall assessment
-  overallScore           Int    // 1-5
-  maturityLevel          String // Basic, Developing, Advanced, Expert
-  
-  // Report generation
-  reportGenerated        Boolean @default(false)
-  reportUrl              String?
-  
-  // Follow-up
-  wantsConsultation      Boolean @default(false)
-  consultationScheduled  Boolean @default(false)
-  
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-  
+  id                    String   @id @default(cuid())
+  name                  String
+  email                 String
+  company               String
+  phone                 String?
+  position              String?
+  hasBcmOfficer         Boolean
+  hasCrisisTeam         Boolean
+  responses             Json
+  contextScore          Int
+  leadershipScore       Int
+  planningScore         Int
+  supportScore          Int
+  operationScore        Int
+  performanceScore      Int
+  improvementScore      Int
+  overallScore          Int
+  maturityLevel         String
+  reportGenerated       Boolean  @default(false)
+  reportUrl             String?
+  wantsConsultation     Boolean  @default(false)
+  consultationScheduled Boolean  @default(false)
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
   @@map("quick_scan_results")
 }
 
 model NewsletterSubscriber {
-  id              String   @id @default(cuid())
-  email           String   @unique
-  name            String?
-  company         String?
-  isActive        Boolean  @default(true)
-  preferences     String[] // JSON array of preferences
-  source          String?  // Where they signed up from
-  leadScore       Int      @default(0)
-  lastEngagement  DateTime?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-  
+  id             String    @id @default(cuid())
+  email          String    @unique
+  name           String?
+  company        String?
+  isActive       Boolean   @default(true)
+  preferences    String[]
+  source         String?
+  leadScore      Int       @default(0)
+  lastEngagement DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
   @@map("newsletter_subscribers")
 }
 
 model SocialMediaPost {
-  id           String   @id @default(cuid())
-  platform     SocialPlatform
-  postId       String   // External post ID
-  content      String
-  url          String
-  imageUrl     String?
-  publishedAt  DateTime
-  engagements  Int      @default(0)
-  createdAt    DateTime @default(now())
-  
+  id          String         @id @default(cuid())
+  platform    SocialPlatform
+  postId      String
+  content     String
+  url         String
+  imageUrl    String?
+  publishedAt DateTime
+  engagements Int            @default(0)
+  createdAt   DateTime       @default(now())
+
   @@unique([platform, postId])
   @@map("social_media_posts")
+}
+
+model ChatConversation {
+  id          String        @id @default(cuid())
+  sessionId   String        @unique
+  userEmail   String?
+  userName    String?
+  userCompany String?
+  userPhone   String?
+  leadScore   Int           @default(0)
+  status      ChatStatus    @default(ACTIVE)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  messages    ChatMessage[]
+
+  @@map("chat_conversations")
+}
+
+model ChatMessage {
+  id             String           @id @default(cuid())
+  conversationId String
+  role           MessageRole
+  content        String
+  metadata       Json?
+  createdAt      DateTime         @default(now())
+  conversation   ChatConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  @@map("chat_messages")
+}
+
+model ChatbotConfig {
+  id                       String   @id @default(cuid())
+  name                     String   @unique
+  welcomeMessage           String
+  fallbackMessage          String
+  leadQualificationEnabled Boolean  @default(true)
+  autoResponseEnabled      Boolean  @default(true)
+  businessHours            Json
+  isActive                 Boolean  @default(true)
+  createdAt                DateTime @default(now())
+  updatedAt                DateTime @updatedAt
+
+  @@map("chatbot_config")
+}
+
+model CrmContact {
+  id             String        @id @default(cuid())
+  hubspotId      String?       @unique
+  email          String        @unique
+  firstName      String
+  lastName       String
+  company        String?
+  phone          String?
+  jobTitle       String?
+  leadScore      Int           @default(0)
+  lifecycleStage String?
+  leadSource     String?
+  lastActivity   DateTime?
+  isActive       Boolean       @default(true)
+  syncedAt       DateTime?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  activities     CrmActivity[]
+
+  @@map("crm_contacts")
+}
+
+model CrmActivity {
+  id          String     @id @default(cuid())
+  contactId   String
+  type        String
+  subject     String
+  description String?
+  outcome     String?
+  scheduledAt DateTime?
+  completedAt DateTime?
+  createdAt   DateTime   @default(now())
+  contact     CrmContact @relation(fields: [contactId], references: [id], onDelete: Cascade)
+
+  @@map("crm_activities")
+}
+
+model AnalyticsEvent {
+  id        String   @id @default(cuid())
+  sessionId String
+  eventType String
+  eventData Json
+  userAgent String?
+  ipAddress String?
+  referrer  String?
+  page      String?
+  userId    String?
+  timestamp DateTime @default(now())
+
+  @@map("analytics_events")
+}
+
+model ConversionMetrics {
+  id                   String   @id @default(cuid())
+  date                 DateTime @unique @db.Date
+  pageViews            Int      @default(0)
+  uniqueVisitors       Int      @default(0)
+  contactForms         Int      @default(0)
+  quickScans           Int      @default(0)
+  newsletterSignups    Int      @default(0)
+  consultationBookings Int      @default(0)
+  conversionRate       Float    @default(0.0)
+
+  @@map("conversion_metrics")
+}
+
+model FaqCategory {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  slug        String   @unique
+  description String?
+  order       Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  faqs        Faq[]
+
+  @@map("faq_categories")
+}
+
+model Faq {
+  id         String      @id @default(cuid())
+  categoryId String
+  question   String
+  answer     String
+  order      Int         @default(0)
+  isActive   Boolean     @default(true)
+  viewCount  Int         @default(0)
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  category   FaqCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@map("faqs")
+}
+
+model TeamMember {
+  id          String   @id @default(cuid())
+  name        String
+  position    String
+  bio         String
+  imageUrl    String?
+  email       String?
+  phone       String?
+  linkedinUrl String?
+  expertise   String[]
+  isActive    Boolean  @default(true)
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("team_members")
+}
+
+model Customer {
+  id             String             @id @default(cuid())
+  email          String             @unique
+  name           String
+  company        String
+  phone          String?
+  hashedPassword String
+  isActive       Boolean            @default(true)
+  lastLogin      DateTime?
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+  documents      CustomerDocument[]
+  projects       CustomerProject[]
+
+  @@map("customers")
+}
+
+model CustomerProject {
+  id          String             @id @default(cuid())
+  customerId  String
+  name        String
+  description String?
+  status      ProjectStatus      @default(ACTIVE)
+  progress    Int                @default(0)
+  startDate   DateTime
+  endDate     DateTime?
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+  documents   CustomerDocument[]
+  customer    Customer           @relation(fields: [customerId], references: [id], onDelete: Cascade)
+
+  @@map("customer_projects")
+}
+
+model CustomerDocument {
+  id             String           @id @default(cuid())
+  customerId     String
+  projectId      String?
+  title          String
+  description    String?
+  fileName       String
+  fileUrl        String
+  fileSize       Int?
+  mimeType       String?
+  isConfidential Boolean          @default(false)
+  uploadedAt     DateTime         @default(now())
+  customer       Customer         @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  project        CustomerProject? @relation(fields: [projectId], references: [id])
+
+  @@map("customer_documents")
+}
+
+// Admin System Models
+model Admin {
+  id             String      @id @default(cuid())
+  email          String      @unique
+  name           String
+  hashedPassword String
+  role           AdminRole   @default(ADMIN)
+  isActive       Boolean     @default(true)
+  lastLogin      DateTime?
+  failedLogins   Int         @default(0)
+  lockoutUntil   DateTime?
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+  createdBy      String?
+  sessions       Session[]
+  accounts       Account[]
+
+  @@map("admins")
+}
+
+// NextAuth.js Models
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              Admin   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         Admin    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+
+// Admin Activity Log
+model AdminActivityLog {
+  id        String   @id @default(cuid())
+  adminId   String
+  action    String
+  resource  String
+  details   Json?
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+
+  @@map("admin_activity_logs")
+}
+
+enum AdminRole {
+  SUPER_ADMIN
+  ADMIN
+  EDITOR
+  VIEWER
 }
 
 enum PostStatus {
@@ -197,230 +461,6 @@ enum SocialPlatform {
   LINKEDIN
   TWITTER
   FACEBOOK
-}
-
-// Chatbot System
-model ChatConversation {
-  id            String   @id @default(cuid())
-  sessionId     String   @unique
-  userEmail     String?
-  userName      String?
-  userCompany   String?
-  userPhone     String?
-  leadScore     Int      @default(0)
-  status        ChatStatus @default(ACTIVE)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  
-  messages      ChatMessage[]
-  
-  @@map("chat_conversations")
-}
-
-model ChatMessage {
-  id             String   @id @default(cuid())
-  conversationId String
-  role           MessageRole
-  content        String
-  metadata       Json?    // Store additional data like lead qualification info
-  createdAt      DateTime @default(now())
-  
-  conversation   ChatConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
-  
-  @@map("chat_messages")
-}
-
-model ChatbotConfig {
-  id                String   @id @default(cuid())
-  name              String   @unique
-  welcomeMessage    String
-  fallbackMessage   String
-  leadQualificationEnabled Boolean @default(true)
-  autoResponseEnabled      Boolean @default(true)
-  businessHours     Json     // Store business hours configuration
-  isActive          Boolean  @default(true)
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
-  
-  @@map("chatbot_config")
-}
-
-// CRM Integration
-model CrmContact {
-  id                String   @id @default(cuid())
-  hubspotId         String?  @unique
-  email             String   @unique
-  firstName         String
-  lastName          String
-  company           String?
-  phone             String?
-  jobTitle          String?
-  leadScore         Int      @default(0)
-  lifecycleStage    String?  // subscriber, lead, marketingqualifiedlead, etc.
-  leadSource        String?
-  lastActivity      DateTime?
-  isActive          Boolean  @default(true)
-  syncedAt          DateTime?
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
-  
-  // Relationships
-  activities        CrmActivity[]
-  
-  @@map("crm_contacts")
-}
-
-model CrmActivity {
-  id           String   @id @default(cuid())
-  contactId    String
-  type         String   // email, call, meeting, quickscan, etc.
-  subject      String
-  description  String?
-  outcome      String?
-  scheduledAt  DateTime?
-  completedAt  DateTime?
-  createdAt    DateTime @default(now())
-  
-  contact      CrmContact @relation(fields: [contactId], references: [id], onDelete: Cascade)
-  
-  @@map("crm_activities")
-}
-
-// Business Intelligence & Analytics
-model AnalyticsEvent {
-  id           String   @id @default(cuid())
-  sessionId    String
-  eventType    String   // pageview, click, form_submit, quickscan_start, etc.
-  eventData    Json     // Store event-specific data
-  userAgent    String?
-  ipAddress    String?
-  referrer     String?
-  page         String?
-  userId       String?
-  timestamp    DateTime @default(now())
-  
-  @@map("analytics_events")
-}
-
-model ConversionMetrics {
-  id                String   @id @default(cuid())
-  date              DateTime @unique @db.Date
-  pageViews         Int      @default(0)
-  uniqueVisitors    Int      @default(0)
-  contactForms      Int      @default(0)
-  quickScans        Int      @default(0)
-  newsletterSignups Int      @default(0)
-  consultationBookings Int   @default(0)
-  conversionRate    Float    @default(0.0)
-  
-  @@map("conversion_metrics")
-}
-
-// FAQ System
-model FaqCategory {
-  id          String   @id @default(cuid())
-  name        String   @unique
-  slug        String   @unique
-  description String?
-  order       Int      @default(0)
-  isActive    Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  
-  faqs        Faq[]
-  
-  @@map("faq_categories")
-}
-
-model Faq {
-  id          String   @id @default(cuid())
-  categoryId  String
-  question    String
-  answer      String
-  order       Int      @default(0)
-  isActive    Boolean  @default(true)
-  viewCount   Int      @default(0)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  
-  category    FaqCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  
-  @@map("faqs")
-}
-
-// Team Management
-model TeamMember {
-  id          String   @id @default(cuid())
-  name        String
-  position    String
-  bio         String
-  imageUrl    String?
-  email       String?
-  phone       String?
-  linkedinUrl String?
-  expertise   String[] // Array of expertise areas
-  isActive    Boolean  @default(true)
-  order       Int      @default(0)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  
-  @@map("team_members")
-}
-
-// Customer Portal
-model Customer {
-  id          String   @id @default(cuid())
-  email       String   @unique
-  name        String
-  company     String
-  phone       String?
-  hashedPassword String
-  isActive    Boolean  @default(true)
-  lastLogin   DateTime?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  
-  // Relationships
-  projects    CustomerProject[]
-  documents   CustomerDocument[]
-  
-  @@map("customers")
-}
-
-model CustomerProject {
-  id          String   @id @default(cuid())
-  customerId  String
-  name        String
-  description String?
-  status      ProjectStatus @default(ACTIVE)
-  progress    Int      @default(0) // 0-100
-  startDate   DateTime
-  endDate     DateTime?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  
-  customer    Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
-  documents   CustomerDocument[]
-  
-  @@map("customer_projects")
-}
-
-model CustomerDocument {
-  id          String   @id @default(cuid())
-  customerId  String
-  projectId   String?
-  title       String
-  description String?
-  fileName    String
-  fileUrl     String
-  fileSize    Int?
-  mimeType    String?
-  isConfidential Boolean @default(false)
-  uploadedAt  DateTime @default(now())
-  
-  customer    Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
-  project     CustomerProject? @relation(fields: [projectId], references: [id], onDelete: SetNull)
-  
-  @@map("customer_documents")
 }
 
 enum ChatStatus {
