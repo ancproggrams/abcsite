@@ -9,6 +9,8 @@ declare module "next-auth" {
       name: string
       role: string
       isActive: boolean
+      loginTime?: number
+      lastActivity?: number
     }
   }
 
@@ -25,5 +27,9 @@ declare module "next-auth/jwt" {
   interface JWT {
     role: string
     isActive: boolean
+    loginTime?: number
+    lastActivity?: number
+    expired?: boolean
+    inactive?: boolean
   }
 }

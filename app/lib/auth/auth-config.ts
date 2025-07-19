@@ -93,26 +93,96 @@ export const authOptions: NextAuthOptions = {
   ],
   session: {
     strategy: "jwt",
-    maxAge: 24 * 60 * 60, // 24 hours
+    maxAge: 8 * 60 * 60, // 8 hours (reduced from 24)
+    updateAge: 30 * 60, // Update session every 30 minutes
   },
   jwt: {
-    maxAge: 24 * 60 * 60, // 24 hours
+    maxAge: 8 * 60 * 60, // 8 hours (reduced from 24)
+    secret: process.env.NEXTAUTH_SECRET,
+  },
+  cookies: {
+    sessionToken: {
+      name: `__Secure-next-auth.session-token`,
+      options: {
+        httpOnly: true,
+        sameSite: 'strict',
+        path: '/',
+        secure: process.env.NODE_ENV === 'production',
+        domain: process.env.NODE_ENV === 'production' ? '.abcadviesnconsultancy.com' : undefined
+      },
+    },
+    callbackUrl: {
+      name: `__Secure-next-auth.callback-url`,
+      options: {
+        httpOnly: true,
+        sameSite: 'strict',
+        path: '/',
+        secure: process.env.NODE_ENV === 'production',
+      },
+    },
+    csrfToken: {
+      name: `__Host-next-auth.csrf-token`,
+      options: {
+        httpOnly: true,
+        sameSite: 'strict',
+        path: '/',
+        secure: process.env.NODE_ENV === 'production',
+      },
+    },
   },
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, account }) {
       if (user) {
         token.role = user.role
         token.isActive = user.isActive
+        token.loginTime = Date.now()
+        token.lastActivity = Date.now()
       }
+      
+      // Session timeout validation (8 hours)
+      if (token.loginTime && Date.now() - (token.loginTime as number) > 8 * 60 * 60 * 1000) {
+        // Mark token as expired instead of returning null
+        token.isActive = false
+        token.expired = true
+      }
+      
+      // Activity timeout validation (2 hours inactivity)
+      if (token.lastActivity && Date.now() - (token.lastActivity as number) > 2 * 60 * 60 * 1000) {
+        // Mark token as expired instead of returning null
+        token.isActive = false
+        token.inactive = true
+      }
+      
+      // Update last activity if still active
+      if (token.isActive) {
+        token.lastActivity = Date.now()
+      }
+      
       return token
     },
     async session({ session, token }) {
-      if (session.user) {
+      if (session.user && token) {
         session.user.id = token.sub!
         session.user.role = token.role as string
         session.user.isActive = token.isActive as boolean
+        
+        // Additional security check in session
+        if (!token.isActive || token.expired || token.inactive) {
+          throw new Error('Session expired or account is no longer active')
+        }
       }
       return session
+    },
+    async signIn({ user, account, profile }) {
+      // Additional security checks during sign-in
+      if (!user?.isActive) {
+        return false
+      }
+      
+      // Log successful sign-in for security monitoring
+      console.log(`🔐 Successful sign-in: ${user.email} at ${new Date().toISOString()}`)
+      
+      return true
     }
   },
   pages: {

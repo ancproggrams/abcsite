@@ -4,7 +4,92 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { getToken } from 'next-auth/jwt'
 
+// Rate limiting store (in-memory for demo, use Redis in production)
+const rateLimitMap = new Map<string, { count: number; resetTime: number }>()
+
+// Security utilities
+function sanitizeInput(input: string): string {
+  return input
+    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+    .replace(/javascript:/gi, '')
+    .replace(/on\w+\s*=/gi, '')
+    .replace(/[<>'"]/g, '')
+}
+
+function checkRateLimit(ip: string, limit: number = 100, windowMs: number = 15 * 60 * 1000): boolean {
+  const now = Date.now()
+  const current = rateLimitMap.get(ip)
+  
+  if (!current || now > current.resetTime) {
+    rateLimitMap.set(ip, { count: 1, resetTime: now + windowMs })
+    return true
+  }
+  
+  if (current.count >= limit) {
+    return false
+  }
+  
+  current.count += 1
+  return true
+}
+
+function isValidUserAgent(userAgent: string): boolean {
+  const suspiciousPatterns = [
+    /sqlmap/i,
+    /nikto/i,
+    /nessus/i,
+    /masscan/i,
+    /nmap/i,
+    /dirb/i,
+    /dirbuster/i,
+    /gobuster/i,
+    /wfuzz/i,
+    /burp/i,
+    /metasploit/i
+  ]
+  
+  return !suspiciousPatterns.some(pattern => pattern.test(userAgent))
+}
+
 export async function middleware(request: NextRequest) {
+  // Enhanced security checks
+  const ip = request.ip || request.headers.get('X-Forwarded-For') || request.headers.get('X-Real-IP') || 'unknown'
+  const userAgent = request.headers.get('User-Agent') || 'unknown'
+  const origin = request.headers.get('Origin')
+  const referer = request.headers.get('Referer')
+
+  // Block suspicious user agents
+  if (!isValidUserAgent(userAgent)) {
+    console.warn(`🚫 Blocked suspicious user agent: ${userAgent} from IP: ${ip}`)
+    return new NextResponse('Forbidden', { status: 403 })
+  }
+
+  // Enhanced rate limiting
+  const isApiRoute = request.nextUrl.pathname.startsWith('/api/')
+  const rateLimit = isApiRoute ? 60 : 100 // Lower limit for API routes
+  const rateLimitWindow = isApiRoute ? 5 * 60 * 1000 : 15 * 60 * 1000 // 5 min for API, 15 min for general
+
+  if (!checkRateLimit(ip, rateLimit, rateLimitWindow)) {
+    console.warn(`🚫 Rate limit exceeded for IP: ${ip}`)
+    return new NextResponse('Too Many Requests', { 
+      status: 429,
+      headers: {
+        'Retry-After': '900',
+        'X-RateLimit-Limit': rateLimit.toString(),
+        'X-RateLimit-Remaining': '0',
+        'X-RateLimit-Reset': Math.floor((Date.now() + rateLimitWindow) / 1000).toString()
+      }
+    })
+  }
+
+  // HTTPS redirect (production only)
+  if (process.env.NODE_ENV === 'production' && 
+      !request.url.startsWith('https://') && 
+      !request.headers.get('x-forwarded-proto')?.includes('https')) {
+    const httpsUrl = request.url.replace(/^http:/, 'https:')
+    return NextResponse.redirect(httpsUrl, 301)
+  }
+
   // Get the response
   const response = NextResponse.next()
 
@@ -72,34 +157,59 @@ export async function middleware(request: NextRequest) {
     return response
   }
 
-  // Production security headers
+  // Enhanced security headers
   response.headers.set('X-DNS-Prefetch-Control', 'on')
   response.headers.set('X-XSS-Protection', '1; mode=block')
   response.headers.set('X-Content-Type-Options', 'nosniff')
   response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
   response.headers.set('X-Frame-Options', 'SAMEORIGIN')
-  response.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()')
+  response.headers.set('X-Permitted-Cross-Domain-Policies', 'none')
+  response.headers.set('Cross-Origin-Embedder-Policy', 'unsafe-none')
+  response.headers.set('Cross-Origin-Opener-Policy', 'same-origin')
+  response.headers.set('Cross-Origin-Resource-Policy', 'same-origin')
   
-  // HSTS - Softened configuration to avoid SSL/TLS issues
-  if (request.url.startsWith('https://')) {
-    // Reduced max-age and removed preload to avoid SSL conflicts
-    response.headers.set('Strict-Transport-Security', 'max-age=3600')
+  // Enhanced Permissions Policy
+  const permissionsPolicy = [
+    'camera=()',
+    'microphone=()',
+    'geolocation=()',
+    'payment=()',
+    'usb=()',
+    'magnetometer=()',
+    'gyroscope=()',
+    'accelerometer=()',
+    'ambient-light-sensor=()',
+    'autoplay=()',
+    'encrypted-media=()',
+    'fullscreen=(self)',
+    'picture-in-picture=()'
+  ]
+  response.headers.set('Permissions-Policy', permissionsPolicy.join(', '))
+  
+  // Enhanced HSTS for production
+  if (request.url.startsWith('https://') || request.headers.get('x-forwarded-proto') === 'https') {
+    response.headers.set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains')
   }
   
-  // Relaxed CSP for production to avoid SSL/TLS conflicts
+  // Enhanced CSP for production security
+  const nonce = Buffer.from(Math.random().toString()).toString('base64').slice(0, 16)
+  
   const cspPolicy = [
-    "default-src 'self' https:",
-    `script-src 'self' 'unsafe-inline' 'unsafe-eval' https: data:`,
-    `style-src 'self' 'unsafe-inline' https: data:`,
-    `font-src 'self' https: data:`,
-    `img-src 'self' data: https: blob:`,
-    `connect-src 'self' https: wss: ws:`,
-    `frame-src 'self' https:`,
+    "default-src 'self'",
+    `script-src 'self' 'unsafe-inline' 'unsafe-eval' https://apps.abacus.ai https://cdn.jsdelivr.net https://unpkg.com`,
+    `style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net`,
+    `font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net data:`,
+    `img-src 'self' data: https: blob: https://airespo.com/wp-content/uploads/2024/12/Abacus-AI-featured-image.jpg https://images.unsplash.com`,
+    `connect-src 'self' https: wss: https://apps.abacus.ai`,
+    `frame-src 'self' https://outlook.live.com https://outlook.office365.com`,
     `object-src 'none'`,
     `base-uri 'self'`,
-    `form-action 'self' https:`,
+    `form-action 'self'`,
     `frame-ancestors 'self'`,
-    // Removed upgrade-insecure-requests to avoid SSL protocol conflicts
+    `media-src 'self' data: blob:`,
+    `worker-src 'self' blob:`,
+    `manifest-src 'self'`,
+    "upgrade-insecure-requests"
   ]
   
   response.headers.set('Content-Security-Policy', cspPolicy.join('; '))
@@ -118,8 +228,7 @@ export async function middleware(request: NextRequest) {
   }
   
   // Rate limiting headers (basic implementation)
-  const ip = request.ip || request.headers.get('X-Forwarded-For') || 'unknown'
-  const userAgent = request.headers.get('User-Agent') || 'unknown'
+  // ip and userAgent already declared above
   
   // Block common bot patterns
   const botPatterns = [
@@ -141,10 +250,42 @@ export async function middleware(request: NextRequest) {
     }
   }
   
-  // Add security headers for API routes
+  // Enhanced security headers for API routes
   if (request.nextUrl.pathname.startsWith('/api/')) {
     response.headers.set('X-API-Version', '1.0')
-    response.headers.set('X-Powered-By', 'Next.js')
+    response.headers.set('X-Content-Type-Options', 'nosniff')
+    response.headers.set('X-Frame-Options', 'DENY')
+    response.headers.set('X-XSS-Protection', '1; mode=block')
+    response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, private')
+    response.headers.set('Pragma', 'no-cache')
+    response.headers.set('Expires', '0')
+    
+    // Remove server identification
+    response.headers.delete('X-Powered-By')
+    response.headers.delete('Server')
+    
+    // CORS security for API routes
+    const allowedOrigins = [
+      'https://abcadviesnconsultancy.com',
+      'https://www.abcadviesnconsultancy.com',
+      'http://localhost:3000',
+      'https://localhost:3000'
+    ]
+    
+    const origin = request.headers.get('Origin')
+    if (origin && allowedOrigins.includes(origin)) {
+      response.headers.set('Access-Control-Allow-Origin', origin)
+    }
+    
+    response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
+    response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With')
+    response.headers.set('Access-Control-Max-Age', '86400')
+    response.headers.set('Access-Control-Allow-Credentials', 'true')
+  }
+  
+  // Add security logging
+  if (process.env.NODE_ENV === 'production') {
+    console.log(`🛡️ Security middleware processed: ${request.method} ${request.nextUrl.pathname} from ${ip}`)
   }
   
   return response
