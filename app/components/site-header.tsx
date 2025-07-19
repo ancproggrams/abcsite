@@ -118,9 +118,6 @@ export function SiteHeader() {
                       <ListItem href="/kenniscentrum" title="Artikelen & Blogs">
                         Nieuwste inzichten over business continuiteit en compliance
                       </ListItem>
-                      <ListItem href="/kenniscentrum/downloads" title="Downloads & Templates">
-                        Praktische templates, checklists en resources
-                      </ListItem>
                       <ListItem href="/resources" title="Resources & Tools">
                         Gratis templates, tools en gidsen voor BCM
                       </ListItem>
