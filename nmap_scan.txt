@@ -1,0 +1,75 @@
+Starting Nmap 7.80 ( https://nmap.org ) at 2025-07-19 10:21 UTC
+Nmap scan report for localhost (127.0.0.1)
+Host is up (0.000048s latency).
+Other addresses for localhost (not scanned): ::1
+
+PORT     STATE SERVICE VERSION
+3000/tcp open  ppp?
+| fingerprint-strings: 
+|   GetRequest: 
+|     HTTP/1.1 200 OK
+|     content-security-policy: default-src * 'unsafe-inline' 'unsafe-eval' data: blob:; frame-ancestors *;
+|     permissions-policy: camera=*, microphone=*, geolocation=*
+|     Vary: RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding
+|     link: </_next/static/media/e4af272ccee01ff0-s.p.woff2>; rel=preload; as="font"; crossorigin=""; type="font/woff2"
+|     Cache-Control: no-store, must-revalidate
+|     X-Powered-By: Next.js
+|     Content-Type: text/html; charset=utf-8
+|     Date: Sat, 19 Jul 2025 10:21:22 GMT
+|     Connection: close
+|     <!DOCTYPE html><html lang="nl"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="preload" as="image" href="/ANCLOGO.jpeg" fetchPriority="high"/><link rel="stylesheet" href="/_next/static/css/app/layout.css?v=1752920482907" data-precedence="ne
+|   HTTPOptions: 
+|     HTTP/1.1 200 OK
+|     content-security-policy: default-src * 'unsafe-inline' 'unsafe-eval' data: blob:; frame-ancestors *;
+|     permissions-policy: camera=*, microphone=*, geolocation=*
+|     Vary: RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding
+|     link: </_next/static/media/e4af272ccee01ff0-s.p.woff2>; rel=preload; as="font"; crossorigin=""; type="font/woff2"
+|     Cache-Control: no-store, must-revalidate
+|     X-Powered-By: Next.js
+|     Content-Type: text/html; charset=utf-8
+|     Date: Sat, 19 Jul 2025 10:21:23 GMT
+|     Connection: close
+|     <!DOCTYPE html><html lang="nl"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="preload" as="image" href="/ANCLOGO.jpeg" fetchPriority="high"/><link rel="stylesheet" href="/_next/static/css/app/layout.css?v=1752920483027" data-precedence="ne
+|   Help, NCP: 
+|     HTTP/1.1 400 Bad Request
+|_    Connection: close
+1 service unrecognized despite returning data. If you know the service/version, please submit the following fingerprint at https://nmap.org/cgi-bin/submit.cgi?new-service :
+SF-Port3000-TCP:V=7.80%I=7%D=7/19%Time=687B71A2%P=x86_64-pc-linux-gnu%r(Ge
+SF:tRequest,10B2D,"HTTP/1\.1\x20200\x20OK\r\ncontent-security-policy:\x20d
+SF:efault-src\x20\*\x20'unsafe-inline'\x20'unsafe-eval'\x20data:\x20blob:;
+SF:\x20frame-ancestors\x20\*;\r\npermissions-policy:\x20camera=\*,\x20micr
+SF:ophone=\*,\x20geolocation=\*\r\nVary:\x20RSC,\x20Next-Router-State-Tree
+SF:,\x20Next-Router-Prefetch,\x20Accept-Encoding\r\nlink:\x20</_next/stati
+SF:c/media/e4af272ccee01ff0-s\.p\.woff2>;\x20rel=preload;\x20as=\"font\";\
+SF:x20crossorigin=\"\";\x20type=\"font/woff2\"\r\nCache-Control:\x20no-sto
+SF:re,\x20must-revalidate\r\nX-Powered-By:\x20Next\.js\r\nContent-Type:\x2
+SF:0text/html;\x20charset=utf-8\r\nDate:\x20Sat,\x2019\x20Jul\x202025\x201
+SF:0:21:22\x20GMT\r\nConnection:\x20close\r\n\r\n<!DOCTYPE\x20html><html\x
+SF:20lang=\"nl\"><head><meta\x20charSet=\"utf-8\"/><meta\x20name=\"viewpor
+SF:t\"\x20content=\"width=device-width,\x20initial-scale=1\"/><meta\x20nam
+SF:e=\"viewport\"\x20content=\"width=device-width,\x20initial-scale=1\"/><
+SF:link\x20rel=\"preload\"\x20as=\"image\"\x20href=\"/ANCLOGO\.jpeg\"\x20f
+SF:etchPriority=\"high\"/><link\x20rel=\"stylesheet\"\x20href=\"/_next/sta
+SF:tic/css/app/layout\.css\?v=1752920482907\"\x20data-precedence=\"ne")%r(
+SF:Help,2F,"HTTP/1\.1\x20400\x20Bad\x20Request\r\nConnection:\x20close\r\n
+SF:\r\n")%r(NCP,2F,"HTTP/1\.1\x20400\x20Bad\x20Request\r\nConnection:\x20c
+SF:lose\r\n\r\n")%r(HTTPOptions,10B2D,"HTTP/1\.1\x20200\x20OK\r\ncontent-s
+SF:ecurity-policy:\x20default-src\x20\*\x20'unsafe-inline'\x20'unsafe-eval
+SF:'\x20data:\x20blob:;\x20frame-ancestors\x20\*;\r\npermissions-policy:\x
+SF:20camera=\*,\x20microphone=\*,\x20geolocation=\*\r\nVary:\x20RSC,\x20Ne
+SF:xt-Router-State-Tree,\x20Next-Router-Prefetch,\x20Accept-Encoding\r\nli
+SF:nk:\x20</_next/static/media/e4af272ccee01ff0-s\.p\.woff2>;\x20rel=prelo
+SF:ad;\x20as=\"font\";\x20crossorigin=\"\";\x20type=\"font/woff2\"\r\nCach
+SF:e-Control:\x20no-store,\x20must-revalidate\r\nX-Powered-By:\x20Next\.js
+SF:\r\nContent-Type:\x20text/html;\x20charset=utf-8\r\nDate:\x20Sat,\x2019
+SF:\x20Jul\x202025\x2010:21:23\x20GMT\r\nConnection:\x20close\r\n\r\n<!DOC
+SF:TYPE\x20html><html\x20lang=\"nl\"><head><meta\x20charSet=\"utf-8\"/><me
+SF:ta\x20name=\"viewport\"\x20content=\"width=device-width,\x20initial-sca
+SF:le=1\"/><meta\x20name=\"viewport\"\x20content=\"width=device-width,\x20
+SF:initial-scale=1\"/><link\x20rel=\"preload\"\x20as=\"image\"\x20href=\"/
+SF:ANCLOGO\.jpeg\"\x20fetchPriority=\"high\"/><link\x20rel=\"stylesheet\"\
+SF:x20href=\"/_next/static/css/app/layout\.css\?v=1752920483027\"\x20data-
+SF:precedence=\"ne");
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 11.97 seconds

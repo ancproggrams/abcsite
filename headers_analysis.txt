@@ -1,0 +1,13 @@
+=== HTTP Security Headers Analysis ===
+HTTP/1.1 200 OK
+content-security-policy: default-src * 'unsafe-inline' 'unsafe-eval' data: blob:; frame-ancestors *;
+permissions-policy: camera=*, microphone=*, geolocation=*
+Vary: RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding
+link: </_next/static/media/e4af272ccee01ff0-s.p.woff2>; rel=preload; as="font"; crossorigin=""; type="font/woff2"
+Cache-Control: no-store, must-revalidate
+X-Powered-By: Next.js
+Content-Type: text/html; charset=utf-8
+Date: Sat, 19 Jul 2025 10:22:49 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+

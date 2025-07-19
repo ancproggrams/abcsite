@@ -1,0 +1,14 @@
+=== API Security Testing ===
+
+Testing API endpoints without authentication:
+GET /api/dashboard/stats: 200
+GET /api/blog: 404
+GET /api/faq: 200
+GET /api/analytics: 404
+
+SQL Injection Tests:
+SQL Injection test /api/blog?id=1': 404
+SQL Injection test /api/faq?search=test' OR 1=1--: 000
+
+XSS Tests:
+XSS test with script tag: 500
