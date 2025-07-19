@@ -66,14 +66,19 @@ export function AdminLayoutClient({ children }: { children: React.ReactNode }) {
       icon: FileText
     },
     {
-      href: '/admin/downloads',
-      label: 'Downloads & Templates',
-      icon: Download
-    },
-    {
       href: '/admin/case-studies',
       label: 'Case Studies',
       icon: BookOpen
+    },
+    {
+      href: '/admin/faq',
+      label: 'FAQ Beheer',
+      icon: HelpCircle
+    },
+    {
+      href: '/admin/chatbot',
+      label: 'Chatbot Config',
+      icon: MessageSquare
     },
     {
       href: '/admin/quickscan-results',

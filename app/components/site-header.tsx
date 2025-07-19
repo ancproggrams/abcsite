@@ -158,9 +158,6 @@ export function SiteHeader() {
                       <ListItem href="/team" title="Ons Team">
                         Ontmoet onze BCM experts en consultants
                       </ListItem>
-                      <ListItem href="/dashboard" title="Dashboard">
-                        Business intelligence en analytics
-                      </ListItem>
                     </ul>
                   </NavigationMenuContent>
                 </NavigationMenuItem>

@@ -23,8 +23,8 @@ export default function AdminDashboard() {
   // TODO: Replace with real data from database
   const stats = {
     blogPosts: { total: 0, published: 0, drafts: 0 },
-    downloads: { total: 0, active: 0 },
     caseStudies: { total: 0, published: 0 },
+    faqs: { total: 0, active: 0 },
     quickScans: { total: 0, thisMonth: 0 }
   }
 
@@ -53,18 +53,25 @@ export default function AdminDashboard() {
       color: 'bg-emerald-500'
     },
     {
-      title: 'Upload Resource',
-      description: 'Voeg nieuwe download toe',
-      href: '/admin/downloads/new',
-      icon: Download,
-      color: 'bg-green-500'
-    },
-    {
       title: 'Case Study',
       description: 'Maak nieuwe case study',
       href: '/admin/case-studies/new',
       icon: BookOpen,
       color: 'bg-purple-500'
+    },
+    {
+      title: 'FAQ Beheer',
+      description: 'Beheer veelgestelde vragen',
+      href: '/admin/faq',
+      icon: HelpCircle,
+      color: 'bg-yellow-500'
+    },
+    {
+      title: 'Chatbot Config',
+      description: 'Chatbot instellingen',
+      href: '/admin/chatbot',
+      icon: MessageSquare,
+      color: 'bg-indigo-500'
     },
     {
       title: 'QuickScan Data',
@@ -86,20 +93,6 @@ export default function AdminDashboard() {
       href: '/admin/dashboard?tab=leads',
       icon: Users,
       color: 'bg-pink-500'
-    },
-    {
-      title: 'Chatbot Config',
-      description: 'Chatbot instellingen',
-      href: '/admin/chatbot',
-      icon: MessageSquare,
-      color: 'bg-indigo-500'
-    },
-    {
-      title: 'FAQ Beheer',
-      description: 'Beheer veelgestelde vragen',
-      href: '/admin/faq',
-      icon: HelpCircle,
-      color: 'bg-yellow-500'
     }
   ]
 
@@ -130,13 +123,13 @@ export default function AdminDashboard() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Downloads</CardTitle>
-            <Download className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium">FAQ's</CardTitle>
+            <HelpCircle className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.downloads.total}</div>
+            <div className="text-2xl font-bold">{stats.faqs.total}</div>
             <p className="text-xs text-muted-foreground">
-              {stats.downloads.active} actief beschikbaar
+              {stats.faqs.active} actief beschikbaar
             </p>
           </CardContent>
         </Card>
