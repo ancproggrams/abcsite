@@ -15,7 +15,8 @@ import {
   Edit,
   Users,
   MessageSquare,
-  HelpCircle
+  HelpCircle,
+  Shield
 } from 'lucide-react'
 import Link from 'next/link'
 
@@ -93,6 +94,13 @@ export default function AdminDashboard() {
       href: '/admin/dashboard?tab=leads',
       icon: Users,
       color: 'bg-pink-500'
+    },
+    {
+      title: 'Security Dashboard',
+      description: 'Security monitoring & management',
+      href: '/admin/security',
+      icon: Shield,
+      color: 'bg-red-500'
     }
   ]
 

@@ -444,6 +444,213 @@ model AdminActivityLog {
   @@map("admin_activity_logs")
 }
 
+// ==== WEEK 2 SECURITY MODELS ====
+
+// API Key Management System
+model ApiKey {
+  id          String       @id @default(cuid())
+  name        String
+  key         String       @unique
+  hashedKey   String
+  adminId     String
+  permissions String[]     // Array of permissions like ['read:blog', 'write:contact']
+  rateLimit   Int          @default(1000) // Per hour
+  isActive    Boolean      @default(true)
+  lastUsed    DateTime?
+  usageCount  Int          @default(0)
+  expiresAt   DateTime?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  apiUsage    ApiUsage[]
+
+  @@map("api_keys")
+}
+
+// API Usage Tracking
+model ApiUsage {
+  id        String   @id @default(cuid())
+  apiKeyId  String
+  endpoint  String
+  method    String
+  ipAddress String
+  userAgent String?
+  status    Int
+  duration  Int      // Response time in milliseconds
+  timestamp DateTime @default(now())
+  apiKey    ApiKey   @relation(fields: [apiKeyId], references: [id], onDelete: Cascade)
+
+  @@index([apiKeyId, timestamp])
+  @@map("api_usage")
+}
+
+// Enhanced Session Management
+model SessionActivity {
+  id           String   @id @default(cuid())
+  sessionToken String
+  adminId      String
+  activity     String   // 'login', 'logout', 'api_call', 'page_view', 'suspicious'
+  ipAddress    String
+  userAgent    String
+  location     String?  // Derived from IP
+  isSuccessful Boolean  @default(true)
+  metadata     Json?
+  timestamp    DateTime @default(now())
+
+  @@index([sessionToken])
+  @@index([adminId, timestamp])
+  @@map("session_activities")
+}
+
+// Concurrent Session Management
+model ActiveSession {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  adminId      String
+  ipAddress    String
+  userAgent    String
+  lastActivity DateTime @default(now())
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+
+  @@index([adminId])
+  @@map("active_sessions")
+}
+
+// Security Event Logging
+model SecurityEvent {
+  id          String            @id @default(cuid())
+  type        SecurityEventType
+  severity    SecuritySeverity
+  title       String
+  description String
+  source      String            // 'middleware', 'api', 'auth', etc.
+  adminId     String?
+  sessionId   String?
+  ipAddress   String
+  userAgent   String?
+  metadata    Json?
+  resolved    Boolean           @default(false)
+  resolvedBy  String?
+  resolvedAt  DateTime?
+  createdAt   DateTime          @default(now())
+
+  @@index([type, severity])
+  @@index([createdAt])
+  @@map("security_events")
+}
+
+// File Upload Validation & Scanning
+model FileUpload {
+  id           String           @id @default(cuid())
+  fileName     String
+  originalName String
+  filePath     String
+  fileSize     Int
+  mimeType     String
+  checksum     String           // SHA-256 hash
+  uploadedBy   String           // Admin ID
+  scanStatus   FileScanStatus   @default(PENDING)
+  scanResult   Json?            // Virus scan, content analysis results
+  isQuarantine Boolean          @default(false)
+  uploadedAt   DateTime         @default(now())
+  scannedAt    DateTime?
+
+  @@map("file_uploads")
+}
+
+// Data Retention Policy Management
+model DataRetentionPolicy {
+  id          String   @id @default(cuid())
+  dataType    String   // 'contact', 'analytics', 'logs', etc.
+  retentionDays Int    // How many days to keep
+  description String
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([dataType])
+  @@map("data_retention_policies")
+}
+
+// GDPR Compliance
+model DataProcessingRequest {
+  id          String                    @id @default(cuid())
+  email       String
+  requestType DataProcessingRequestType
+  status      RequestStatus            @default(PENDING)
+  requestData Json?                    // What data was requested
+  responseData Json?                   // What data was provided/deleted
+  processedBy String?                  // Admin ID
+  processedAt DateTime?
+  createdAt   DateTime                 @default(now())
+
+  @@map("data_processing_requests")
+}
+
+// Consent Management
+model ConsentRecord {
+  id            String   @id @default(cuid())
+  email         String
+  consentType   String   // 'marketing', 'analytics', 'functional'
+  hasConsent    Boolean
+  consentSource String   // 'form', 'cookie_banner', 'email'
+  ipAddress     String
+  userAgent     String?
+  withdrawnAt   DateTime?
+  createdAt     DateTime @default(now())
+
+  @@index([email, consentType])
+  @@map("consent_records")
+}
+
+// API Health Monitoring
+model ApiHealthCheck {
+  id           String   @id @default(cuid())
+  endpoint     String
+  method       String
+  status       Int
+  responseTime Int      // milliseconds
+  error        String?
+  checkedAt    DateTime @default(now())
+
+  @@index([endpoint, checkedAt])
+  @@map("api_health_checks")
+}
+
+// Real-time Alerting
+model SecurityAlert {
+  id          String       @id @default(cuid())
+  type        String       // 'rate_limit_exceeded', 'suspicious_activity', 'failed_login_attempts'
+  severity    SecuritySeverity
+  title       String
+  message     String
+  metadata    Json?
+  triggered   Boolean      @default(false)
+  acknowledged Boolean    @default(false)
+  acknowledgedBy String?
+  acknowledgedAt DateTime?
+  createdAt   DateTime     @default(now())
+
+  @@index([severity, triggered])
+  @@map("security_alerts")
+}
+
+// Enhanced Admin model for Week 2
+model AdminSecurityPreference {
+  id                        String   @id @default(cuid())
+  adminId                   String   @unique
+  maxConcurrentSessions     Int      @default(3)
+  sessionTimeoutMinutes     Int      @default(120)
+  requireTwoFactor          Boolean  @default(false)
+  allowedIpRanges           String[] // CIDR notation
+  securityNotifications     Boolean  @default(true)
+  lastSecurityReview        DateTime?
+  createdAt                 DateTime @default(now())
+  updatedAt                 DateTime @updatedAt
+
+  @@map("admin_security_preferences")
+}
+
 enum AdminRole {
   SUPER_ADMIN
   ADMIN
@@ -480,5 +687,56 @@ enum ProjectStatus {
   ACTIVE
   COMPLETED
   PAUSED
+  CANCELLED
+}
+
+// ==== WEEK 2 SECURITY ENUMS ====
+
+enum SecurityEventType {
+  AUTHENTICATION_FAILURE
+  RATE_LIMIT_EXCEEDED
+  SUSPICIOUS_ACTIVITY
+  UNAUTHORIZED_ACCESS
+  MALICIOUS_REQUEST
+  SESSION_HIJACKING
+  BRUTE_FORCE_ATTACK
+  SQL_INJECTION_ATTEMPT
+  XSS_ATTEMPT
+  CSRF_ATTEMPT
+  FILE_UPLOAD_THREAT
+  API_ABUSE
+  PRIVILEGE_ESCALATION
+  DATA_BREACH_ATTEMPT
+}
+
+enum SecuritySeverity {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum FileScanStatus {
+  PENDING
+  SCANNING
+  SAFE
+  THREAT_DETECTED
+  QUARANTINED
+  SCAN_FAILED
+}
+
+enum DataProcessingRequestType {
+  ACCESS_REQUEST
+  DELETION_REQUEST
+  RECTIFICATION_REQUEST
+  PORTABILITY_REQUEST
+  RESTRICTION_REQUEST
+}
+
+enum RequestStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  REJECTED
   CANCELLED
 }

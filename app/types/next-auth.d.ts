@@ -12,6 +12,7 @@ declare module "next-auth" {
       loginTime?: number
       lastActivity?: number
     }
+    sessionToken?: string
   }
 
   interface User {
@@ -31,5 +32,7 @@ declare module "next-auth/jwt" {
     lastActivity?: number
     expired?: boolean
     inactive?: boolean
+    accountDeactivated?: boolean
+    sessionToken?: string
   }
 }

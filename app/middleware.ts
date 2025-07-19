@@ -3,6 +3,7 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { getToken } from 'next-auth/jwt'
+import { SecurityLogger, SessionManager, ValidationManager, ApiKeyManager } from '@/lib/security-week2'
 
 // Rate limiting store (in-memory for demo, use Redis in production)
 const rateLimitMap = new Map<string, { count: number; resetTime: number }>()
@@ -52,24 +53,120 @@ function isValidUserAgent(userAgent: string): boolean {
 }
 
 export async function middleware(request: NextRequest) {
+  const startTime = Date.now()
+  
   // Enhanced security checks
   const ip = request.ip || request.headers.get('X-Forwarded-For') || request.headers.get('X-Real-IP') || 'unknown'
   const userAgent = request.headers.get('User-Agent') || 'unknown'
   const origin = request.headers.get('Origin')
   const referer = request.headers.get('Referer')
+  const method = request.method
+  const pathname = request.nextUrl.pathname
+
+  // ==== WEEK 2: ENHANCED INPUT VALIDATION ====
+  
+  // Check for SQL injection patterns in URL
+  if (ValidationManager.detectSqlInjection(pathname)) {
+    await SecurityLogger.logEvent('SQL_INJECTION_ATTEMPT', 'HIGH', {
+      url: pathname,
+      ipAddress: ip,
+      userAgent,
+      method
+    }, 'middleware', undefined, undefined, ip, userAgent)
+    
+    return new NextResponse('Forbidden', { status: 403 })
+  }
+
+  // Check for XSS patterns in URL parameters
+  const searchParams = request.nextUrl.searchParams.toString()
+  if (searchParams && ValidationManager.detectXss(searchParams)) {
+    await SecurityLogger.logEvent('XSS_ATTEMPT', 'HIGH', {
+      params: searchParams,
+      ipAddress: ip,
+      userAgent,
+      method
+    }, 'middleware', undefined, undefined, ip, userAgent)
+    
+    return new NextResponse('Forbidden', { status: 403 })
+  }
+
+  // ==== WEEK 2: API KEY AUTHENTICATION ====
+  
+  const isApiRoute = pathname.startsWith('/api/')
+  const isPublicApiRoute = pathname.startsWith('/api/auth') || 
+                           pathname.startsWith('/api/health') ||
+                           pathname.startsWith('/api/contact')
+
+  // API Key validation for protected API routes
+  if (isApiRoute && !isPublicApiRoute && method !== 'OPTIONS') {
+    const apiKey = request.headers.get('X-API-Key')
+    
+    if (apiKey) {
+      // Validate API key
+      const validation = await ApiKeyManager.validateApiKey(apiKey)
+      
+      if (!validation.isValid) {
+        await SecurityLogger.logEvent('UNAUTHORIZED_ACCESS', 'MEDIUM', {
+          reason: validation.error,
+          endpoint: pathname,
+          ipAddress: ip,
+          userAgent
+        }, 'middleware', undefined, undefined, ip, userAgent)
+        
+        return new NextResponse('Unauthorized', { status: 401 })
+      }
+
+      // Check API key rate limit
+      const canProceed = await ApiKeyManager.checkRateLimit(validation.apiKey.id)
+      if (!canProceed) {
+        await SecurityLogger.logEvent('RATE_LIMIT_EXCEEDED', 'MEDIUM', {
+          apiKeyId: validation.apiKey.id,
+          endpoint: pathname,
+          ipAddress: ip
+        }, 'middleware', undefined, undefined, ip, userAgent)
+        
+        return new NextResponse('Rate Limit Exceeded', { status: 429 })
+      }
+
+      // Log API usage
+      const duration = Date.now() - startTime
+      await ApiKeyManager.logApiUsage(
+        validation.apiKey.id,
+        pathname,
+        method,
+        ip,
+        userAgent,
+        200, // Will be updated in response
+        duration
+      )
+    }
+  }
 
   // Block suspicious user agents
   if (!isValidUserAgent(userAgent)) {
+    await SecurityLogger.logEvent('MALICIOUS_REQUEST', 'MEDIUM', {
+      userAgent,
+      ipAddress: ip,
+      reason: 'Suspicious user agent'
+    }, 'middleware', undefined, undefined, ip, userAgent)
+    
     console.warn(`🚫 Blocked suspicious user agent: ${userAgent} from IP: ${ip}`)
     return new NextResponse('Forbidden', { status: 403 })
   }
 
-  // Enhanced rate limiting
-  const isApiRoute = request.nextUrl.pathname.startsWith('/api/')
+  // Enhanced rate limiting with logging
   const rateLimit = isApiRoute ? 60 : 100 // Lower limit for API routes
   const rateLimitWindow = isApiRoute ? 5 * 60 * 1000 : 15 * 60 * 1000 // 5 min for API, 15 min for general
 
   if (!checkRateLimit(ip, rateLimit, rateLimitWindow)) {
+    await SecurityLogger.logEvent('RATE_LIMIT_EXCEEDED', 'MEDIUM', {
+      ipAddress: ip,
+      userAgent,
+      limit: rateLimit,
+      window: rateLimitWindow,
+      endpoint: pathname
+    }, 'middleware', undefined, undefined, ip, userAgent)
+    
     console.warn(`🚫 Rate limit exceeded for IP: ${ip}`)
     return new NextResponse('Too Many Requests', { 
       status: 429,
@@ -93,12 +190,13 @@ export async function middleware(request: NextRequest) {
   // Get the response
   const response = NextResponse.next()
 
-  // Check if this is an admin route (but not login page)
-  const isAdminRoute = request.nextUrl.pathname.startsWith('/admin')
-  const isLoginPage = request.nextUrl.pathname === '/admin/login'
-  const isAuthRoute = request.nextUrl.pathname.startsWith('/api/auth')
+  // ==== WEEK 2: ENHANCED ADMIN ROUTE PROTECTION & SESSION MANAGEMENT ====
+  
+  const isAdminRoute = pathname.startsWith('/admin')
+  const isLoginPage = pathname === '/admin/login'
+  const isAuthRoute = pathname.startsWith('/api/auth')
 
-  // Protect admin routes
+  // Protect admin routes with enhanced session management
   if (isAdminRoute && !isLoginPage && !isAuthRoute) {
     const token = await getToken({ 
       req: request,
@@ -106,22 +204,75 @@ export async function middleware(request: NextRequest) {
     })
 
     if (!token || !token.isActive) {
-      // Redirect to login page
+      await SecurityLogger.logEvent('UNAUTHORIZED_ACCESS', 'MEDIUM', {
+        attemptedRoute: pathname,
+        ipAddress: ip,
+        userAgent,
+        reason: 'No valid session token'
+      }, 'middleware', undefined, undefined, ip, userAgent)
+      
       const loginUrl = new URL('/admin/login', request.url)
-      loginUrl.searchParams.set('callbackUrl', request.nextUrl.pathname)
+      loginUrl.searchParams.set('callbackUrl', pathname)
       return NextResponse.redirect(loginUrl)
     }
 
     // Check if user is actually an admin
     if (!token.role || !['SUPER_ADMIN', 'ADMIN', 'EDITOR'].includes(token.role as string)) {
-      // Redirect to login page with error
+      await SecurityLogger.logEvent('PRIVILEGE_ESCALATION', 'HIGH', {
+        userId: token.sub,
+        userRole: token.role,
+        attemptedRoute: pathname,
+        ipAddress: ip,
+        userAgent
+      }, 'middleware', token.sub, undefined, ip, userAgent)
+      
       const loginUrl = new URL('/admin/login', request.url)
       loginUrl.searchParams.set('error', 'insufficient_permissions')
       return NextResponse.redirect(loginUrl)
     }
+
+    // Track session activity
+    await SessionManager.trackSessionActivity(
+      token.sessionToken as string,
+      token.sub as string,
+      'page_view',
+      ip,
+      userAgent,
+      true,
+      { page: pathname }
+    )
+
+    // Update session activity timestamp
+    await SessionManager.updateSessionActivity(token.sessionToken as string)
+
+    // Check for suspicious activity
+    const suspiciousCheck = await SessionManager.detectSuspiciousActivity(
+      token.sub as string,
+      ip,
+      userAgent
+    )
+
+    if (suspiciousCheck.suspicious) {
+      await SecurityLogger.logEvent('SUSPICIOUS_ACTIVITY', 'HIGH', {
+        userId: token.sub,
+        ipAddress: ip,
+        userAgent,
+        reasons: suspiciousCheck.reasons,
+        sessionToken: token.sessionToken
+      }, 'middleware', token.sub, token.sessionToken as string, ip, userAgent)
+
+      // For critical suspicious activity, invalidate sessions
+      if (suspiciousCheck.reasons.length > 2) {
+        await SessionManager.invalidateSessionsOnSuspiciousActivity(token.sub as string)
+        
+        const loginUrl = new URL('/admin/login', request.url)
+        loginUrl.searchParams.set('error', 'suspicious_activity_detected')
+        return NextResponse.redirect(loginUrl)
+      }
+    }
   }
 
-  // If already authenticated and trying to access login page, redirect to dashboard
+  // Enhanced login page handling
   if (isLoginPage) {
     const token = await getToken({ 
       req: request,
@@ -129,6 +280,17 @@ export async function middleware(request: NextRequest) {
     })
 
     if (token && token.isActive) {
+      // Track successful authentication bypass
+      await SessionManager.trackSessionActivity(
+        token.sessionToken as string,
+        token.sub as string,
+        'login_page_bypass',
+        ip,
+        userAgent,
+        true,
+        { redirectedFrom: 'login_page' }
+      )
+      
       return NextResponse.redirect(new URL('/admin', request.url))
     }
   }
