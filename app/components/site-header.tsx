@@ -168,14 +168,7 @@ export function SiteHeader() {
                   </Link>
                 </NavigationMenuItem>
                 
-                <NavigationMenuItem>
-                  <Link 
-                    href="/customer-portal"
-                    className="text-sm font-medium text-foreground hover:text-primary transition-colors focus-visible"
-                  >
-                    Klanten Portal
-                  </Link>
-                </NavigationMenuItem>
+
               </NavigationMenuList>
             </NavigationMenu>
             
