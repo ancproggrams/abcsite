@@ -216,7 +216,7 @@ export const authOptions: NextAuthOptions = {
         sameSite: 'strict',
         path: '/',
         secure: process.env.NODE_ENV === 'production',
-        domain: process.env.NODE_ENV === 'production' ? '.abcadviesnconsultancy.com' : undefined
+        domain: process.env.NODE_ENV === 'production' ? '.adviesnconsultancy.nl' : undefined
       },
     },
     callbackUrl: {
