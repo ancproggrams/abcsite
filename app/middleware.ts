@@ -428,8 +428,8 @@ export async function middleware(request: NextRequest) {
     
     // CORS security for API routes
     const allowedOrigins = [
-      'https://abcadviesnconsultancy.com',
-      'https://www.abcadviesnconsultancy.com',
+      'https://adviesnconsultancy.nl',
+      'https://www.adviesnconsultancy.nl',
       'http://localhost:3000',
       'https://localhost:3000'
     ]
